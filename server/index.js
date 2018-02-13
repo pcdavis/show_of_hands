@@ -35,28 +35,37 @@ passport.use(new Autho0Strategy({
 }, function(accessToken, refreshToken, extraParams, profile, done){
     const db = app.get('db');
     const { sub } = profile._json; 
+    console.log("this is the sub coming from auth0", sub)
     
     db.sq_find_user([sub])
     .then( response => {
-        if (!response.length === 0){
-            done(null, response[0].id)
+        console.log("here is the response from sq_find_user", response)
+        if (response.length > 0){
+            done(null, response[0].user_id)
         } else {
             db.sq_create_user([sub])
             .then( response => { 
-                console.log(response);
-                done(null, response[0].id) })
+                console.log("here is the response from sq_create_user", response);
+                done(null, response[0].user_id) })
         }
     })
 })); // end of passport.use call
 
-passport.serializeUser( (id, done) => { 
-    done(null, id);
+passport.serializeUser( (user_id, done) => { 
+    console.log("in the serializeUser here")
+    session.user = { id: user_id, stacks: { }, answers: { }};
+    const isuser = session.user ? true : false;
+    console.log(isuser)
+    console.log(session.user)
+   
+    done(null, user_id);
 })
 
-passport.deserializeUser( (id, done) => {
+passport.deserializeUser( (user_id, done) => {
     const db = app.get('db');
+    console.log("this is req.session.user from the deserializer")
     
-    db.find_logged_in_user([id])
+    db.sq_find_logged_in_user([user_id])
     .then( response => {
         done(null, response[0]);
     })
@@ -92,7 +101,7 @@ app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
 //Below are the sql scripts I used to create the users1 table, populate it with some test records and see if they show up as expected
 // CREATE TABLE users1(
-//     id serial primary key,
+//     user_id serial primary key,
 //     user_name text,
 //     img text,
 //     auth_id text,
