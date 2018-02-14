@@ -1,33 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-// import { Provider } from "react-redux";
-import { HashRouter } from "react-router-dom";
-// import store from './store';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import promise from "redux-promise";
 
-import './index.css';
-import App from './components/App/App';
-import registerServiceWorker from './registerServiceWorker';
+import reducers from "./ducks";
+import Login from './components/Login/Login'
+import Dashboard from './components/Dashboard/Dashboard'
+import Stack from './components/Stack/Stack'
 
-
-
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 
 ReactDOM.render(
-    <HashRouter>
-        
-          <App />
-        
-  </HashRouter>, 
+      <Provider store={createStoreWithMiddleware(reducers)}>
+          <BrowserRouter> 
+            <div>
+              <Switch>
+                <Route exact path="/" component={Login} />
+                <Route path="/dashboard" component={Dashboard} />
+                <Route path="/stacks/:id" component={Stack} />
+              </Switch>
+            </div>
+        </BrowserRouter>
+      </Provider>,
 document.getElementById('root'));
-registerServiceWorker();
 
 
-//final version should look like this
-// ReactDOM.render(
-//   <BrowserRouter>
-//       <Provider store={ store }>
-//         <App />
-//       </Provider>
-// </BrowserRouter>, 
-// document.getElementById('root'));
-// registerServiceWorker();
+

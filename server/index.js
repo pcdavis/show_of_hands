@@ -6,11 +6,14 @@ const passport = require('passport');
 const Autho0Strategy = require('passport-auth0');
 const cors = require('cors');// potentially not necessary
 const massive = require('massive'); 
+const control = require ('./controllers/api_controllers.js')
 
 //Import Controllers I created that are used in Endpoints
 // const swag_controller = require('./controllers/swag_controller');
 
 const app = express(); 
+app.use(bodyParser.json());
+// app.use(cors);
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -35,11 +38,11 @@ passport.use(new Autho0Strategy({
 }, function(accessToken, refreshToken, extraParams, profile, done){
     const db = app.get('db');
     const { sub } = profile._json; 
-    console.log("this is the sub coming from auth0", sub)
+    console.log("passport new Auth0Strategy receiving results from Auth0 profile._json. The sub is going to be used next in sq_find_user. Here is the sub: ", sub)
     
     db.sq_find_user([sub])
     .then( response => {
-        console.log("here is the response from sq_find_user", response)
+        console.log("Still in original passport call. After sq_find_user is made, we're now in the .then with the response from sq_find_user.Here is the response from sq_find_user", response)
         if (response.length > 0){
             done(null, response[0].user_id)
         } else {
@@ -53,20 +56,22 @@ passport.use(new Autho0Strategy({
 
 passport.serializeUser( (user_id, done) => { 
     console.log("in the serializeUser here")
+    //I am creating the session.user object below
     session.user = { id: user_id, stacks: { }, answers: { }};
     const isuser = session.user ? true : false;
     console.log(isuser)
-    console.log(session.user)
+    console.log("here is session.user I created inside serializeUser. ", session.user)
    
     done(null, user_id);
 })
 
 passport.deserializeUser( (user_id, done) => {
     const db = app.get('db');
-    console.log("this is req.session.user from the deserializer")
+    console.log("this is req.session.user from the deserializer",session.user)
     
     db.sq_find_logged_in_user([user_id])
     .then( response => {
+        console.log("here is the response that comes into .then from sq_find_logged_in_user. response[0] is sent to done ", response)
         done(null, response[0]);
     })
 })
@@ -74,7 +79,7 @@ passport.deserializeUser( (user_id, done) => {
 //Authentication endpoints for Auth0
 app.get('/auth', passport.authenticate('auth0'));
 app.get('/auth/callback', passport.authenticate('auth0', { 
-    successRedirect: 'http://localhost:3000/#/dashboard'
+    successRedirect: 'http://localhost:3000/dashboard'
 }));
 
 //This endpoint gets called from a componentDidMount - used to ensure that the user is valid before showing sensative data
@@ -92,7 +97,10 @@ app.get( '/logout', (req,res) => {
 } )
 
 //Endpoints for interacting with the regular pages of the app
-// app.get( '/api/products', controller.getAll ); 
+app.post('/api/newstack', control.createStack)
+app.get('/api/stacks', control.fetchStacks)
+app.get('/api/stack_items', control.fetchStackItems)
+
 
 //Start server listening
 const port = process.env.SERVER_PORT || 3005
