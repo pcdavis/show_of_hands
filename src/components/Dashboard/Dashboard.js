@@ -20,9 +20,13 @@ class Dashboard extends Component {
   }
 
   renderStacks() {
+    
     return _.map(this.props.stacks, stack => {
+      let index = stack.stack_id;
+      console.log('index',index)
+      
       return (
-        <li className="list-group-item" key={stack.stack_id}>
+        <li className="list-group-item" key={index}>
           <Link to={`/stacks/${stack.stack_id}`}>
             {stack.stack_title}
           </Link>

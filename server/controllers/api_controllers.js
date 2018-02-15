@@ -3,13 +3,21 @@
 module.exports = {
 
     fetchStacks: function(req, res, next) {
+
+        console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.user)
         const db = req.app.get('db');
-        db.sq_fetch_stacks()
-        .then( stacks => {
-            res.status(200).send( stacks )
-            console.log("fetchStacks worked",stacks)
-        }) 
-        .catch( err => {res.status(500).send('error with fetchStacks') })
+        if(req.user){
+            const user_id = req.user.user_id;
+            console.log(user_id)
+            db.sq_fetch_stacks([user_id])
+            .then( stacks => {
+                res.status(200).send( stacks )
+                console.log("fetchStacks worked",stacks)
+            }) 
+            .catch( err => {res.status(500).send('error with fetchStacks') })
+        } else {
+            res.status(401).send("not authorized")
+        }
     },
 
     fetchStackItems: function(req, res, next) {
@@ -22,8 +30,8 @@ module.exports = {
         // const { session } = req;
               console.log(" the createStack controller just fired. Here is the req ", req)
               console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.user)
-              console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.body)
-              console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.session)
+            //   console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.body)
+            //   console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.session)
             //   constole.log(req.session)
         // let title = req.body.title;
         // console.log("createStack controller fired")

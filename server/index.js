@@ -57,19 +57,19 @@ passport.use(new Autho0Strategy({
 passport.serializeUser( (user_id, done) => { 
     console.log("in the serializeUser here")
     //I am creating the session.user object below
-    session.user = { id: user_id, stacks: { }, answers: { }};
-    const isuser = session.user ? true : false;
+    let user = { id: user_id, stacks: { }, answers: { }};
+    const isuser = user ? true : false;
     console.log(isuser)
-    console.log("here is session.user I created inside serializeUser. ", session.user)
+    console.log("here is session.user I created inside serializeUser. ", user)
    
-    done(null, user_id);
+    done(null, user);
 })
 
-passport.deserializeUser( (user_id, done) => {
+passport.deserializeUser( (user, done) => {
     const db = app.get('db');
-    console.log("this is req.session.user from the deserializer",session.user)
+    // console.log("this is req.session.user from the deserializer",session.user)
     
-    db.sq_find_logged_in_user([user_id])
+    db.sq_find_logged_in_user([user.id])
     .then( response => {
         console.log("here is the response that comes into .then from sq_find_logged_in_user. response[0] is sent to done ", response)
         done(null, response[0]);

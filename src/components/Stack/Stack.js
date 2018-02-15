@@ -7,20 +7,22 @@ import { fetchStackItems } from "../../actions";
 
 
 class Stack extends Component {
-    constructor(props){
-      super(props);
-      this.state = {
-        title: ''
-      }
-      this.handleChange = this.handleChange.bind(this)
-    }
+    // constructor(props){
+    //   super(props);
+    //   this.state = {
+    //     new_stack_title: '',
+    //     new_
+    //   }
+    //   this.handleChange = this.handleChange.bind(this)
+    // }
 
-  componentDidMount() {
-    this.props.fetchStacks();
-  }
+  // componentDidMount() {
+  //   this.props.fetchStackItems();
+  // }
 
-  renderStacks() {
-    return _.map(this.props.stacks, stack => {
+  renderStacksItems() {
+    let stackKeys = Object.keys(this.props.stacks);
+    return _.map(this.props.stacks.stackItems, stackItem => {
       return (
         <li className="list-group-item" key={stack.stack_id}>
           <Link to={`/stacks/${stack.stack_id}`}>
@@ -78,4 +80,4 @@ function mapStateToProps(state) {
   return { stacks: state.stacks };
 }
 
-export default connect(null, { fetchStackItems })(Stack);
+export default connect(mapStateToProps, )(Stack);
