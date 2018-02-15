@@ -24,7 +24,7 @@ class Dashboard extends Component {
     return _.map(this.props.stacks, stack => {
       let index = stack.stack_id;
       console.log('inside render stacks in dashboard. here is the mapped stack_id that I map to index',index)
-      
+      console.log('here is the statck object that is going through the lodash map inside render stacks', stack)
       return (
         <li className="list-group-item" key={index}>
           <Link to={`/stacks/${stack.stack_id}`}>

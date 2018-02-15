@@ -37,16 +37,17 @@ CREATE TABLE stack_content(
     content_id serial primary key,
     ordinal_val INTEGER,
     stack_id INTEGER REFERENCES stacks(stack_id),
-    quiz_id INTEGER REFERENCES quizes(quiz_id)
+    quiz_id INTEGER REFERENCES quizes(quiz_id),
+    user_id INTEGER REFERENCES users(user_id)
 )
 SELECT * from stacks
 SELECT * from quizes
 
-insert into stack_content 
-(stack_id,quiz_id)
-VALUES 
-(2,5)
+insert into stack_content (stack_id,quiz_id,user_id)
+VALUES (5,5,1)
 returning *;
+
+
 
 select * from quizes
 join stack_content
@@ -59,7 +60,7 @@ join quizes
 on stacks.user_id = quizes.user_id 
 where stack_id = 1
 
-The following query will select all stacks and their content from a specific user
+-- The following query will select all stacks and their content from a specific user
 select * from stacks
 join quizes
 on stacks.user_id = quizes.user_id 

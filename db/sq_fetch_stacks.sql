@@ -1,4 +1,4 @@
-select * from stacks
-join quizes
-on stacks.user_id = quizes.user_id 
-where stacks.user_id = 1
+SELECT * from quizes
+join stack_content on quizes.quiz_id = stack_content.quiz_id
+join stacks on stacks.stack_id = stack_content.stack_id
+where stack_content.user_id = $1;
