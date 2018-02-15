@@ -1,8 +1,8 @@
-import _ from "lodash";
+// import _ from "lodash";
 import React, { Component } from "react";
-import './dashboard.css'
+import './stack.css'
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { fetchStackItems } from "../../actions";
 
 
@@ -16,61 +16,58 @@ class Stack extends Component {
     //   this.handleChange = this.handleChange.bind(this)
     // }
 
-  // componentDidMount() {
-  //   this.props.fetchStackItems();
-  // }
+  componentDidMount() {
+    let stackID = this.props.match.params.id;
+    console.log('this.props.match.params.id',this.props.match.params.id)
+    console.log('stackID is equal to this.props.match.params.id',stackID)
+    console.log('inside Stack component in component did mount this.props.stacks',this.props.stacks)
+
+   
+    let this_stack =  this.props.stacks[stackID];
+ 
+    console.log('this_stack',this_stack)
+    
+  }
 
   renderStacksItems() {
-    let stackKeys = Object.keys(this.props.stacks);
-    return _.map(this.props.stacks.stackItems, stackItem => {
-      return (
-        <li className="list-group-item" key={stack.stack_id}>
-          <Link to={`/stacks/${stack.stack_id}`}>
-            {stack.stack_title}
-          </Link>
-        </li>
-      );
-    });
+    // let stackKeys = Object.keys(this.props.stacks);
+    // console.log('stackKeys',stackKeys)
+    
+    // return _.map(this.props.stacks.stackItems, stackItem => {
+    //   return (
+    //     <li className="list-group-item" key={stack.stack_id}>
+    //       <Link to={`/stacks/${stack.stack_id}`}>
+    //         {stack.stack_title}
+    //       </Link>
+    //     </li>
+    //   );
+    // });
   }
 
 
 
-handleChange(event){
-  this.setState({
-    title: event.target.value
-  })
-}
+// handleChange(event){
+//   this.setState({
+//     title: event.target.value
+//   })
+// }
 
   render() {
     console.log('this.props.stacks',this.props.stacks)
-    
+    let stackID = this.props.match.params.id;
+    const {stack_title,question,correct_answer, false_1, false_2, false_3} = this.props.stacks[stackID];
     return (
       <div>
-        <div className="text-xs-right">
-
-                  <form>
-                  <input
-                      placeholder="Stack Title"
-                      name = "title" 
-                      type="text" 
-                      onChange={this.handleChange}
-                  />
-                      <br/>
-                  <button label="Submit" className="btn btn-primary" type = "submit" onClick={() => createStack(this.state.title) } >New Stack</button>
-                  </form>
-                  <h2>{this.state.title}</h2>
-
-
-          <Link className="btn btn-primary" to="/stacks/new">
-            Add a Stack
-          </Link>
-        </div>
-        <h3>Stacks</h3>
+        <h1>Stack Component</h1>
+        <h1>{stack_title}</h1>
+        <h1>{question}</h1>
+        <h1>{correct_answer}</h1>
+        <h1>{false_1}</h1>
+        <h1>{false_2}</h1>
+        <h1>{false_3}</h1>
         
-        <ul className="list-group">
-        
-          {this.renderStacks()}
-        </ul>
+
+
       </div>
     );
   }
@@ -80,4 +77,4 @@ function mapStateToProps(state) {
   return { stacks: state.stacks };
 }
 
-export default connect(mapStateToProps, )(Stack);
+export default connect(mapStateToProps, {fetchStackItems} )(Stack);

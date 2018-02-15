@@ -8,7 +8,7 @@ import promise from "redux-promise";
 import reducers from "./ducks";
 import Login from './components/Login/Login'
 import Dashboard from './components/Dashboard/Dashboard'
-// import Stack from './components/Stack/Stack'
+import Stack from './components/Stack/Stack'
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -20,7 +20,7 @@ ReactDOM.render(
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route path="/dashboard" component={Dashboard} />
-                {/* <Route path="/stacks/:id" component={Stack} /> */}
+                <Route path="/stacks/:id" component={Stack} />
               </Switch>
             </div>
         </BrowserRouter>

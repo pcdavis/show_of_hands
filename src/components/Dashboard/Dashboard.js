@@ -23,7 +23,7 @@ class Dashboard extends Component {
     
     return _.map(this.props.stacks, stack => {
       let index = stack.stack_id;
-      console.log('index',index)
+      console.log('inside render stacks in dashboard. here is the mapped stack_id that I map to index',index)
       
       return (
         <li className="list-group-item" key={index}>

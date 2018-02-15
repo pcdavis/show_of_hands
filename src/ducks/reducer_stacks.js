@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { FETCH_STACKS, FETCH_STACK, DELETE_STACK, CREATE_STACK } from "../actions";
-
+import { FETCH_STACKS, } from "../actions";
+// FETCH_STACK, DELETE_STACK, CREATE_STACK
 
 const initialState = {
   stacks: {}

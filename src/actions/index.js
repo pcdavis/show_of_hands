@@ -16,7 +16,6 @@ export function fetchStacks() {
  }
 
  export function fetchStackItems() {
-  let stack_id = this.props.match.params.id;
   let serverResponse = axios.get('/api/stacks_items?q_stack_id = stack_id')
  
    return {
