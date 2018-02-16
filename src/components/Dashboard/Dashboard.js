@@ -83,8 +83,8 @@ function mapStateToProps(state) {
   return { stacks: state.stacks };
 }
 
-const socketConnected = connectSocket(Dashboard);
-const reduxConnected = connect(mapStateToProps, { fetchStacks, createStack })(socketConnected);
-
+// const socketConnected = connectSocket(Dashboard);
+// const reduxConnected = connect(mapStateToProps, { fetchStacks, createStack })(socketConnected);
+const reduxConnected = connect(mapStateToProps, { fetchStacks, createStack })(Dashboard);
 
 export default reduxConnected;
