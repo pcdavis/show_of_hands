@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { createStack } from "../../actions";
 import { fetchStacks } from "../../actions";
+import { connectSocket } from 'socket.io-react';
 
 class Dashboard extends Component {
     constructor(props){
@@ -82,4 +83,8 @@ function mapStateToProps(state) {
   return { stacks: state.stacks };
 }
 
-export default connect(mapStateToProps, { fetchStacks, createStack })(Dashboard);
+const socketConnected = connectSocket(Dashboard);
+const reduxConnected = connect(mapStateToProps, { fetchStacks, createStack })(socketConnected);
+
+
+export default reduxConnected;

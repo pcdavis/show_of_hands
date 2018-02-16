@@ -29,6 +29,9 @@
     "redux-form": "^7.2.3",
     "redux-promise": "^0.5.3",
     "redux-promise-middleware": "^5.0.0",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
+    "socket.io-react": "^1.2.0",
     "underscore": "^1.8.3"
   },
   "scripts": {
@@ -36,5 +39,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }

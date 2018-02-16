@@ -8,17 +8,10 @@ const cors = require('cors');// potentially not necessary
 const massive = require('massive'); 
 const control = require ('./controllers/api_controllers.js')
 
-
 //Import Controllers I created that are used in Endpoints
 // const swag_controller = require('./controllers/swag_controller');
 
 const app = express(); 
-//-----------Socket.io Changes-----------------------------------
-//these were updated using socket.io/docs
-const server = require('http').Server(app);
-const io = require('socket.io')(server);
-
-
 app.use(bodyParser.json());
 // app.use(cors);
 
@@ -108,24 +101,10 @@ app.post('/api/newstack', control.createStack)
 app.get('/api/stacks', control.fetchStacks)
 app.get('/api/stack_items', control.fetchStackItems)
 
-//SOCKET.IO-----------------------------------------------------------------------------------
-//----------------Two lines below are the original before Socket.io implementation ----------------------------------
-// const port = process.env.SERVER_PORT || 3005
-// app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
-//------------------Below are the socket changes
+
+//Start server listening
 const port = process.env.SERVER_PORT || 3005
-server.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
-app.get('/classroom', function (req,res) {
-    res.sendFile(__dirname + '/public/socket_classroom.html')
-} );
-io.on('connection', function(socket) {
-    console.log('user connected');
-    socket.emit('server-welcome-message',{ welcome: 'Welcome to the socket classroom'});
-    socket.on('myclient-response', function (data) {
-        console.log(data);
-    })
-})
-//-----------------------------------------------------------------------
+app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
 
 //Below are the sql scripts I used to create the users1 table, populate it with some test records and see if they show up as expected
