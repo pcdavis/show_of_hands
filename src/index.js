@@ -10,6 +10,7 @@ import reducers from "./ducks";
 import Login from './components/Login/Login'
 import Dashboard from './components/Dashboard/Dashboard'
 import Stack from './components/Stack/Stack'
+import SocketRoom from './components/Classroom/SocketRoom'
 import Test from './Test'
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
@@ -25,6 +26,7 @@ ReactDOM.render(
                   <Route exact path='/test' component={Test} />
                   <Route path="/dashboard" component={Dashboard} />
                   <Route path="/stacks/:id" component={Stack} />
+                  <Route path="/socketroom" component={SocketRoom} />
                 </Switch>
               </div>
           </BrowserRouter>

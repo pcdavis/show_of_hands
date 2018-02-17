@@ -1,6 +1,7 @@
 import React from 'react';
 import socketIOClient from 'socket.io-client';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router'
 import {test} from './ducks/reducer_stacks'
 let socket;
 
@@ -29,6 +30,7 @@ class Test extends React.Component {
       })
       this.setState({socket});
     }
+
   
     username(e) {
       this.setState({ username: e.target.value})
@@ -57,7 +59,7 @@ class Test extends React.Component {
       })
       return (
         <div className="App">
-            <h1 onClick={()=> this.props.test('updated')}>/test</h1>
+            <h1 onClick={()=> this.props.test('new value being sent to action creator and reducer and coming back here as state.stacks.test and being assigned to prop dummyText')}>/test</h1>
             {JSON.stringify(this.props.dummyText, null, 2)}
           <h2>React/socket.io Chats</h2>
           <input onChange={this.username} placeholder='username' type='' className=''/>
