@@ -1,12 +1,31 @@
 import React, { Component } from 'react';
 import './App.css';
-import routes from '../../routes'
+import { Route, Switch } from "react-router-dom";
+import Login from '../Login/Login'
+import Dashboard from '../Dashboard/Dashboard'
+import Stack from '../Stack/Stack'
+import SocketRoom from '../Classroom/SocketRoom'
+// import SocketRoom2 from './components/Classroom/SocketRoom2'
+import Test from '../../Test'
 
 class App extends Component {
   render() {
     return (
       <div className="App">        
-        {routes}
+        
+      <h1>Hello to App component </h1>
+
+          <div>
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <Route exact path='/test' component={Test} />
+          <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/stacks/:id" component={Stack} />
+          <Route exact path="/socketroom" component={SocketRoom} />
+          {/* <Route exact path="/socketroom2" component={SocketRoom2} /> */}
+        </Switch>
+      </div>
+
       </div>
     );
   }

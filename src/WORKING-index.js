@@ -14,22 +14,14 @@ import SocketRoom from './components/Classroom/SocketRoom'
 // import SocketRoom2 from './components/Classroom/SocketRoom2'
 import Test from './Test'
 
-//socket.io-redux middleware additions ------------------------
-import io from 'socket.io-client';
-import socketIO from 'socket.io-redux';
-const socketStore = createStore(reducers, applyMiddleware(
-  socketIO(io.connect(process.env.SOCKET_URL))
-));
-//socket.io-redux ---------------------------
+const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
-//Below is the code used to create the provider prior to the socket-io-redux implementation
-// const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
-// <Provider store={createStoreWithMiddleware(reducers)}>
+//Notes: the udemy course imported browserHistory and added it to the Router. I don't think I need to do this b/c I imported react-router-dom and used BrowserRouter which I think includes the history object
 
 
 ReactDOM.render(
       
-        <Provider store={socketStore}>
+        <Provider store={createStoreWithMiddleware(reducers)}>
             <BrowserRouter> 
               <div>
                 <Switch>

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { createStack } from "../../actions";
 import { fetchStacks } from "../../actions";
-import { connectSocket } from 'socket.io-react';
+// import { connectSocket } from 'socket.io-react';
 
 class Dashboard extends Component {
     constructor(props){

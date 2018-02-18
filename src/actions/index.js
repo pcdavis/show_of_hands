@@ -11,6 +11,24 @@ export const IS_TEACHER = "is_teacher";
 export const LOAD_STACK_INTO_ROOM = "load_stack_into_room";
 export const UPDATE_STUDENT_VIEW = "update_student_view";
 
+//TODO - remove this action creator after done testing. It will test the socket.io-redux npm package ability to work
+
+export function socketReduxTest(value) {
+  return {
+    type: 'SOCKET_REDUX_TEST',
+    payload: {
+      message: 'Using socket.io-redux middleware',
+    },
+    meta: {
+      socket: {
+        channel: 'add:todo',
+        namespace: 'ns',
+        room: 'room',
+      },
+    },
+  };
+}
+
 //Action Creators for the teacher's dashboard ----------------------------------------------
 export function fetchStacks() {
     //TODO Need to turn the response, which is an array of all quizes from all stacks belonging to the user_id into an array object that looks something like this: 
