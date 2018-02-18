@@ -67,7 +67,7 @@ handleChange(event){
             Add a Stack
           </Link>
         </div>
-        <h3>Stacks</h3>
+        <h3>Here are your current stacks</h3>
         
         <ul className="list-group">
         
