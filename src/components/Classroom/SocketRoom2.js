@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
-import socketIOClient from 'socket.io-client';
+// import socketIOClient from 'socket.io-client';
+import socketConnect from 'socket.io-react'
 
-import {test} from '../../ducks/reducer_stacks';
+// import {test} from '../../ducks/reducer_stacks';
 import {checkIsTeacher} from '../../actions/index';
 
-let socket;
+// let socket;
 
 
 class SocketRoom extends Component {
@@ -27,37 +28,37 @@ class SocketRoom extends Component {
         }
     }
 //----------------Socket items from Joe's test page -------------------
-    componentDidMount() {
-        socket = socketIOClient(this.state.baseURL);
+    // componentDidMount() {
+    //     socket = socketIOClient(this.state.baseURL);
         
-        socket.on('get chat for test', (msg) => {
-            console.log('got mesg', msg)
-          this.setState({
-            messages: [...this.state.messages, msg]
-          })
-        })
-        this.setState({socket});
-      }
+    //     socket.on('get chat for test', (msg) => {
+    //         console.log('got mesg', msg)
+    //       this.setState({
+    //         messages: [...this.state.messages, msg]
+    //       })
+    //     })
+    //     this.setState({socket});
+    //   }
 
-      username(e) {
-        this.setState({ username: e.target.value})
-      }
+    //   username(e) {
+    //     this.setState({ username: e.target.value})
+    //   }
     
-      handleChange(e) {
-        this.setState({
-          inputValue: e.target.value
-        })
-      }
+    //   handleChange(e) {
+    //     this.setState({
+    //       inputValue: e.target.value
+    //     })
+    //   }
     
-      sendMessage(e) {
-        e.preventDefault();
-        if (this.state.username === '') {
-          alert('enter username')
-          return;
-        }
-        this.state.socket.emit('new message', {msg: this.state.inputValue, username: this.state.username})
-        this.setState({inputValue: ''})
-      }
+    //   sendMessage(e) {
+    //     e.preventDefault();
+    //     if (this.state.username === '') {
+    //       alert('enter username')
+    //       return;
+    //     }
+    //     this.state.socket.emit('new message', {msg: this.state.inputValue, username: this.state.username})
+    //     this.setState({inputValue: ''})
+    //   }
 //------------------End of test items from Joe's test page ------------------------
 
 //My method to determine which UI to show: teacher or student
@@ -104,5 +105,5 @@ function mapDispatchToProps(state){
       dummyText: state.stacks.test
     }
   }
-    export default connect (mapStateToProps, mapDispatchToProps)(SocketRoom)
-    // export default SocketRoom;
+
+  export default socketConnect(connect(mapStateToProps, mapDispatchToProps)(SocketRoom);

@@ -17,11 +17,12 @@ class Dashboard extends Component {
     }
 
   componentDidMount() {
+    //This will bring back all quizes from all stacks for this user_id. The action creator fetchStacks will send it to the reducer_stacks.js which will assign it to the state.stacks object on the main redux state object
     this.props.fetchStacks();
   }
 
   renderStacks() {
-    
+    //this lodash method maps over the object called stacks and returns an array with each stack object assigned to an array index value equal to it's key in the stacks object, which is equal to it's stack_content_id. So to access any 
     return _.map(this.props.stacks, stack => {
       let index = stack.stack_id;
       console.log('inside render stacks in dashboard. here is the mapped stack_id that I map to index',index)
