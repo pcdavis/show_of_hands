@@ -5,7 +5,7 @@ export const FETCH_STACK = "fetch_stack";
 export const CREATE_STACK = "create_stack";
 export const DELETE_STACK = "delete_stack";
 export const FETCH_STACK_TITLES = "FETCH_STACK_TITLES";
-export const START_BROADCAST = "START_BROADCAST";
+export const CREATE_BROADCAST = "CREATE_BROADCAST";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
@@ -55,13 +55,13 @@ export function fetchStackTitles() {
 //     payload: "hello from createStack"
 //   }
 
-export function startBroadcast(value){
+export function createBroadcast(value){
   console.log('startBoradcast fired from action creator index and here is the value being passed to axios as its body object ', value)
-  axios.post('/api/broadcast', value)
+  axios.post('/api/newbroadcast', value)
   .catch(error => console.log(error));
 
   return {
-    type: START_BROADCAST,
+    type: CREATE_BROADCAST,
     payload: {}
   }
 }

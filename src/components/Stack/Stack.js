@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
-import { startBroadcast } from "../../actions";
+import { createBroadcast } from "../../actions";
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 
@@ -11,7 +11,8 @@ class Stack extends Component {
     super(props);
     this.state = {
       broadcast_code: '',
-      theStackTitle: ''
+      theStackTitle: '',
+      theStackContent: []
     }
     // this.handleChange = this.handleChange.bind(this)
   }
@@ -22,11 +23,17 @@ class Stack extends Component {
      let stackID = this.props.match.params.id;
      console.log("stack titles prop from redux state-------------------",this.props.stack_titles)
      console.log(stackID)
-     let thisStackTitle = _.filter(this.props.stack_titles, function(obj){
+     let theStackNeeded = _.filter(this.props.stacks, function(obj){
        return obj.stack_id == stackID
      })
-     console.log("thisStack fromthe lodash filter is ", thisStackTitle)
-     this.setState({ theStackTitle: thisStackTitle[0].stack_title})
+     let newStackContents = [...this.state.theStackContent,...theStackNeeded]
+     console.log("here is the combined arrrays --------------------------------", newStackContents)
+     console.log("theStackNeeded fromthe lodash filter is ", theStackNeeded)
+     this.setState({ 
+       theStackTitle: theStackNeeded[0].stack_title,
+       theStackContent: newStackContents
+      }, ()=>  console.log("theStackContent fromthe local state is ", this.state.theStackContent))
+     
 
   }
 
@@ -49,18 +56,23 @@ class Stack extends Component {
 //   })
 // }
 
-startBoadcast(){
+startBroadcasting(){
   console.log("startBroadcast function fired")
-
-  this.props.startBroadcast({
+  let this_user_id = this.state.theStackContent[0].user_id;
+  let this_stack_id = this.state.theStackContent[0].stack_id;
+console.log("deconstructed items userid--------------------------------" ,this_user_id)
+console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
+  let broadcastObj = {
     broadcast_code: this.state.broadcast_code,
+    user_id: this_user_id,
+    stack_id: this_stack_id
+  }
 
-  })
+  this.props.createBroadcast(broadcastObj)
 }
 
   render() {
-    const stackTitle = this.props.stacks.stack_title;
-    console.log("Inside render here is stackTitle -------------------------------------------", stackTitle);
+
 
     return (
       <div>
@@ -79,7 +91,7 @@ startBoadcast(){
             placeholder = 'Broadcast Code'
             onChange = { event => this.setState({ broadcast_code: event.target.value})}
             />
-        <Button onClick={() => this.startBoadcast()}>Start Broadcast</Button>
+        <Button onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
         <h3>{this.state.broadcast_code}</h3>
         </Form>
         </div>
@@ -95,4 +107,4 @@ function mapStateToProps(state) {
     stack_titles: state.stack_content.stackTitles };
 }
 
-export default connect(mapStateToProps, {startBroadcast} )(Stack);
+export default connect(mapStateToProps, {createBroadcast} )(Stack);
