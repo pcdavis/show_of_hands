@@ -9,6 +9,7 @@ import reducers from "./ducks";
 import Login from './components/Login/Login'
 import Dashboard from './components/Dashboard/Dashboard'
 import Stack from './components/Stack/Stack'
+import QuizQuestion from './components/QuizQuestion/QuizQuestion'
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -19,8 +20,9 @@ ReactDOM.render(
             <div>
               <Switch>
                 <Route exact path="/" component={Login} />
-                <Route path="/dashboard" component={Dashboard} />
-                <Route path="/stacks/:id" component={Stack} />
+                <Route exact path="/dashboard" component={Dashboard} />
+                <Route exact path="/newquestion" component={QuizQuestion} />
+                <Route exact path="/stacks/:id" component={Stack} />
               </Switch>
             </div>
         </BrowserRouter>
