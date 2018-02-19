@@ -72,7 +72,7 @@ console.log("deconstructed items stack_id--------------------------------" ,this
   }
 
   this.props.createBroadcast(broadcastObj, () => {
-    this.props.history.push("/dashboard")
+    this.props.history.push(`/classroom/${this.state.broadcast_code}`)
   })
 }
 
