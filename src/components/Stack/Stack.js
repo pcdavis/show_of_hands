@@ -71,7 +71,9 @@ console.log("deconstructed items stack_id--------------------------------" ,this
     stack_id: this_stack_id
   }
 
-  this.props.createBroadcast(broadcastObj)
+  this.props.createBroadcast(broadcastObj, () => {
+    this.props.history.push("/dashboard")
+  })
 }
 
   render() {

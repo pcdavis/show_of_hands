@@ -37,6 +37,7 @@ passport.use(new Autho0Strategy({
     scope: 'openid profile'
 }, function(accessToken, refreshToken, extraParams, profile, done){
     const db = app.get('db');
+    console.log("Here is the profile object from google auth0 process ---------------------------" ,profile);
     const { sub } = profile._json; 
     console.log("passport new Auth0Strategy receiving results from Auth0 profile._json. The sub is going to be used next in sq_find_user. Here is the sub: ", sub)
     
@@ -98,6 +99,7 @@ app.get( '/logout', (req,res) => {
 
 //Endpoints for interacting with the regular pages of the app
 app.post('/api/newstack', control.createStack)
+app.post('/api/newbroadcast', control.createBroadcast)
 app.get('/api/stacks', control.fetchStacks)
 app.get('/api/stacktitles', control.fetchStackTitles)
 app.get('/api/stack_items', control.fetchStackItems)

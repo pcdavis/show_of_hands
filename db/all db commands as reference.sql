@@ -68,3 +68,48 @@ CREATE TABLE stack_content(
     quiz_id INTEGER REFERENCES quizes(quiz_id),
     user_id INTEGER REFERENCES users(user_id)
 )
+
+CREATE TABLE broadcast(
+    broadcast_id serial primary key,
+    user_id INTEGER REFERENCES users(user_id),
+    stack_id INTEGER REFERENCES stacks(stack_id),
+    broadcast_code text,
+    broadcast_start_time INTEGER,
+    broadcast_end_time INTEGER
+)
+
+insert into broadcast 
+(user_id,stack_id,broadcast_code)
+VALUES 
+(2, 1, 'xyz')
+returning *;
+
+select * from broadcast 
+
+CREATE TABLE responses(
+    response_id serial primary key,
+    broadcast_id INTEGER REFERENCES broadcast(broadcast_id),
+    user_id INTEGER REFERENCES users(user_id),
+    stack_id INTEGER REFERENCES stacks(stack_id),
+    time_submitted INTEGER,
+    quiz_id INTEGER REFERENCES quizes(quiz_id),
+    quiz_question TEXT REFERENCES quizes(question),
+    correct_answer TEXT REFERENCES quizes(correct_answer),
+    quiz_question_id INTEGER REFERENCES quizes(quiz_id),
+    
+)
+
+insert into broadcast
+(user_id,stack_id,broadcast_code)
+VALUES
+(2,1,'xyz')
+returning *;
+
+
+
+
+
+
+
+
+

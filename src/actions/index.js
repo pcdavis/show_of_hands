@@ -56,9 +56,10 @@ export function fetchStackTitles() {
 //     payload: "hello from createStack"
 //   }
 
-export function createBroadcast(value){
-  console.log('startBoradcast fired from action creator index and here is the value being passed to axios as its body object ', value)
-  axios.post('/api/newbroadcast', value)
+export function createBroadcast(broadcastObj, callback){
+  console.log('startBoradcast fired from action creator index and here is the broadcastObj being passed to axios as its body object ', broadcastObj)
+  axios.post('/api/newbroadcast', {broadcastObj})
+  .then(() => callback())
   .catch(error => console.log(error));
 
   return {
