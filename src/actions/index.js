@@ -4,12 +4,23 @@ export const FETCH_STACKS = "fetch_stacks";
 export const FETCH_STACK = "fetch_stack";
 export const CREATE_STACK = "create_stack";
 export const DELETE_STACK = "delete_stack";
+export const FETCH_STACK_TITLES = "FETCH_STACK_TITLES";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
    
      return {
        type: FETCH_STACKS,
+       payload: serverResponse
+     };
+
+ }
+
+export function fetchStackTitles() {
+    let serverResponse = axios.get('/api/stacktitles')
+   
+     return {
+       type: FETCH_STACK_TITLES,
        payload: serverResponse
      };
 

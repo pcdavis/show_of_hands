@@ -4,7 +4,7 @@ import './dashboard.css'
 import { Form, FormControl, Button } from 'react-bootstrap'
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchStacks, createStack } from "../../actions";
+import { fetchStacks, createStack, fetchStackTitles } from "../../actions";
 
 
 class Dashboard extends Component {
@@ -18,6 +18,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.props.fetchStacks();
+    this.props.fetchStackTitles();
   }
 
   renderStacks() {
@@ -30,6 +31,23 @@ class Dashboard extends Component {
         <li className="list-group-item" key={stack.content_id}>
           <Link to={`/stacks/${stack.stack_id}`}>
             {stack.stack_title}
+          </Link>
+        </li>
+      );
+    });
+  }
+
+  renderStackTitles() {
+    console.log("renderStackTitles fired-------------");
+    console.log('this props stacktitles is ',this.props.stack_titles)
+    return _.map(this.props.stack_titles, stackTitleItem => {
+      let theStackID = stackTitleItem.stack_id;
+      console.log('stack id render ---------',theStackID)
+      console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
+      return (
+        <li className="list-group-item" key={stackTitleItem.content_id}>
+          <Link to={`/stacks/${stackTitleItem.stack_id}`}>
+            {stackTitleItem.stack_title}
           </Link>
         </li>
       );
@@ -68,7 +86,7 @@ handleChange(event){
         
         <ul className="list-group">
         
-          {this.renderStacks()}
+          {this.renderStackTitles()}
         </ul>
       </div>
     );
@@ -76,7 +94,10 @@ handleChange(event){
 }
 
 function mapStateToProps(state) {
-  return { stacks: state.stack_content };
+  return { 
+    stacks: state.stack_content.stacks,
+    stack_titles: state.stack_content.stackTitles 
+  };
 }
 
-export default connect(mapStateToProps, { fetchStacks, createStack })(Dashboard);
+export default connect(mapStateToProps, { fetchStacks, fetchStackTitles, createStack })(Dashboard);

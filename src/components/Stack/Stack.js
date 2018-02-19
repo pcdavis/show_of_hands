@@ -4,6 +4,7 @@ import './stack.css'
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchStackItems } from "../../actions";
+import { Form, FormControl, Button } from 'react-bootstrap'
 
 
 class Stack extends Component {
@@ -91,13 +92,17 @@ class Stack extends Component {
       
         <h1> Hello to the Stack</h1>
         {this.renderStackItems()}
+
+        <div>
+        <Button onClick={() => console.log("start broadcast")}>Start Broadcast</Button>
+        </div>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { stacks: state.stack_content };
+  return { stacks: state.stack_content.stacks };
 }
 
 export default connect(mapStateToProps, {fetchStackItems} )(Stack);

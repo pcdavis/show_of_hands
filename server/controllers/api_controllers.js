@@ -20,6 +20,24 @@ module.exports = {
         }
     },
 
+    fetchStackTitles: function(req, res, next) {
+
+        console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.user)
+        const db = req.app.get('db');
+        if(req.user){
+            const user_id = req.user.user_id;
+            console.log(user_id)
+            db.sq_fetch_stackTitles([user_id])
+            .then( stacks => {
+                res.status(200).send( stacks )
+                console.log("fetchStackTitles worked",stacks)
+            }) 
+            .catch( err => {res.status(500).send('error with fetchStackTitles') })
+        } else {
+            res.status(401).send("not authorized")
+        }
+    },
+
     fetchStackItems: function(req, res, next) {
         const db = req.app.get('db');
         const stackItemsNeeded = req.query.q_stack_id

@@ -99,6 +99,7 @@ app.get( '/logout', (req,res) => {
 //Endpoints for interacting with the regular pages of the app
 app.post('/api/newstack', control.createStack)
 app.get('/api/stacks', control.fetchStacks)
+app.get('/api/stacktitles', control.fetchStackTitles)
 app.get('/api/stack_items', control.fetchStackItems)
 
 
