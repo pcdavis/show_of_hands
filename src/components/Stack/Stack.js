@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
-import { createBroadcast } from "../../actions";
+import { createBroadcast, fetchStacks, fetchStackTitles } from "../../actions";
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 
@@ -19,6 +19,8 @@ class Stack extends Component {
   
 
   componentDidMount() {
+    this.props.fetchStacks();
+    this.props.fetchStackTitles();
      console.log('inside Stack component in component did mount this.props.stacks',this.props.stacks)
      let stackID = this.props.match.params.id;
      console.log("stack titles prop from redux state-------------------",this.props.stack_titles)
@@ -26,15 +28,16 @@ class Stack extends Component {
      let theStackNeeded = _.filter(this.props.stacks, function(obj){
        return obj.stack_id == stackID
      })
+     let titleNeeded = _.filter(this.props.stack_titles, function(obj){
+       return obj.stack_id == stackID
+     })
      let newStackContents = [...this.state.theStackContent,...theStackNeeded]
      console.log("here is the combined arrrays --------------------------------", newStackContents)
      console.log("theStackNeeded fromthe lodash filter is ", theStackNeeded)
      this.setState({ 
-       theStackTitle: theStackNeeded[0].stack_title,
+       theStackTitle: titleNeeded[0].stack_title,
        theStackContent: newStackContents
       }, ()=>  console.log("theStackContent fromthe local state is ", this.state.theStackContent))
-     
-
   }
 
   renderStackItems() {
@@ -107,4 +110,4 @@ function mapStateToProps(state) {
     stack_titles: state.stack_content.stackTitles };
 }
 
-export default connect(mapStateToProps, {createBroadcast} )(Stack);
+export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles} )(Stack);

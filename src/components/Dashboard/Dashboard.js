@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import './dashboard.css'
 import { Form, FormControl, Button } from 'react-bootstrap'
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, History } from "react-router-dom";
 import { fetchStacks, createStack, fetchStackTitles } from "../../actions";
 
 
@@ -20,22 +20,23 @@ class Dashboard extends Component {
     this.props.fetchStacks();
     this.props.fetchStackTitles();
   }
+  
 
-  renderStacks() {
+  // renderStacks() {
     
-    return _.map(this.props.stacks, quizObj => {
-      let index = quizObj.content_id;
-      // console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
-      // console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
-      return (
-        <li className="list-group-item" key={quizObj.content_id}>
-          <Link to={`/quiz/${quizObj.quiz_id}`}>
-            {quizObj.question}
-          </Link>
-        </li>
-      );
-    });
-  }
+  //   return _.map(this.props.stacks, quizObj => {
+  //     let index = quizObj.content_id;
+  //     // console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
+  //     // console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
+  //     return (
+  //       <li className="list-group-item" key={quizObj.content_id}>
+  //         <Link to={`/quiz/${quizObj.quiz_id}`}>
+  //           {quizObj.question}
+  //         </Link>
+  //       </li>
+  //     );
+  //   });
+  // }
 
   renderStackTitles() {
     // console.log("renderStackTitles fired-------------");
@@ -74,9 +75,12 @@ handleChange(event){
         placeholder = 'Stack Title'
         onChange = { event => this.setState({ title: event.target.value})}
         />
-        <Button onClick={ () => this.props.createStack(this.state.title) }>Create New Stack</Button>
+        <Button onClick={ 
+          () => this.props.createStack(this.state.title, () => {
+            this.props.fetchStackTitles()  } ) 
+                        }>Create New Stack</Button>
       </Form>
-
+      {/* this.props.history.push("/dashboard") */}
                 
                   <h2>{this.state.title}</h2>
 
