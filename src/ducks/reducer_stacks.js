@@ -11,7 +11,7 @@ export default function( state = initialState, action ) {
   switch(action.type){
     case FETCH_STACKS:
     console.log("inside reducer_stacks.js using case FETCH_STACKS, here is the action payload data", action.payload.data)
-    return _.mapKeys(action.payload.data, "stack_id");
+    return _.mapKeys(action.payload.data, "content_id");
     
      
 

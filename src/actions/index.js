@@ -29,13 +29,13 @@ export function fetchStacks() {
  
 
  export function createStack(title){
-  console.log('createStack actino crreator fired')
+  console.log('createStack actino crreator fired and here is the title being passed to axios as its body object ', title)
   axios.post('/api/newstack', title)
   .catch(error => console.log(error));
 
   return {
     type: CREATE_STACK,
-    payload: "hello from createStack"
+    payload: {}
   }
 // export function createStack(title, callback){
 //   console.log('createStack actino crreator fired')

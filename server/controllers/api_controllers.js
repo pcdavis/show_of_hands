@@ -27,9 +27,27 @@ module.exports = {
     },
 
     createStack: function(req, res, next) {
+        console.log("here is the req.body inside controller createStack", req.body)
+        const db = req.app.get('db');
+        if(req.user){
+            const stack_title = req.body.title
+            const user_id = req.user.user_id;
+            console.log("here is the user id from inside create stack controller", user_id)
+            db.sq_create_stack([stack_title,user_id])
+            .then( response => {
+                res.status(200).send( response )
+                console.log("create stack worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with create stack') })
+        } 
+        else {
+            res.status(401).send("not authorized")
+        }
+    }
+
         // const { session } = req;
-              console.log(" the createStack controller just fired. Here is the req ", req)
-              console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.user)
+            //   console.log(" the createStack controller just fired. Here is the req ", req)
+            //   console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.user)
             //   console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.body)
             //   console.log(" REC TESTING ----------------------------------------------------------------------------------  ", req.session)
             //   constole.log(req.session)
@@ -45,7 +63,7 @@ module.exports = {
         // console.log('user_id',newStack.user_id)
 
         // db.sq_create_stack([title, id])
-        }
+        
     
     // exampleMethod:   ( req, res, next ) {
     //         const { session } = req;
@@ -57,7 +75,9 @@ module.exports = {
     //           console.log("here's req session after user key created")
     //           console.log(req.session)
     //         next();
-    }
+
+
+    } // end of module exports
 
 
 

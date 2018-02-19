@@ -1,4 +1,4 @@
-// import _ from "lodash";
+import _ from "lodash";
 import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
@@ -29,20 +29,20 @@ class Stack extends Component {
     
   }
 
-  renderStacksItems() {
-    // let stackKeys = Object.keys(this.props.stacks);
-    // console.log('stackKeys',stackKeys)
+  // renderStacksItems() {
+  //   let stackKeys = Object.keys(this.props.stacks);
+  //   console.log('stackKeys',stackKeys)
     
-    // return _.map(this.props.stacks.stackItems, stackItem => {
-    //   return (
-    //     <li className="list-group-item" key={stack.stack_id}>
-    //       <Link to={`/stacks/${stack.stack_id}`}>
-    //         {stack.stack_title}
-    //       </Link>
-    //     </li>
-    //   );
-    // });
-  }
+  //   return _.map(this.props.stacks.stackItems, stackItem => {
+  //     return (
+  //       <li className="list-group-item" key={stack.stack_id}>
+  //         <Link to={`/stacks/${stack.stack_id}`}>
+  //           {stack.stack_title}
+  //         </Link>
+  //       </li>
+  //     );
+  //   });
+  // }
 
 
 

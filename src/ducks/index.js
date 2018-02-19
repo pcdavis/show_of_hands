@@ -3,7 +3,7 @@ import { reducer as formReducer } from "redux-form"; //as enables an alias to be
 import StacksReducer from "./reducer_stacks.js";
 
 const rootReducer = combineReducers({
-  stacks: StacksReducer,
+  stack_content: StacksReducer,
   form: formReducer
 });
 
