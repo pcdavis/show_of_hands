@@ -25,8 +25,8 @@ class Dashboard extends Component {
     
     return _.map(this.props.stacks, quizObj => {
       let index = quizObj.content_id;
-      console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
-      console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
+      // console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
+      // console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
       return (
         <li className="list-group-item" key={quizObj.content_id}>
           <Link to={`/quiz/${quizObj.quiz_id}`}>
@@ -38,12 +38,12 @@ class Dashboard extends Component {
   }
 
   renderStackTitles() {
-    console.log("renderStackTitles fired-------------");
-    console.log('this props stacktitles is ',this.props.stack_titles)
+    // console.log("renderStackTitles fired-------------");
+    // console.log('this props stacktitles is ',this.props.stack_titles)
     return _.map(this.props.stack_titles, stackTitleItem => {
       let theStackID = stackTitleItem.stack_id;
-      console.log('stack id render ---------',theStackID)
-      console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
+      // console.log('stack id render ---------',theStackID)
+      // console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
       return (
         <li className="list-group-item" key={stackTitleItem.stack_title}>
           <Link to={`/stacks/${stackTitleItem.stack_id}`}>
