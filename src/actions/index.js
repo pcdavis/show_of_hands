@@ -58,17 +58,26 @@ export function fetchStackTitles() {
 //     payload: "hello from createStack"
 //   }
 
-export function createBroadcast(broadcastObj, callback){
-  console.log('createBroadcast fired from action creator index and here is the broadcastObj being passed to axios as its body object ', broadcastObj)
-  let serverResponse = axios.post('/api/newbroadcast', {broadcastObj})
-  .then(() => callback())
-  .catch(error => console.log(error));
+export function createBroadcast(serverResponse){
+  console.log('createBroadcast fired from action creator index and here is the serverResponse being passed in ', serverResponse)
 
   return {
     type: CREATE_BROADCAST,
     payload: serverResponse
   }
 }
+//TODO  this version below was working prior to changing strategy to update redux from inside here before jumping into the classroom. It uses a callback to jump into classroom
+// export function createBroadcast(broadcastObj, callback){
+//   console.log('createBroadcast fired from action creator index and here is the broadcastObj being passed to axios as its body object ', broadcastObj)
+//   let serverResponse = axios.post('/api/newbroadcast', {broadcastObj})
+//   .then(() => callback())
+//   .catch(error => console.log(error));
+
+//   return {
+//     type: CREATE_BROADCAST,
+//     payload: serverResponse
+//   }
+// }
 
 export function fetchBroadcast(broadcast_id){
   console.log('fetchBroadcast fired from action creator index and here is the broadcast_id being passed to axios as its body object ', broadcast_id)

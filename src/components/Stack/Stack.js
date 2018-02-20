@@ -1,4 +1,5 @@
 import _ from "lodash";
+import axios from 'axios'
 import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
@@ -20,6 +21,7 @@ class Stack extends Component {
   
 
   componentDidMount() {
+    //When stack.js is opened, we first call the action creators fetch stacks and fetchtitles to be sure we have the latest stack content. Then we grab the specific stack id from the url param and use it to filter the redux 'stacks' prop, which contains all of the teacher's stacks and get theStackNeeeded and place it in local state 'theStackContent'
     console.log("here is the user id to use for setting teacher id -----------------------",this.props.user_id)
     this.props.fetchStacks();
     this.props.fetchStackTitles();
@@ -68,17 +70,35 @@ startBroadcasting(){
   let this_stack_id = this.state.theStackContent[0].stack_id;
 console.log("deconstructed items userid--------------------------------" ,this_user_id)
 console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
+
+  //set redux state of teacherID
+  this.props.setTeacherID(this.state.teacherID);
+
+//create the broadcast object that we'll send via axios.post to server
   let broadcastObj = {
     broadcast_code: this.state.broadcast_code,
     user_id: this_user_id,
     stack_id: this_stack_id
   };
-  //TODO change hardwired id to this.props.user_id
-  this.props.setTeacherID(this.state.teacherID);
+  //use axios call in here to insert the broadcast into the database table 'broadcast'. Then get the promise back, which is the info from the broadcast table needed to update redux minus the broadcast stack, which we'll merge into serverResponse before sending it to the action creator.
+ axios.post('/api/newbroadcast', {broadcastObj}).then( (serverResponse)=> {
+    let data = serverResponse.data
+    console.log("inside the serverResponse variable after axios was called, here is the serverResposne object ---------------------", data)
+    
+    data.broadcast_stack = this.state.theStackContent
+    
+    this.props.createBroadcast(data)}).catch(error => console.log(error));
 
-  this.props.createBroadcast(broadcastObj, () => {
-    this.props.history.push(`/classroom/${this.state.broadcast_code}`)
-  })
+//After redux state of socketroom is updated with all the needed info, jump into the classroom for starting the broadcast session
+this.props.history.push(`/classroom/${this.state.broadcast_code}`)
+
+    //TODO this version below was working prior to changing strategy to update redux from inside here before jumping into the classroom
+    // this.props.createBroadcast(broadcastObj, () => {
+    //   this.props.history.push(`/classroom/${this.state.broadcast_code}`)
+    // })
+
+//use action creator to set redux state of broadcast info needed and then jump into the classroom
+
 }
 
   render() {
@@ -114,7 +134,9 @@ console.log("deconstructed items stack_id--------------------------------" ,this
 function mapStateToProps(state) {
   return { 
     stacks: state.stack_content.stacks,
-    stack_titles: state.stack_content.stackTitles };
+    stack_titles: state.stack_content.stackTitles,
+    socketroom: state.socketroom //this is a state object with multiple keys related to broadcast
+   };
 }
 
 export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles, setTeacherID} )(Stack);

@@ -76,8 +76,8 @@ module.exports = {
             console.log("here is the user id from inside createBroadcast controller", user_id)
             db.sq_createBroadcast([user_id,stack_id,broadcast_code])
             .then( response => {
-                res.status(200).send( response )
-                console.log("createBroadcast worked",response)
+                res.status(200).send( response[0] )
+                console.log("createBroadcast worked",response[0])
             }) 
             .catch( err => {res.status(500).send('error with createBroadcast') })
         } 

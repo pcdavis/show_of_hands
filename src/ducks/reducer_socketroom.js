@@ -13,18 +13,20 @@ const initialState = {
 export default function( state = initialState, action ) {
   switch(action.type){
     
-    case CREATE_BROADCAST+ '_FULFILLED':
-    console.log("inside reducer_socketroom.js using case CREATE_BROADCAST, here is the action payload data", action.payload.data)
-    let returned_broadcast_id= action.payload.data.broadcast_id
-    let returned_stack_id= action.payload.data.stack_id
-    let returned_broadcast_code= action.payload.data.broadcast_code
+    case CREATE_BROADCAST:
+    console.log("inside reducer_socketroom.js using case CREATE_BROADCAST, here is the action payload data", action.payload)
+    let returned_broadcast_id= action.payload.broadcast_id
+    let returned_stack_id= action.payload.stack_id
+    let returned_broadcast_code= action.payload.broadcast_code
+    let returned_broadcast_stack= action.payload.broadcast_stack
     
     return Object.assign({}, state, {
         broadcast_id: returned_broadcast_id,
         broadcast_stack_id: returned_stack_id,
-        broadcast_code: returned_broadcast_code
+        broadcast_code: returned_broadcast_code,
+        broadcast_stack: returned_broadcast_stack
     })
-    
+    //TODO I think now that I'm updating socketroom state directly from inside stack.j when starting a broadcast, I won't need this reducer
     case FETCH_BROADCAST_CONTENT:
     console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload.data)
 
