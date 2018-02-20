@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import './dashboard.css'
-import { Form, FormControl, Button } from 'react-bootstrap'
+import { Form, FormControl, Button, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { connect } from "react-redux";
 import { Link, History } from "react-router-dom";
-import { fetchStacks, createStack, fetchStackTitles } from "../../actions";
+import { fetchStacks, createStack, fetchStackTitles, deleteStack } from "../../actions";
 
 
 class Dashboard extends Component {
@@ -14,6 +14,7 @@ class Dashboard extends Component {
         title: ''
       }
       this.handleChange = this.handleChange.bind(this)
+      this.onDeleteClick = this.onDeleteClick.bind(this)
     }
 
   componentDidMount() {
@@ -21,6 +22,12 @@ class Dashboard extends Component {
     this.props.fetchStackTitles();
   }
   
+  onDeleteClick(stackID) {
+    console.log("onDeleteClick fired inside dashboard-------------", stackID)
+    this.props.deleteStack(stackID, () => {
+      this.props.fetchStackTitles();
+    });
+  }
 
   // renderStacks() {
     
@@ -46,11 +53,21 @@ class Dashboard extends Component {
       // console.log('stack id render ---------',theStackID)
       // console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
       return (
-        <li className="list-group-item" key={stackTitleItem.stack_title}>
-          <Link to={`/stacks/${stackTitleItem.stack_id}`}>
-            {stackTitleItem.stack_title}
+
+        <ListGroupItem key={stackTitleItem.stack_title}>
+           <Link to={`/stacks/${stackTitleItem.stack_id}`}>
+              {stackTitleItem.stack_title}
           </Link>
-        </li>
+              <Button  onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
+        </ListGroupItem>
+
+        // Old version below
+        // <li className="list-group-item" key={stackTitleItem.stack_title}>
+        //   <Link to={`/stacks/${stackTitleItem.stack_id}`}>
+        //     {stackTitleItem.stack_title}
+        //     <Button  onClick={this.onDeleteClick.bind(this)}>Delete</Button>
+        //   </Link>
+        // </li>
       );
     });
   }
@@ -89,8 +106,14 @@ handleChange(event){
         <h3>Stacks</h3>
         
         <ul className="list-group">
-        
+
+        <ListGroup>
+   
           {this.renderStackTitles()}
+  
+        </ListGroup>
+
+        
           
         </ul>
       </div>
@@ -105,4 +128,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchStacks, fetchStackTitles, createStack })(Dashboard);
+export default connect(mapStateToProps, { fetchStacks, fetchStackTitles, createStack, deleteStack })(Dashboard);

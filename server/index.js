@@ -119,6 +119,7 @@ app.get( '/logout', (req,res) => {
 app.post('/api/newstack', control.createStack)
 app.post('/api/newbroadcast', control.createBroadcast)
 app.get('/api/stacks', control.fetchStacks)
+app.delete('/api/deletestack/:stackID', control.deleteStack)
 app.get('/api/stacktitles', control.fetchStackTitles)
 app.post('/api/broadcast', control.fetchBroadcast)
 app.get('/api/stack_items', control.fetchStackItems)

@@ -105,6 +105,25 @@ module.exports = {
         }
     },
 
+    deleteStack: function(req, res, next) {
+
+        console.log(" deleteStack ----------------------------------------------------------------------------------  ", req.params)
+        const db = req.app.get('db');
+        if(req.user){
+            const user_id = req.user.user_id;
+            const stackID = req.params.stackID;
+            console.log("stack id ", stackID)
+            db.sq_delete_stack([stackID])
+            .then( response => {
+                res.status(200).send( response )
+                console.log("deleteStack worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with deleteStack') })
+        } else {
+            res.status(401).send("not authorized")
+        }
+    },
+
 
 
 

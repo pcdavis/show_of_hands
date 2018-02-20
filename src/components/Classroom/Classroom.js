@@ -15,6 +15,7 @@ class SocketRoom extends Component {
     constructor(props){
         super(props);
         subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
+        
         this.state = {
             // socket: '',
             isTeacher: false,

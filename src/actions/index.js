@@ -47,6 +47,18 @@ export function fetchStackTitles() {
     payload: {}
   }
 }
+
+ export function deleteStack(stackID, callback){
+  console.log('deleteStack action crreator fired and here is the stackID being passed to axios as its body object ', stackID)
+  axios.delete('/api/deletestack/'+stackID)
+  .then(() => callback())
+  .catch(error => console.log(error));
+
+  return {
+    type: DELETE_STACK,
+    payload: stackID
+  }
+}
 // export function createStack(title, callback){
 //   console.log('createStack actino crreator fired')
 //   axios.post('/api/newstack', title)
