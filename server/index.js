@@ -12,6 +12,24 @@ const control = require ('./controllers/api_controllers.js')
 // const swag_controller = require('./controllers/swag_controller');
 
 const app = express(); 
+
+//socket-attempt-medium-dailyjs
+// const io = require('socket.io')();
+//joe's version
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+io.on('connection', (client) => {
+    client.on('subscribeToTimer', (interval) => {
+      console.log('client is subscribing to timer with interval ', interval);
+      setInterval(() => {
+        client.emit('timer', new Date());
+      }, interval);
+    });
+  });
+//------------------------------------
+
+
 app.use(bodyParser.json());
 // app.use(cors);
 
@@ -108,7 +126,12 @@ app.get('/api/stack_items', control.fetchStackItems)
 
 //Start server listening
 const port = process.env.SERVER_PORT || 3005
-app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
+
+//socket attempt -----------
+// io.listen(port);
+server.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
+//here's the listen call before socket implemented
+// app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
 
 //Below are the sql scripts I used to create the users1 table, populate it with some test records and see if they show up as expected
