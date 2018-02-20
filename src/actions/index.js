@@ -6,6 +6,8 @@ export const CREATE_STACK = "create_stack";
 export const DELETE_STACK = "delete_stack";
 export const FETCH_STACK_TITLES = "FETCH_STACK_TITLES";
 export const CREATE_BROADCAST = "CREATE_BROADCAST";
+export const SET_TEACHER_ID = "SET_TEACHER_ID";
+export const FETCH_BROADCAST_CONTENT = "FETCH_BROADCAST_CONTENT";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
@@ -65,5 +67,13 @@ export function createBroadcast(broadcastObj, callback){
   return {
     type: CREATE_BROADCAST,
     payload: {}
+  }
+}
+
+export function setTeacherID(teacher_id){
+  console.log('setTeacherID fired from action creator index and here is the teacherID being passed in as the argument ', teacher_id)
+  return {
+    type: SET_TEACHER_ID,
+    payload: teacher_id
   }
 }

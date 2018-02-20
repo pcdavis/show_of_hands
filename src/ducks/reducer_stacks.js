@@ -1,10 +1,11 @@
 import _ from "lodash";
-import { FETCH_STACKS, FETCH_STACK_TITLES } from "../actions";
+import { FETCH_STACKS, FETCH_STACK_TITLES, SET_TEACHER_ID } from "../actions";
 // FETCH_STACK, DELETE_STACK, CREATE_STACK
 
 const initialState = {
   stacks: [],
-  stackTitles: {}
+  stackTitles: {},
+  teacherID: null
 };
 
 
@@ -21,6 +22,10 @@ export default function( state = initialState, action ) {
     let fetchedTitles= _.mapKeys(action.payload.data, "stack_id");
     console.log("here is the lodashed object from _map of fetchedTitles ", fetchedTitles)
     return Object.assign({}, state, {stackTitles: fetchedTitles})
+    
+    case SET_TEACHER_ID:
+    console.log("inside reducer_stacks.js using case SET_TEACHER_ID, here is the action payload data", action.payload)
+    return Object.assign({}, state, {teacherID: action.payload})
      
 
     default:

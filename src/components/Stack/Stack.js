@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
-import { createBroadcast, fetchStacks, fetchStackTitles } from "../../actions";
+import { createBroadcast, fetchStacks, fetchStackTitles, setTeacherID } from "../../actions";
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 
@@ -12,13 +12,15 @@ class Stack extends Component {
     this.state = {
       broadcast_code: '',
       theStackTitle: '',
-      theStackContent: []
+      theStackContent: [],
+      teacherID: ''
     }
     // this.handleChange = this.handleChange.bind(this)
   }
   
 
   componentDidMount() {
+    console.log("here is the user id to use for setting teacher id -----------------------",this.props.user_id)
     this.props.fetchStacks();
     this.props.fetchStackTitles();
      console.log('inside Stack component in component did mount this.props.stacks',this.props.stacks)
@@ -36,6 +38,7 @@ class Stack extends Component {
      console.log("theStackNeeded fromthe lodash filter is ", theStackNeeded)
      this.setState({ 
        theStackTitle: titleNeeded[0].stack_title,
+       teacherID: titleNeeded[0].user_id,
        theStackContent: newStackContents
       }, ()=>  console.log("theStackContent fromthe local state is ", this.state.theStackContent))
   }
@@ -69,7 +72,9 @@ console.log("deconstructed items stack_id--------------------------------" ,this
     broadcast_code: this.state.broadcast_code,
     user_id: this_user_id,
     stack_id: this_stack_id
-  }
+  };
+  //TODO change hardwired id to this.props.user_id
+  this.props.setTeacherID(this.state.teacherID);
 
   this.props.createBroadcast(broadcastObj, () => {
     this.props.history.push(`/classroom/${this.state.broadcast_code}`)
@@ -112,4 +117,4 @@ function mapStateToProps(state) {
     stack_titles: state.stack_content.stackTitles };
 }
 
-export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles} )(Stack);
+export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles, setTeacherID} )(Stack);
