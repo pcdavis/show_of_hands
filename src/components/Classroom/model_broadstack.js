@@ -1,0 +1,38 @@
+module.exports = 
+    [  {
+        quiz_id: 3,
+        user_id: 2,
+        question: 'What is the capital of New York?',
+        correct_answer: 'Albany',
+        false_1: 'Buffalo',
+        false_2: 'Syracuse',
+        false_3: 'New York City',
+        content_id: 3,
+        ordinal_val: null,
+        stack_id: 1,
+        stack_title: 'State Capitals' },
+       {
+        quiz_id: 2,
+        user_id: 2,
+        question: 'What is the capital of California?',
+        correct_answer: 'Sacramento',
+        false_1: 'Napa Valley',
+        false_2: 'San Francisco',
+        false_3: 'Bakersfield',
+        content_id: 2,
+        ordinal_val: null,
+        stack_id: 1,
+        stack_title: 'State Capitals' },
+       {
+        quiz_id: 1,
+        user_id: 2,
+        question: 'What is the capital of Virginia?',
+        correct_answer: 'Richmond',
+        false_1: 'Petersburg',
+        false_2: 'Williamsburg',
+        false_3: 'Fredericksburg',
+        content_id: 1,
+        ordinal_val: null,
+        stack_id: 1,
+        stack_title: 'State Capitals' }
+      ]
