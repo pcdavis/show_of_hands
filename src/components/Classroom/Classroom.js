@@ -4,7 +4,8 @@ import { browserHistory } from 'react-router'
 // import socketIOClient from 'socket.io-client';
 
 // import {test} from '../../ducks/reducer_stacks';
-import {checkIsTeacher} from '../../actions/index';
+
+import {checkIsTeacher, fetchBroadcast} from '../../actions/index';
 
 // let socket;
 
@@ -17,15 +18,23 @@ class SocketRoom extends Component {
             isTeacher: false,
             username: '',
             inputValue: '',
-            messages: []
+            messages: [],
+            broadcast_id: ''
         }
     }
 
     componentWillMount() {
-        if (this.props.teacherID == this.props.stacks) {
-        this.setState({ isTeacher: true},console.log(this.state.isTeacher))
-        }
         
+        console.log("teacher Id is ", this.props.teacherID)
+        if (this.props.teacherID == 2) {
+        this.setState({ isTeacher: true})
+        }
+ 
+        
+    }
+    componentDidMount(){
+        console.log("here are socket props in cdm in classroom-----------------------",this.props.socketroom)
+        console.log(this.state.isTeacher)
     }
 //----------------Socket items from Joe's test page -------------------
     // componentDidMount() {
@@ -90,7 +99,9 @@ function mapStateToProps(state) {
     return { 
       stacks: state.stack_content.stacks,
       teacherID: state.stack_content.teacherID,
-      stack_titles: state.stack_content.stackTitles };
+      stack_titles: state.stack_content.stackTitles,
+      socketroom: state.socketroom
+    };
   }
   
 // function mapDispatchToProps(state){
@@ -101,6 +112,6 @@ function mapStateToProps(state) {
 //   }
 
 
-  
-    export default connect (mapStateToProps, null)(SocketRoom)
+
+    export default connect (mapStateToProps, {fetchBroadcast})(SocketRoom)
     // export default SocketRoom;

@@ -59,14 +59,25 @@ export function fetchStackTitles() {
 //   }
 
 export function createBroadcast(broadcastObj, callback){
-  console.log('startBoradcast fired from action creator index and here is the broadcastObj being passed to axios as its body object ', broadcastObj)
-  axios.post('/api/newbroadcast', {broadcastObj})
+  console.log('createBroadcast fired from action creator index and here is the broadcastObj being passed to axios as its body object ', broadcastObj)
+  let serverResponse = axios.post('/api/newbroadcast', {broadcastObj})
   .then(() => callback())
   .catch(error => console.log(error));
 
   return {
     type: CREATE_BROADCAST,
-    payload: {}
+    payload: serverResponse
+  }
+}
+
+export function fetchBroadcast(broadcast_id){
+  console.log('fetchBroadcast fired from action creator index and here is the broadcast_id being passed to axios as its body object ', broadcast_id)
+  let serverResponse = axios.post('/api/newbroadcast', {broadcast_id})
+  .catch(error => console.log(error));
+
+  return {
+    type: FETCH_BROADCAST_CONTENT,
+    payload: serverResponse
   }
 }
 

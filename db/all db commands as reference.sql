@@ -28,6 +28,20 @@ join quizes
 on stacks.user_id = quizes.user_id 
 where stacks.user_id = 1
 
+--fetch_broadcast_content--options----------------
+
+SELECT * from quizes
+join stack_content on quizes.quiz_id = stack_content.quiz_id
+join broadcast on broadcast.stack_id = stack_content.stack_id
+join stacks on stacks.stack_id = stack_content.stack_id
+where broadcast.broadcast_id = $1
+
+-- SELECT quizes.quiz_id, quizes.question, quizes.correct_answer, quizes.false_1, quizes.false_2, quizes.false_3, stack_content.stack_id, stacks.stack_title, broadcast.broadcast_id, broadcast.broadcast_code, broadcast.user_id
+-- join stack_content on quizes.quiz_id = stack_content.quiz_id
+-- join broadcast on broadcast.stack_id = stack_content.stack_id
+-- join stacks on stacks.stack_id = stack_content.stack_id
+-- where broadcast.broadcast_id = 1
+
 
 -- Extra Shit --------------------
 create TABLE stacks(

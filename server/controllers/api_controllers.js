@@ -64,27 +64,46 @@ module.exports = {
     },
 
     createBroadcast: function(req, res, next) {
-        console.log("here is the req.body inside controller createStack", req.body)
+        console.log("here is the req.body inside controller createBroadcast", req.body)
         const db = req.app.get('db');
         if(req.user){
             const broadcastObj = req.body.broadcastObj;
             let broadcast_code = broadcastObj.broadcast_code;
             let stack_id = broadcastObj.stack_id;
             const user_id = req.user.user_id;
-            console.log("here is the broadcast_code from inside create stack controller", broadcast_code)
-            console.log("here is the stack_id from inside create stack controller", stack_id)
-            console.log("here is the user id from inside create stack controller", user_id)
+            console.log("here is the broadcast_code from inside createBroadcast controller", broadcast_code)
+            console.log("here is the stack_id from inside createBroadcast controller", stack_id)
+            console.log("here is the user id from inside createBroadcast controller", user_id)
             db.sq_createBroadcast([user_id,stack_id,broadcast_code])
             .then( response => {
                 res.status(200).send( response )
-                console.log("create stack worked",response)
+                console.log("createBroadcast worked",response)
             }) 
-            .catch( err => {res.status(500).send('error with create stack') })
+            .catch( err => {res.status(500).send('error with createBroadcast') })
         } 
         else {
             res.status(401).send("not authorized")
         }
-    }
+    },
+
+    fetchBroadcast: function(req, res, next) {
+
+        console.log(" fetchBroadcast ----------------------------------------------------------------------------------  ", req.user)
+        const db = req.app.get('db');
+        if(req.user){
+            const user_id = req.user.user_id;
+            const broadcast_id = req.body.broadcast_id;
+            console.log(user_id)
+            db.sq_fetch_broadcast([broadcast_id])
+            .then( response => {
+                res.status(200).send( response )
+                console.log("fetchBroadcast worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with fetchBroadcast') })
+        } else {
+            res.status(401).send("not authorized")
+        }
+    },
 
 
 

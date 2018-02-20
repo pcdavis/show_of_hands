@@ -102,6 +102,7 @@ app.post('/api/newstack', control.createStack)
 app.post('/api/newbroadcast', control.createBroadcast)
 app.get('/api/stacks', control.fetchStacks)
 app.get('/api/stacktitles', control.fetchStackTitles)
+app.post('/api/broadcast', control.fetchBroadcast)
 app.get('/api/stack_items', control.fetchStackItems)
 
 
