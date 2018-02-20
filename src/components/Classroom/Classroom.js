@@ -74,8 +74,10 @@ class SocketRoom extends Component {
     uiToDisplay () {
         if(this.state.isTeacher){
             return (
-                <h1>The Teacher UI </h1>     
-                <h1>Now on feb20_socekt_feature git branch </h1>     
+              <div>
+                    <h1>The Teacher UI </h1>     
+                    <h1>Now on feb20_socekt_feature git branch </h1>     
+              </div>
             );
         }
         return (
