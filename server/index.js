@@ -19,7 +19,20 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-io.on('connection', (client) => {
+var socketCount = 0
+
+io.on('connection', function (client){
+    // Socket has connected, increase socket count
+    socketCount++
+    console.log(socketCount)
+    io.emit('users connected', socketCount)
+ 
+    client.on('disconnect', function() {
+        // Decrease the socket count on a disconnect, emit
+        socketCount--
+        io.emit('users connected', socketCount)
+    })
+
     client.on('subscribeToTimer', (interval) => {
       console.log('client is subscribing to timer with interval ', interval);
       setInterval(() => {
@@ -33,6 +46,48 @@ io.on('connection', (client) => {
     })
   });
 
+  //What follows is an example from an article http://markshust.com/2013/11/07/creating-nodejs-server-client-socket-io-mysql
+
+//   var socketCount = 0
+ 
+// io.sockets.on('connection', function(socket){
+//     // Socket has connected, increase socket count
+//     socketCount++
+//     // Let all sockets know how many are connected
+//     io.sockets.emit('users connected', socketCount)
+ 
+//     socket.on('disconnect', function() {
+//         // Decrease the socket count on a disconnect, emit
+//         socketCount--
+//         io.sockets.emit('users connected', socketCount)
+//     })
+ 
+//     socket.on('new note', function(data){
+//         // New note added, push to all sockets and insert into db
+//         notes.push(data)
+//         io.sockets.emit('new note', data)
+//         // Use node's db injection format to filter incoming data
+//         db.query('INSERT INTO notes (note) VALUES (?)', data.note)
+//     })
+// // Check to see if initial query/notes are set
+// if (! isInitNotes) {
+//     // Initial app start, run db query
+//     db.query('SELECT * FROM notes')
+//         .on('result', function(data){
+//             // Push results onto the notes array
+//             notes.push(data)
+//         })
+//         .on('end', function(){
+//             // Only emit notes after query has been completed
+//             socket.emit('initial notes', notes)
+//         })
+
+//     isInitNotes = true
+// } else {
+//     // Initial notes already exist, send out
+//     socket.emit('initial notes', notes)
+// }
+// })
   
   
 //------------------------------------
