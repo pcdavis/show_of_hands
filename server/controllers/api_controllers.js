@@ -129,8 +129,11 @@ module.exports = {
     
     responseUpdater: function(req, res, next) {
 
-        console.log(" responseUpdater fired in the controller ----------------------------------------------------------------------------------  ")
+        console.log(" responseUpdater fired in the controller here is the req.user----------------------------------------------------------------------------------  ", req.user)
+        console.log(" here is req.sessionID----------------------------------------------------------------------------------  ", req.sessionID)
         const db = req.app.get('db');
+        const userSessionID = req.sessionID;
+        
         const myResponse = req.body.myResponse;
         console.log(myResponse)
             db.sq_fetch_broadcast([2])

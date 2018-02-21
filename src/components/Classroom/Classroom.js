@@ -8,7 +8,7 @@ import TeacherView from './TeacherView'
 
 // import {test} from '../../ducks/reducer_stacks';
 
-import {checkIsTeacher, fetchBroadcast} from '../../actions/index';
+import {checkIsTeacher } from '../../actions/index';
 
 // let socket;
 
@@ -30,7 +30,7 @@ class SocketRoom extends Component {
     }
 
     componentWillMount() {
-        
+        //todo change the hardwired teacherid == 2 to dynamic one 
         console.log("teacher Id is ", this.props.teacherID)
         if (this.props.teacherID == 2) {
         this.setState({ isTeacher: true})
@@ -39,7 +39,7 @@ class SocketRoom extends Component {
         
     }
     componentDidMount(){
-        console.log("here are socket props in cdm in classroom-----------------------",this.props.socketroom)
+        // console.log("here are socket props in cdm in classroom-----------------------",this.props.socketroom)
         console.log(this.state.isTeacher)
     }
 //----------------Socket items from Joe's test page -------------------
@@ -81,7 +81,7 @@ class SocketRoom extends Component {
         if(this.state.isTeacher){
             return (
               <div>
-                    <TeacherView/>  
+                    <TeacherView match ={this.props.match}/>  
               </div>
             );
         }
@@ -107,10 +107,10 @@ class SocketRoom extends Component {
 
 function mapStateToProps(state) {
     return { 
-      stacks: state.stack_content.stacks,
+    //   stacks: state.stack_content.stacks,
       teacherID: state.stack_content.teacherID,
-      stack_titles: state.stack_content.stackTitles,
-      socketroom: state.socketroom
+    //   stack_titles: state.stack_content.stackTitles,
+    //   socketroom: state.socketroom
     };
   }
   
@@ -123,5 +123,5 @@ function mapStateToProps(state) {
 
 
 
-    export default connect (mapStateToProps, {fetchBroadcast})(SocketRoom)
+    export default connect (mapStateToProps)(SocketRoom)
     // export default SocketRoom;

@@ -93,7 +93,7 @@ export function createBroadcast(serverResponse){
 
 export function fetchBroadcast(broadcast_id){
   console.log('fetchBroadcast fired from action creator index and here is the broadcast_id being passed to axios as its body object ', broadcast_id)
-  let serverResponse = axios.post('/api/newbroadcast', {broadcast_id})
+  let serverResponse = axios.post('/api/newbroadcast', {broadcast_id}).then( resp => resp.data)
   .catch(error => console.log(error));
 
   return {

@@ -28,9 +28,9 @@ export default function( state = initialState, action ) {
     })
     //TODO I think now that I'm updating socketroom state directly from inside stack.j when starting a broadcast, I won't need this reducer
     case FETCH_BROADCAST_CONTENT:
-    console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload.data)
+    console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload)
 
-    return Object.assign({}, state, { broadcast_stack: action.payload.data })
+    return Object.assign({}, state, { broadcast_stack: action.payload })
     
  
     default:
