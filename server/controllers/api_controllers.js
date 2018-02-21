@@ -138,6 +138,31 @@ module.exports = {
         console.log(myResponse)
             db.sq_fetch_broadcast([2])
             .then( response => {
+                res.status(200).send( myResponse )
+                console.log("myResponse worked",response[0])
+            }) 
+            .catch( err => {res.status(500).send('error with myResponse') })
+
+   },
+    
+    postQuiz: function(req, res, next) {
+
+        console.log(" responseUpdater fired in the controller here is the req.user----------------------------------------------------------------------------------  ", req.user)
+        console.log(" here is req.sessionID----------------------------------------------------------------------------------  ", req.sessionID)
+        const db = req.app.get('db');
+        const userSessionID = req.sessionID;
+        
+        const quizObj = req.body.newQuiz;
+        console.log(quizObj)
+        let quiz_id = quizObj.quiz_id;
+        let question= quizObj.question;
+        let correct_answer = quizObj.correct_answer;
+        let false_1 =quizObj.false_1;
+        let false_2 =quizObj.false_2;
+        let false_3 =quizObj.false_3; 
+        let broadcast_id = quizObj.broadcast_id;        
+            db.sq_current_quiz([quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id ])
+            .then( response => {
                 res.status(200).send( response[0] )
                 console.log("myResponse worked",response[0])
             }) 

@@ -198,6 +198,8 @@ app.get('/api/stack_items', control.fetchStackItems)
 
 //test of direct axios post from student teachers
 app.post('/api/studentresponses', control.responseUpdater)
+app.post('/api/postQuiz', control.postQuiz)
+
 
 //Start server listening
 const port = process.env.SERVER_PORT || 3005

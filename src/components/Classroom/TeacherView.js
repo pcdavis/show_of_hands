@@ -18,7 +18,8 @@ class TeacherView extends Component {
         exp_obj: {
           quiz_id: 1,
           question: "Is this the teacher?"
-        }
+        },
+      studentView: {}
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
@@ -48,17 +49,25 @@ class TeacherView extends Component {
 
 renderStackItems() {
   let the_broadcast_stack = this.props.socketroom.broadcast_stack;
-  console.log(the_broadcast_stack)
+  // console.log(the_broadcast_stack)
 
   return  _.map(the_broadcast_stack, quizObj => {
-    console.log(quizObj)
+    // console.log(quizObj)
     let index = quizObj.content_id;
 
     return (
       
      <div>
-        <Panel.Body key={quizObj.quiz_id} > {quizObj.question} <Button onClick={() => console.log("start broadcast")}>Start</Button></Panel.Body>
-          <ListGroupItem  > {quizObj.corect_answer} </ListGroupItem>
+        <Panel.Body key={quizObj.quiz_id} > {quizObj.question} <Button onClick={() => this.sendMySelection({
+          quiz_id: quizObj.quiz_id,
+          question: quizObj.question,
+          correct_answer: quizObj.correct_answer,
+          false_1:quizObj.false_1,
+          false_2:quizObj.false_2,
+          false_3:quizObj.false_3,
+          broadcast_id: this.props.socketroom.broadcast_id
+        })}>Start</Button></Panel.Body>
+          <ListGroupItem  > {quizObj.correct_answer} </ListGroupItem>
           <ListGroupItem  > {quizObj.false_1} </ListGroupItem>
           <ListGroupItem  > {quizObj.false_2} </ListGroupItem>
           <ListGroupItem  > {quizObj.false_3} </ListGroupItem>
@@ -84,12 +93,12 @@ renderStackItems() {
   })
 }
 //TEST Axios post direct to server.then response to AC - then socket emit
-sendMySelection(){
-let myResponse = this.state.exp_obj;
-console.log(myResponse)
-axios.post('/api/studentresponses',{myResponse})
+sendMySelection(newQuiz){
+
+console.log(newQuiz)
+axios.post('/api/postQuiz',{newQuiz})
 .then( (response) => {
-  console.log("here is the response from sendMySelection-----------" ,response)
+  console.log("here is the response.data from sendMySelection-----------" ,response.data)
 })
 }
 
