@@ -125,19 +125,22 @@ module.exports = {
     },
 
     //---------WED TEST OF DIRECT AXIOS POST FROM STUDENT
-    // responseUpdater: function() {
 
-    //     console.log(" responseUpdater fired in the controller ----------------------------------------------------------------------------------  ")
-    //     const db = req.app.get('db');
-        
-    //         db.sq_fetch_broadcast([2])
-    //         .then( response => {
-    //             res.status(200).send( response[0] )
-    //             console.log("messageTest worked",response[0])
-    //         }) 
-    //         .catch( err => {res.status(500).send('error with messageTest') })
-       
-    // },
+    
+    responseUpdater: function(req, res, next) {
+
+        console.log(" responseUpdater fired in the controller ----------------------------------------------------------------------------------  ")
+        const db = req.app.get('db');
+        const myResponse = req.body.myResponse;
+        console.log(myResponse)
+            db.sq_fetch_broadcast([2])
+            .then( response => {
+                res.status(200).send( response[0] )
+                console.log("myResponse worked",response[0])
+            }) 
+            .catch( err => {res.status(500).send('error with myResponse') })
+
+   },
 
     //------------Socket Methods ------------------------------
     messenger: function() {

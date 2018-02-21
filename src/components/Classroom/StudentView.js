@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { subscribeToTimer, messenger } from './api';
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 
@@ -33,13 +34,14 @@ class StudentView extends Component {
     })
   }
 //TEST Axios post direct to server.then response to AC - then socket emit
-// sendMySelection(){
-//   let myResponse = this.state.exp_obj;
-//   axios.post('/api/responses',myResponse)
-//   .then( (response) => {
-//     console.log("here is the response from sendMySelection-----------" ,response)
-//   })
-// }
+sendMySelection(){
+  let myResponse = this.state.exp_obj;
+  console.log(myResponse)
+  axios.post('/api/studentresponses',{myResponse})
+  .then( (response) => {
+    console.log("here is the response from sendMySelection-----------" ,response)
+  })
+}
 
 
 
@@ -72,7 +74,7 @@ class StudentView extends Component {
             placeholder = 'Send a message to the teacher'
             onChange = { event => this.setState({ message: event.target.value})}
             />
-        <Button onClick={() => this.sendMessage()}>Send Message to Teach</Button>
+        <Button onClick={() => this.sendMySelection()}>Send Message to Teach</Button>
         <h3>{this.state.message}</h3>
         </Form> 
       </div>
