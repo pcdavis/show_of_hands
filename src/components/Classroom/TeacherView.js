@@ -24,11 +24,27 @@ class TeacherView extends Component {
   }
 
   componentDidMount(){
-    let broadcast_id = this.props.match.params.id
+    let broadcast_id = this.props.match.params.id //Note: this only works because I added a prop to the rendered version of teacherview component inside the classroom component. Otherwise Route would not have given the teacherview component access to it.
     this.props.fetchBroadcast(broadcast_id)
     console.log("here are socket props in cdm in teacherview-----------------------",this.props.socketroom)
     console.log(this.state.isTeacher)
 }
+
+//Here is what the_broadcast_stack looks like: It's an array of objects.
+// (3) [{…}, {…}, {…}]
+// 0
+// :
+// {quiz_id: 3, user_id: 2, question: "What is the capital of New York?", correct_answer: "Albany", false_1: "Buffalo", …}
+// 1
+// :
+// {quiz_id: 2, user_id: 2, question: "What is the capital of California?", correct_answer: "Sacramento", false_1: "Napa Valley", …}
+// 2
+// :
+// {quiz_id: 1, user_id: 2, question: "What is the capital of Virginia?", correct_answer: "Richmond", false_1: "Petersburg", …}
+// length
+// :
+// 3
+
 
 renderStackItems() {
   let the_broadcast_stack = this.props.socketroom.broadcast_stack;
@@ -37,10 +53,18 @@ renderStackItems() {
   return  _.map(the_broadcast_stack, quizObj => {
     console.log(quizObj)
     let index = quizObj.content_id;
-    // console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
-    // console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
+
+    return (
       
-        return (<ListGroupItem  key={quizObj.quiz_id}> {quizObj.question} </ListGroupItem>);
+     <div>
+        <Panel.Body key={quizObj.quiz_id} > {quizObj.question} <Button onClick={() => console.log("start broadcast")}>Start</Button></Panel.Body>
+          <ListGroupItem  > {quizObj.corect_answer} </ListGroupItem>
+          <ListGroupItem  > {quizObj.false_1} </ListGroupItem>
+          <ListGroupItem  > {quizObj.false_2} </ListGroupItem>
+          <ListGroupItem  > {quizObj.false_3} </ListGroupItem>
+        
+     </div>
+      );
       
   });
 }
@@ -81,7 +105,7 @@ axios.post('/api/studentresponses',{myResponse})
           <ListGroup>
             {this.props.socketroom && this.renderStackItems()}
           </ListGroup>
-          <Panel.Body> <Button onClick={() => console.log("start broadcast")}>New Quiz Question</Button></Panel.Body>
+          
         </Panel>;
         
                     
