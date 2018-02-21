@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
-import { subscribeToTimer } from './api';
+
+import StudentView from './StudentView'
+import TeacherView from './TeacherView'
 // import socketIOClient from 'socket.io-client';
 
 // import {test} from '../../ducks/reducer_stacks';
@@ -14,7 +16,7 @@ import {checkIsTeacher, fetchBroadcast} from '../../actions/index';
 class SocketRoom extends Component {
     constructor(props){
         super(props);
-        subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
+
         
         this.state = {
             // socket: '',
@@ -79,17 +81,13 @@ class SocketRoom extends Component {
         if(this.state.isTeacher){
             return (
               <div>
-                    <h1>The Teacher UI </h1>     
-                    <h1>Now on feb20_socekt_feature git branch </h1>     
-                    <h1>This is the timer value: {this.state.timestamp} </h1>     
+                    <TeacherView/>  
               </div>
             );
         }
         return (
             <div>
-                    <h1>The Student UI </h1>     
-                       
-                    <h1>This is the timer value: {this.state.timestamp} </h1>     
+                   <StudentView/>  
               </div>
         );
     }

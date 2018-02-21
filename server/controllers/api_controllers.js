@@ -124,6 +124,21 @@ module.exports = {
         }
     },
 
+    //------------Socket Methods ------------------------------
+    messenger: function() {
+
+        console.log(" messageTest fired in the controller ----------------------------------------------------------------------------------  ")
+        const db = req.app.get('db');
+        
+            db.sq_fetch_broadcast([2])
+            .then( response => {
+                res.status(200).send( response[0] )
+                console.log("messageTest worked",response[0])
+            }) 
+            .catch( err => {res.status(500).send('error with messageTest') })
+       
+    },
+
 
 
 

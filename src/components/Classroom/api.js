@@ -7,8 +7,8 @@ function subscribeToTimer(cb) {
 }
 export { subscribeToTimer };
 
-function subscribeToStudentView(cb) {
-  socket.on('timer', timestamp => cb(null, timestamp));
-  socket.emit('subscribeToTimer', 1000);
+function messenger(cb) {
+  socket.emit('clientMessage');
+  socket.on('serverMessage', (serverResponse) => cb(null, serverResponse));
 }
-export { subscribeToStudentView };
+export { messenger };

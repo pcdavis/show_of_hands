@@ -26,7 +26,15 @@ io.on('connection', (client) => {
         client.emit('timer', new Date());
       }, interval);
     });
+
+    client.on('clientMessage', () => {
+        control.messenger();
+        client.emit('serverMessage', serverResponse)
+    })
   });
+
+  
+  
 //------------------------------------
 
 
