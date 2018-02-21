@@ -17,14 +17,28 @@ const app = express();
 // const io = require('socket.io')();
 //joe's version
 const server = require('http').Server(app);
+
+massive(process.env.CONNECTION_STRING).then( dbInstance => {
+    app.set('db',dbInstance);
+    console.log('DB is connected')
+}).catch(console.log);
+const db = app.get('db')
 const io = require('socket.io')(server);
 
 var socketCount = 0
+//TODO change over from client to socket and create connections array to manage socket connections
+// const connections = [];
+// io.on('connection', function (socket) {
+// 	console.log("Connected to Socket!!"+ socket.id)	
+// 	connections.push(socket)
+// 	socket.on('disconnect', function(){
+// 		console.log('Disconnected - '+ socket.id);
+// 	});
 
 io.on('connection', function (client){
     // Socket has connected, increase socket count
     socketCount++
-    console.log(socketCount)
+    console.log("Socket Connections: ", socketCount)
     io.emit('users connected', socketCount)
  
     client.on('disconnect', function() {
@@ -41,8 +55,8 @@ io.on('connection', function (client){
     });
 
     client.on('clientMessage', () => {
-        control.messenger();
-        client.emit('serverMessage', serverResponse)
+        control.socketMessenger(io, app);
+        
     })
   });
 
@@ -101,11 +115,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-
-massive(process.env.CONNECTION_STRING).then( dbInstance => {
-    app.set('db',dbInstance);
-    console.log('DB is connected')
-}).catch(console.log);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -187,6 +196,8 @@ app.get('/api/stacktitles', control.fetchStackTitles)
 app.post('/api/broadcast', control.fetchBroadcast)
 app.get('/api/stack_items', control.fetchStackItems)
 
+//test of direct axios post from student teachers
+// app.post('/api/responses', control.responseUpdater)
 
 //Start server listening
 const port = process.env.SERVER_PORT || 3005

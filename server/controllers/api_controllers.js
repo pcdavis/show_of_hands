@@ -124,6 +124,21 @@ module.exports = {
         }
     },
 
+    //---------WED TEST OF DIRECT AXIOS POST FROM STUDENT
+    // responseUpdater: function() {
+
+    //     console.log(" responseUpdater fired in the controller ----------------------------------------------------------------------------------  ")
+    //     const db = req.app.get('db');
+        
+    //         db.sq_fetch_broadcast([2])
+    //         .then( response => {
+    //             res.status(200).send( response[0] )
+    //             console.log("messageTest worked",response[0])
+    //         }) 
+    //         .catch( err => {res.status(500).send('error with messageTest') })
+       
+    // },
+
     //------------Socket Methods ------------------------------
     messenger: function() {
 
@@ -136,6 +151,22 @@ module.exports = {
                 console.log("messageTest worked",response[0])
             }) 
             .catch( err => {res.status(500).send('error with messageTest') })
+       
+    },
+    socketMessenger: function(io,app) {
+
+        console.log(" messageTest fired in the controller ----------------------------------------------------------------------------------  ")
+        const db = app.get('db');
+        
+             db.sq_fetch_broadcast([2])
+            .then( response => {
+                io.emit('serverMessage', response[0])
+        
+
+            }) 
+            .catch( err => {res.status(500).send('error with messageTest') })
+
+            
        
     },
 

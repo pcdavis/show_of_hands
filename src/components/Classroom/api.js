@@ -12,3 +12,10 @@ function messenger(cb) {
   socket.on('serverMessage', (serverResponse) => cb(null, serverResponse));
 }
 export { messenger };
+
+//WED TEST---------------------------------
+// function expressDB(cb) {
+//   socket.emit('client-exp-update',obj);
+//   socket.on('server-exp-update', (serverResponse) => cb(null, serverResponse));
+// }
+// export { expressDB };

@@ -9,7 +9,11 @@ class StudentView extends Component {
     this.state = {
       timestamp: 'no timestamp yet',
         message: '',
-        broadcast_code: ''
+        broadcast_code: '',
+        exp_obj: {
+          quiz_id: 1,
+          question: "what the heck?"
+        }
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
@@ -28,6 +32,32 @@ class StudentView extends Component {
         // })
     })
   }
+//TEST Axios post direct to server.then response to AC - then socket emit
+// sendMySelection(){
+//   let myResponse = this.state.exp_obj;
+//   axios.post('/api/responses',myResponse)
+//   .then( (response) => {
+//     console.log("here is the response from sendMySelection-----------" ,response)
+//   })
+// }
+
+
+
+//WED TEST -----------------------------------
+  // expTest(){
+  //     console.log('expTest fired')
+  //    let obj = this.state.exp_obj
+  //   messenger((err, serverResponse) => {
+  //       console.log(serverResponse)
+  //       // let broadcastObj = {
+  //       //     broadcast_id: serverResponse.broadcast_id,
+  //       //     broadcast_code: serverResponse.broadcast_code
+  //       // }
+  //       // this.setState({
+  //       //     broadcast_code: broadcastObj.broadcast_code
+  //       // })
+  //   })
+  // }
 
   render() {
     return (
