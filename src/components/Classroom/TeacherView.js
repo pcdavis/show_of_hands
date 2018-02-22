@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
 import axios from 'axios';
-import { subscribeToTimer, messenger } from './api';
+import { subscribeToTimer, messenger, api_broadcast_quiz } from './api';
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
-import {fetchBroadcast } from '../../actions/index';
+import {fetchBroadcast, ac_setCurrentQuiz } from '../../actions/index';
 
 class TeacherView extends Component {
   constructor(props) {
@@ -94,12 +94,24 @@ renderStackItems() {
 }
 //TEST Axios post direct to server.then response to AC - then socket emit
 sendMySelection(newQuiz){
+  let current_quiz_id;
 
 console.log(newQuiz)
 axios.post('/api/postQuiz',{newQuiz})
 .then( (response) => {
   console.log("here is the response.data from sendMySelection-----------" ,response.data)
+  let currentQuiz = response.data //this is an object with the keys I need
+  current_quiz_id = currentQuiz.current_quiz_id
+  this.props.ac_setCurrentQuiz(currentQuiz)
+  api_broadcast_quiz(current_quiz_id)
 })
+setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
+// setTimeout(  () => {
+//   api_notify_of_quiz(currentQuiz);
+// }, 5000)
+
+
+
 }
 
   render() {
@@ -142,4 +154,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect (mapStateToProps, {fetchBroadcast})(TeacherView)
+export default connect (mapStateToProps, {fetchBroadcast, ac_setCurrentQuiz})(TeacherView)

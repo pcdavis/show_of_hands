@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
-import { subscribeToTimer, messenger } from './api';
+import { subscribeToTimer, messenger, api_subscribe_to_quizes } from './api';
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
+import {fetchBroadcast } from '../../actions/index';
 
 class StudentView extends Component {
   constructor(props) {
     super(props);
     subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
+    api_subscribe_to_quizes((err, current_quiz_id) => this.setState({ current_quiz_id }));
     this.state = {
       timestamp: 'no timestamp yet',
         message: '',
         broadcast_code: '',
+        current_quiz_id: '',
         exp_obj: {
           quiz_id: 1,
           question: "what the heck?"
@@ -18,6 +22,10 @@ class StudentView extends Component {
     };
     this.sendMessage = this.sendMessage.bind(this);
   }
+
+  // api_subscribe_to_quizes(current_quiz_id){ console.log(current_quiz_id) }
+
+  
 
   sendMessage(){
       console.log('sendmessage fired')
@@ -65,9 +73,11 @@ sendMySelection(){
     return (
       <div className="StudentView">
       <h1>Welcome to the Student View </h1>
+     
         
                       
                     <h1>This is the timer value: {this.state.timestamp} </h1>   
+                    <h1>This is current quiz id: {this.state.current_quiz_id} </h1>   
                     <h2>{this.state.broadcast_code}</h2>
                      <Form inline>
         <FormControl 
@@ -82,4 +92,11 @@ sendMySelection(){
   }
 }
 
-export default StudentView;
+function mapStateToProps(state) {
+  return { 
+    socketroom: state.socketroom
+  };
+}
+
+export default connect (mapStateToProps, {fetchBroadcast})(StudentView)
+

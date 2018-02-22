@@ -8,6 +8,7 @@ export const FETCH_STACK_TITLES = "FETCH_STACK_TITLES";
 export const CREATE_BROADCAST = "CREATE_BROADCAST";
 export const SET_TEACHER_ID = "SET_TEACHER_ID";
 export const FETCH_BROADCAST_CONTENT = "FETCH_BROADCAST_CONTENT";
+export const SET_CURRENT_QUIZ = "SET_CURRENT_QUIZ";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
@@ -107,5 +108,13 @@ export function setTeacherID(teacher_id){
   return {
     type: SET_TEACHER_ID,
     payload: teacher_id
+  }
+}
+
+export function ac_setCurrentQuiz(currentQuiz){
+  console.log('ac_setCurrentQuiz fired from action creator index and here is the currentQuiz being passed in as the argument ', currentQuiz)
+  return {
+    type: SET_CURRENT_QUIZ,
+    payload: currentQuiz
   }
 }

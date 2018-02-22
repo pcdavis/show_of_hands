@@ -1,12 +1,13 @@
 import _ from "lodash";
-import { CREATE_BROADCAST, FETCH_BROADCAST_CONTENT } from "../actions";
+import { CREATE_BROADCAST, FETCH_BROADCAST_CONTENT, SET_CURRENT_QUIZ } from "../actions";
 // FETCH_STACK, DELETE_STACK, CREATE_STACK
 
 const initialState = {
   broadcast_id: null,
   broadcast_stack_id: null,
   broadcast_code: '',
-  broadcast_stack: []
+  broadcast_stack: [],
+  current_quiz:{}
 };
 
 
@@ -31,6 +32,12 @@ export default function( state = initialState, action ) {
     console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload)
 
     return Object.assign({}, state, { broadcast_stack: action.payload })
+    
+ 
+    case SET_CURRENT_QUIZ:
+    console.log("inside reducer_socketroom.js using case SET_CURRENT_QUIZ, here is the action payload data", action.payload)
+
+    return Object.assign({}, state, { current_quiz: action.payload })
     
  
     default:

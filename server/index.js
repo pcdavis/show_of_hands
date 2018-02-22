@@ -55,9 +55,16 @@ io.on('connection', function (client){
     });
 
     client.on('clientMessage', () => {
-        control.socketMessenger(io, app);
+        control.socketMessenger(io, app); //need to pass in io and app in order to be able to use sql calls to db and emit the response
         
     })
+
+    client.on('update_quiz_view', (current_quiz_id) => {
+        io.emit('new_quiz_question', current_quiz_id);
+        
+    })
+
+
   });
 
   //What follows is an example from an article http://markshust.com/2013/11/07/creating-nodejs-server-client-socket-io-mysql
