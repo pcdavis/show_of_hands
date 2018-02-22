@@ -28,16 +28,6 @@ class StudentView extends Component {
     this.renderQuiz = this.renderQuiz.bind(this);
   }
 
-  // api_subscribe_to_quizes(current_quiz_id){ console.log(current_quiz_id) }
-
-  //<Button> {correct_answer} </Button>
-  // <Button> {false_1} </Button>
-  // <Button> {false_2} </Button>
-  // <Button> {false_3} </Button>
-  // <Button name={correct_answer} onClick={ this.submitAnswer(this.target.name)} > {correct_answer} </Button>
-  //                 <Button name={false_1} onClick={ this.submitAnswer(this.target.name)} > {false_1} </Button>
-  //                 <Button name={false_2} onClick={ this.submitAnswer(this.target.name)} > {false_2} </Button>
-  //                 <Button name={false_3} onClick={ this.submitAnswer(this.target.name)} > {false_3} </Button>
 
   submitAnswer(buttonName){
     alert(buttonName);
