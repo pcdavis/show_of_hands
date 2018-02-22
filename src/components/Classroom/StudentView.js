@@ -41,6 +41,15 @@ class StudentView extends Component {
 
   submitAnswer(buttonName){
     alert(buttonName);
+    //create a submissionObject that contains all the values that will populate the submission table with the student's response. Include a timestamp when the button is clicked so that you can compair the fastest correct answers.
+
+    //Make an axios.post to the server
+
+    //After the response comes back from the server, take the response object and pass it to the socket api to broadcast it to everyone 
+
+    //Then change the student view to show the chart and the correct answer and a message saying whether or not they got it correct. Inside this new view add a function that calls the socket api with a callback. The socket api will subscribe to any updates to the results and use the callback to repopulate their chart.js with data
+
+    // Inside the 
   }
 
   renderQuiz(){
