@@ -68,8 +68,8 @@ startBroadcasting(){
   console.log("startBroadcast function fired")
   let this_user_id = this.state.theStackContent[0].user_id;
   let this_stack_id = this.state.theStackContent[0].stack_id;
-console.log("deconstructed items userid--------------------------------" ,this_user_id)
-console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
+// console.log("deconstructed items userid--------------------------------" ,this_user_id)
+// console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
 
   //set redux state of teacherID
   this.props.setTeacherID(this.state.teacherID);
