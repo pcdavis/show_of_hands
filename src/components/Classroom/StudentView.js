@@ -2,30 +2,66 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes } from './api';
-import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {fetchBroadcast } from '../../actions/index';
 
 class StudentView extends Component {
   constructor(props) {
     super(props);
     subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
-    api_subscribe_to_quizes((err, current_quiz_id) => this.setState({ current_quiz_id }));
+    api_subscribe_to_quizes((err, newQuizObj) => {
+      this.setState({ newQuizObj:newQuizObj })
+      console.log(this.state.newQuizObj) ;
+    } );
     this.state = {
       timestamp: 'no timestamp yet',
         message: '',
         broadcast_code: '',
         current_quiz_id: '',
+        newQuizObj: {},
         exp_obj: {
           quiz_id: 1,
           question: "what the heck?"
         }
     };
     this.sendMessage = this.sendMessage.bind(this);
+    this.renderQuiz = this.renderQuiz.bind(this);
   }
 
   // api_subscribe_to_quizes(current_quiz_id){ console.log(current_quiz_id) }
 
-  
+  renderQuiz(){
+
+    console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
+    const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
+
+    if (this.state.newQuizObj.question) {
+      return (
+        <div>
+                <Panel>
+                  <Panel.Heading><h2>{question}</h2></Panel.Heading>
+                  <Panel.Body>
+                    <ButtonGroup vertical block>
+                  <Button> {correct_answer} </Button>
+                  <Button> {false_1} </Button>
+                  <Button> {false_2} </Button>
+                  <Button> {false_3} </Button>
+                </ButtonGroup>;
+          
+          
+                  </Panel.Body>
+            </Panel>
+        </div>
+        
+            )
+    } else {
+      return (
+        <h2> Waiting for teacher </h2>
+      )
+    }
+
+   
+  }
 
   sendMessage(){
       console.log('sendmessage fired')
@@ -74,7 +110,7 @@ sendMySelection(){
       <div className="StudentView">
       <h1>Welcome to the Student View </h1>
      
-        
+        {this.renderQuiz()}
                       
                     <h1>This is the timer value: {this.state.timestamp} </h1>   
                     <h1>This is current quiz id: {this.state.current_quiz_id} </h1>   

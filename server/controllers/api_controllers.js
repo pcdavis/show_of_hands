@@ -184,21 +184,25 @@ module.exports = {
             .catch( err => {res.status(500).send('error with messageTest') })
        
     },
+    
     socketMessenger: function(io,app) {
-
-        console.log(" messageTest fired in the controller ----------------------------------------------------------------------------------  ")
+    console.log(" socketMessenger fired in the controller ----------------------------------------------------------------------------------  ")
         const db = app.get('db');
-        
-             db.sq_fetch_broadcast([2])
+        db.sq_fetch_broadcast([2])
             .then( response => {
                 io.emit('serverMessage', response[0])
-        
-
             }) 
             .catch( err => {res.status(500).send('error with messageTest') })
-
-            
-       
+    },
+    
+    quizMessenger: function(io,app,current_quiz_id) {
+    console.log(" quizMessenger fired in the controller -------------------------------------------------------------------current_quiz_id passed in is ---------------  ",current_quiz_id)
+        const db = app.get('db');
+        db.sq_fetch_current_quiz([current_quiz_id])
+            .then( response => {
+                io.emit('new_quiz_question', response[0])
+            }) 
+            .catch( err => {res.status(500).send('error with messageTest') })
     },
 
 

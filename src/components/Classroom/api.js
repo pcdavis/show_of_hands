@@ -8,8 +8,14 @@ function subscribeToTimer(cb) {
 export { subscribeToTimer };
 
 function api_subscribe_to_quizes(cb) {
-  socket.on('new_quiz_question', current_quiz_id => cb(null, current_quiz_id) );
+  socket.on('new_quiz_question', (newQuizObj) => {
+    console.log(newQuizObj)
+    cb(null, newQuizObj)
+  }  );
 }
+// function api_subscribe_to_quizes(cb) {
+//   socket.on('new_quiz_question', current_quiz_id => cb(null, current_quiz_id) );
+// }
 export { api_subscribe_to_quizes };
 
 function messenger(cb) {

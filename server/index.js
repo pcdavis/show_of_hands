@@ -60,9 +60,15 @@ io.on('connection', function (client){
     })
 
     client.on('update_quiz_view', (current_quiz_id) => {
-        io.emit('new_quiz_question', current_quiz_id);
+        control.quizMessenger(io, app, current_quiz_id)
+        // io.emit('new_quiz_question', quizObj);
         
     })
+
+    // client.on('update_quiz_view', (current_quiz_id) => {
+    //     io.emit('new_quiz_question', current_quiz_id);
+        
+    // })
 
 
   });

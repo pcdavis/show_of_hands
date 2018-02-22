@@ -96,7 +96,7 @@ renderStackItems() {
 sendMySelection(newQuiz){
   let current_quiz_id;
 
-console.log(newQuiz)
+console.log("sendMySelection fired and newQuiz obj is " ,newQuiz)
 axios.post('/api/postQuiz',{newQuiz})
 .then( (response) => {
   console.log("here is the response.data from sendMySelection-----------" ,response.data)
@@ -137,7 +137,7 @@ setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
             placeholder = 'Broadcast Code'
             onChange = { event => this.setState({ message: event.target.value})}
             />
-        <Button onClick={() => this.sendMySelection()}>Send Message to Studi</Button>
+        <Button onClick={() => this.sendMessage()}>Send Message to Studi</Button>
         <h3>{this.state.message}</h3>
         </Form> 
       </div>
