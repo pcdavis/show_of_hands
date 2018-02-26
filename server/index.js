@@ -223,6 +223,7 @@ app.get('/api/stack_items', control.fetchStackItems)
 app.post('/api/studentresponses', control.responseUpdater)
 app.post('/api/postQuiz', control.postQuiz)
 app.post('/api/responses', control.postAnswer)
+app.post('/api/students', control.student_signin)
 
 
 

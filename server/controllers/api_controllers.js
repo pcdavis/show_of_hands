@@ -144,6 +144,17 @@ module.exports = {
             .catch( err => {res.status(500).send('error with myResponse') })
 
    },
+    
+   student_signin: function(req, res, next) {
+
+        console.log(" student_signin fired in the controller here is the req.user----------------------------------------------------------------------------------  ", req.user)
+        console.log(" here is req.sessionID----------------------------------------------------------------------------------  ", req.sessionID)
+        if( req.sessionID) {
+            res.status(200).send( req.sessionID )
+            console.log("student_signin worked, here is the students session id ",req.sessionID)
+        } else ( err => {res.status(500).send('error with student_signin') })
+ },
+ 
     //postQuiz is called from TeacherView - it sends the new quiz question to the db, then responds to front end with db response, which will get sent to AC to update redux and finally, TeacherView will then send api_socket method call to notify everyone of the new quiz and emit that object to them to use in Student View
     postQuiz: function(req, res, next) {
 
