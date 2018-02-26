@@ -10,7 +10,7 @@ import {fetchBroadcast, ac_setCurrentQuiz } from '../../actions/index';
 class TeacherView extends Component {
   constructor(props) {
     super(props);
-    subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
+    // subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
     this.state = {
       timestamp: 'no timestamp yet',
       message: '',
@@ -96,14 +96,14 @@ renderStackItems() {
 sendMySelection(newQuiz){
   let current_quiz_id;
 
-console.log("sendMySelection fired and newQuiz obj is " ,newQuiz)
+console.log("sendMySelection fired FROM INSIDE TEACHERVIEW AND IS USED TO SEND NEW QUIZ QUESTION VIA axios.post('/api/postQuiz',{newQuiz}) TO STUDENTSand newQuiz obj is " ,newQuiz)
 axios.post('/api/postQuiz',{newQuiz})
 .then( (response) => {
   console.log("here is the response.data from sendMySelection-----------" ,response.data)
   let currentQuiz = response.data //this is an object with the keys I need
   current_quiz_id = currentQuiz.current_quiz_id
   this.props.ac_setCurrentQuiz(currentQuiz)
-  api_broadcast_quiz(current_quiz_id)
+  api_broadcast_quiz(current_quiz_id)//place this inside .then otherwise it would fire before .then because .then is async promise
 })
 setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
 // setTimeout(  () => {

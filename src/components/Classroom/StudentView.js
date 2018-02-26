@@ -1,36 +1,129 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { subscribeToTimer, messenger, api_subscribe_to_quizes } from './api';
+import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {fetchBroadcast } from '../../actions/index';
+import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
+import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
 
 class StudentView extends Component {
   constructor(props) {
     super(props);
     // subscribeToTimer((err, timestamp) => this.setState({ timestamp }));
-    api_subscribe_to_quizes((err, newQuizObj) => {
+    
+    
+    api_subscribe_to_quizes( (err, newQuizObj) => {
       this.setState({ newQuizObj:newQuizObj })
       console.log("here is the newQuizObj that arrived from socket into the student veiw", this.state.newQuizObj) ;
     } );
+    
     this.state = {
       timestamp: 'no timestamp yet',
-        message: '',
-        broadcast_code: '',
-        current_quiz_id: '',
-        newQuizObj: {},
-        exp_obj: {
-          quiz_id: 1,
-          question: "what the heck?"
-        }
+      message: '',
+      broadcast_code: '',
+      current_quiz_id: '',
+      newQuizObj: {},
+      exp_obj: {
+        quiz_id: 1,
+        question: "what the heck?"
+      },
+      selectedAnswer: '',
+      correct_answers: 0,
+      false_1s: 0,
+      false_2s: 0,
+      false_3s: 0,
+      totalresponses: 0
     };
+
+    //Here's what the response object looks like going into broadcast response socket call
+//     broadcast_id: null
+// quiz_id: 3
+// response_id: 13
+// response_timestamp: "1519663423505"
+// screen_name: ""
+// selected_answer: "correct_answer"
+// selected_answer_text: "Albany"
+// stack_id: null
+// user_id: null
+// user_session_id: null
+    
+    api_subscribe_to_responses( (err, newResponse) => {
+      console.log("api_subscribe_to_responses. here is the newResponse object", newResponse)
+    
+
+     let response_id = newResponse.response_id 
+     let user_session_id = newResponse.user_session_id
+     let selected_answer = newResponse.selected_answer
+     let selected_answer_text = newResponse.selected_answer_text
+     let response_timestamp = newResponse.response_timestamp
+     let screen_name = newResponse.screen_name
+     let broadcast_id = newResponse.broadcast_id
+     let user_id = newResponse.user_id
+     let stack_id = newResponse.stack_id
+     let quiz_id = newResponse.quiz_id
+
+      if(selected_answer.length > 0){
+        let curentResponses = this.state.totalresponses;
+        curentResponses++;
+
+        this.setState({totalresponses: curentResponses})
+        
+         switch(selected_answer ){
+           case "correct_answer":
+           let currentCorrects = this.state.correct_answers
+           currentCorrects++
+           this.setState({ correct_answers: currentCorrects})
+           
+           case "false_1":
+           this.setState({ false_1s : ++this.state.false_1s})
+           
+           case "false_2":
+           this.setState({ false_2s : ++this.state.false_2s})
+           
+           case "false_3":
+           this.setState({ false_3s : ++this.state.false_3s})
+           }
+      }
+  })
+
+
+       
     this.sendMessage = this.sendMessage.bind(this);
     this.renderQuiz = this.renderQuiz.bind(this);
-  }
+    this.submitAnswer = this.submitAnswer.bind(this);
+  }//End of CONSTSRUCTOR
 
 
-  submitAnswer(buttonName){
-    alert(buttonName);
+
+
+//This version goes through socket emit on client side. probably not the way to do it
+  submitAnswer(buttonKey,buttonName){
+    
+    this.setState({ selectedAnswer: buttonKey});
+    
+    const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
+    let responseObj = {
+      selectedAnswer: buttonKey,
+      selectedAnswerText: buttonName,
+      response_timestamp: new Date().getTime(),
+      broadcast_id: this.props.socketroom.broadcast_id,
+      screen_name: '',
+      user_session_id: '',
+      user_id: '',
+      stack_id: this.props.socketroom.stack_id,
+      quiz_id: quiz_id,
+      question: question,
+      correct_answer: correct_answer,
+   };
+   console.log("here is the responseObj beign sent to axios in submit answer function ", responseObj)
+   axios.post('/api/responses', {responseObj})
+   .then( (response) => {
+     console.log("here is the server response that comes back to submitAnswer" ,response.data);
+     api_emit_my_responses(response.data)
+     
+   })
+}
     //create a submissionObject that contains all the values that will populate the submission table with the student's response. Include a timestamp when the button is clicked so that you can compair the fastest correct answers.
 
     //Make an axios.post to the server
@@ -40,6 +133,63 @@ class StudentView extends Component {
     //Then change the student view to show the chart and the correct answer and a message saying whether or not they got it correct. Inside this new view add a function that calls the socket api with a callback. The socket api will subscribe to any updates to the results and use the callback to repopulate their chart.js with data
 
     // Inside the 
+  renderChart(){
+    
+    if(this.state.totalresponses > 0){
+      //render the chart in here using the response data
+      let correct_answers =this.state.correct_answers;
+      let false_1s = this.state.false_1s;
+      let false_2s = this.state.false_2s;
+      let false_3s = this.state.false_3s;
+      let totalresponses = this.state.totalresponses;
+
+      const doughnut = {
+        labels: [
+          this.state.newQuizObj.correct_answer,
+          this.state.newQuizObj.false_1,
+          this.state.newQuizObj.false_2,
+          this.state.newQuizObj.false_3
+        ],
+        datasets: [{
+          data: [correct_answers, false_1s, false_2s],
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56',
+            '#36A2EB'
+          ],
+          hoverBackgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56'
+          ]
+        }]
+      };
+
+      return (
+        <div className="animated fadeIn">
+          <CardColumns className="cols-2">
+          <Card>
+            <CardHeader>
+              Student Responses
+              <div className="card-actions">
+                <a href="http://www.chartjs.org">
+                  <small className="text-muted">docs</small>
+                </a>
+              </div>
+            </CardHeader>
+          
+              <div className="chart-wrapper">
+                <Doughnut data={doughnut}/>
+              </div>
+            
+          </Card>
+
+         </CardColumns>
+      </div>
+    )
+      
+    }
   }
 
   renderQuiz(){
@@ -55,10 +205,10 @@ class StudentView extends Component {
                   <Panel.Heading><h2>{question}</h2></Panel.Heading>
                   <Panel.Body>
                     <ButtonGroup vertical block>
-                    <Button onClick= { ()=> this.submitAnswer(correct_answer)} > {correct_answer} </Button>
-                    <Button onClick= { ()=> this.submitAnswer(false_1)} > {false_1} </Button>
-                    <Button onClick= { ()=> this.submitAnswer(false_2)} > {false_2} </Button>
-                    <Button onClick= { ()=> this.submitAnswer(false_3)} > {false_3} </Button>
+                    <Button onClick= { ()=> this.submitAnswer ("correct_answer", correct_answer)} > {correct_answer} </Button>
+                    <Button onClick= { ()=> this.submitAnswer("false_1", false_1)} > {false_1} </Button>
+                    <Button onClick= { ()=> this.submitAnswer("false_2" ,false_2)} > {false_2} </Button>
+                    <Button onClick= { ()=> this.submitAnswer("false_3" ,false_3)} > {false_3} </Button>
                 </ButtonGroup>;
           
           
@@ -91,14 +241,14 @@ class StudentView extends Component {
     })
   }
 //TEST Axios post direct to server.then response to AC - then socket emit
-sendMySelection(){
-  let myResponse = this.state.exp_obj;
-  console.log(myResponse)
-  axios.post('/api/studentresponses',{myResponse})
-  .then( (response) => {
-    console.log("here is the response from sendMySelection-----------" ,response)
-  })
-}
+// sendMySelection(){
+//   let myResponse = this.state.exp_obj;
+//   console.log(myResponse)
+//   axios.post('/api/studentresponses',{myResponse})
+//   .then( (response) => {
+//     console.log("here is the response from sendMySelection-----------" ,response)
+//   })
+// }
 
 
 
@@ -122,7 +272,9 @@ sendMySelection(){
     return (
       <div className="StudentView">
       <h1>Welcome to the Student View </h1>
+      <h1>total responses: {this.state.totalresponses} </h1>
      
+        {this.renderChart()}
         {this.renderQuiz()}
                       
                     {/* <h1>This is the timer value: {this.state.timestamp} </h1>   

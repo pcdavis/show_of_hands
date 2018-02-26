@@ -144,10 +144,10 @@ module.exports = {
             .catch( err => {res.status(500).send('error with myResponse') })
 
    },
-    
+    //postQuiz is called from TeacherView - it sends the new quiz question to the db, then responds to front end with db response, which will get sent to AC to update redux and finally, TeacherView will then send api_socket method call to notify everyone of the new quiz and emit that object to them to use in Student View
     postQuiz: function(req, res, next) {
 
-        console.log(" responseUpdater fired in the controller here is the req.user----------------------------------------------------------------------------------  ", req.user)
+        console.log(" postQuiz fired in the controller here is the req.user----------------------------------------------------------------------------------  ", req.user)
         console.log(" here is req.sessionID----------------------------------------------------------------------------------  ", req.sessionID)
         const db = req.app.get('db');
         const userSessionID = req.sessionID;
@@ -164,9 +164,50 @@ module.exports = {
             db.sq_current_quiz([quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id ])
             .then( response => {
                 res.status(200).send( response[0] )
-                console.log("myResponse worked",response[0])
+                console.log("postQuiz worked after being called by TeacherView to post the current Quiz. Here is the response from the db that will be used by front end to update redux and also to emit via socket to all students",response[0])
             }) 
-            .catch( err => {res.status(500).send('error with myResponse') })
+            .catch( err => {res.status(500).send('error with postQuiz when teacher view tried to send the new quiz question to server and db') })
+
+   },
+//    postAnswer: function(app, io, responseObj)  
+   postAnswer: function(req, res, next) {
+       //TODO if I'm not able to bring req and app in as arguments, just ditch the req and make students provide a screenname when entering classroom.  ALSO - you can tag a console.log on the new quiz controller method to see if it receicves a req object even though it is bringing in the app and io in as arguments.
+
+        console.log(" postAnser fired in the controller here is the req----------------------------------------------------------------------------------  ")
+        // console.log(" here is app----------------------------------------------------------------------------------  ", app)
+
+        const db = req.app.get('db');
+        // console.log(db)
+        const userSessionID = req.app.sessionID;
+        // const db = app.get('db');
+        // db.sq_fetch_current_quiz([1])
+        
+        console.log("responseObj coming in to postAnswer server controller from front end" , req.body.responseObj)
+        let { selectedAnswer, selectedAnswerText, response_timestamp, broadcast_id, screen_name, user_id, stack_id, quiz_id, question, correct_answer } = req.body.responseObj;
+        console.log("here is the variable selectedAnswer", selectedAnswer)
+        // let database_submission = {
+        //     userSessionID,
+        //     selectedAnswer,
+        //     selectedAnswerText,
+        //     response_timestamp,
+        //     broadcast_id,
+        //     screen_name,
+        //     user_id,
+        //     stack_id,
+        //     quiz_id,
+        //     question,
+        //     correct_answer
+        // }
+// console.log("here's the database_submission that is being sent to db_responses-----------", database_submission)  
+           
+            // db.sq_post_responses(['slppdfjdfj','inserver','selected text from server',234567800944567, 'daffy 2duck3', 1 ])
+             db.sq_post_responses([userSessionID, selectedAnswer, selectedAnswerText, response_timestamp, screen_name, quiz_id ])
+             .then( response => {
+                 console.log("postAnswer receied this back from db after posting the student's response",response[0])
+                res.status(200).send( response[0] )
+                console.log("postAnswer worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with postAnswer') })
 
    },
 
@@ -204,6 +245,17 @@ module.exports = {
             }) 
             .catch( err => {res.status(500).send('error with messageTest') })
     },
+    
+    //This may have been used as a test or maybe I used it to send the quiz to everyone. Not sure anymore
+    // postAnswer: function(io,app,current_quiz_id) {
+    // console.log(" postAnswer fired in the controller -------------------------------------------------------------------current_quiz_id passed in is ---------------  ",current_quiz_id)
+    //     const db = app.get('db');
+    //     db.sq_fetch_current_quiz([current_quiz_id])
+    //         .then( response => {
+    //             io.emit('new_quiz_question', response[0])
+    //         }) 
+    //         .catch( err => {res.status(500).send('error with messageTest') })
+    // },
 
 
 

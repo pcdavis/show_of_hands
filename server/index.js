@@ -59,11 +59,21 @@ io.on('connection', function (client){
         
     })
 
+    client.on('responses_to_server', (responseObj) => {
+        io.emit('new_response', responseObj)
+        
+    })
+
     client.on('update_quiz_view', (current_quiz_id) => {
         control.quizMessenger(io, app, current_quiz_id)
         // io.emit('new_quiz_question', quizObj);
         
     })
+
+    // client.on('submit_response', (responseObj) => {
+    //     control.postAnswer(io, app, responseObj)
+                
+    // })
 
     // client.on('update_quiz_view', (current_quiz_id) => {
     //     io.emit('new_quiz_question', current_quiz_id);
@@ -71,7 +81,7 @@ io.on('connection', function (client){
     // })
 
 
-  });
+  });//end of socket calls
 
   //What follows is an example from an article http://markshust.com/2013/11/07/creating-nodejs-server-client-socket-io-mysql
 
@@ -212,6 +222,8 @@ app.get('/api/stack_items', control.fetchStackItems)
 //test of direct axios post from student teachers
 app.post('/api/studentresponses', control.responseUpdater)
 app.post('/api/postQuiz', control.postQuiz)
+app.post('/api/responses', control.postAnswer)
+
 
 
 //Start server listening
@@ -223,29 +235,3 @@ server.listen( port, () => { console.log(`Server listening on port ${port}.`); }
 //here's the listen call before socket implemented
 // app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
-
-//Below are the sql scripts I used to create the users1 table, populate it with some test records and see if they show up as expected
-// CREATE TABLE users1(
-//     user_id serial primary key,
-//     user_name text,
-//     img text,
-//     auth_id text,
-//     first_name text,
-//     last_name text,
-//     gender text,
-//     hair_color text,
-//     eye_color text,
-//     hobby text,
-//     birth_day integer,
-//     birth_month text,
-//     birth_year integer
-// )
-
-
-// insert into users1 
-// (user_name, img, auth_id, first_name, last_name, gender, hair_color, eye_color, hobby, birth_day, birth_month, birth_year)
-// VALUES 
-// ('', '', 'google-oauth2|10878794363160113', '', '', '', '', '', '', null, '', null )
-// returning *;
-
-// select * from users1;

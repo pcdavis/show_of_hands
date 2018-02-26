@@ -6,6 +6,25 @@ VALUES
 ('My Second Stack', 1)
 returning *;
 
+--create table responses
+
+
+
+CREATE TABLE responses
+(response_id serial primary key,
+ userSessionID text,
+ selectedAnswer text,
+selectedAnswerText text,
+response_timestamp INTEGER,
+broadcast_id INTEGER REFERENCES broadcast(broadcast_id),
+screen_name text,
+user_id INTEGER REFERENCES users(user_id),
+stack_id INTEGER REFERENCES stacks(stack_id) ,
+quiz_id INTEGER REFERENCES quizes(quiz_id)
+)
+
+
+
 --Create quiz questions
 insert into quizes 
 (user_id, question, correct_answer, false_1, false_2, false_3)
@@ -99,18 +118,29 @@ VALUES
 returning *;
 
 select * from broadcast 
+userSessionID,
+        //     selectedAnswer,
+        //     selectedAnswerText,
+        //     response_timestamp,
+        //     broadcast_id,
+        //     screen_name,
+        //     user_id,
+        //     stack_id,
+        //     quiz_id,
+        //     question,
+        //     correct_answer
 
 CREATE TABLE responses(
     response_id serial primary key,
+    user_session_id text,
+    selected_answer text,
+    selected_answer_text text,
+    response_timestamp BIGINT,
+    screen_name text,
     broadcast_id INTEGER REFERENCES broadcast(broadcast_id),
     user_id INTEGER REFERENCES users(user_id),
     stack_id INTEGER REFERENCES stacks(stack_id),
-    time_submitted INTEGER,
-    quiz_id INTEGER REFERENCES quizes(quiz_id),
-    quiz_question TEXT REFERENCES quizes(question),
-    correct_answer TEXT REFERENCES quizes(correct_answer),
-    quiz_question_id INTEGER REFERENCES quizes(quiz_id),
-    
+    quiz_id INTEGER REFERENCES quizes(quiz_id)    
 )
 
 insert into broadcast
