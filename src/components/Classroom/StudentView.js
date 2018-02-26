@@ -69,32 +69,32 @@ class StudentView extends Component {
 
         this.setState({totalresponses: curentResponses})
         
-         switch(selected_answer ){
-           case "correct_answer":
-           let currentCorrects = this.state.correct_answers
-           currentCorrects++
-           this.setState({ correct_answers: currentCorrects})
-           
-           case "false_1":
-           this.setState({ false_1s : ++this.state.false_1s})
-           
-           case "false_2":
-           this.setState({ false_2s : ++this.state.false_2s})
-           
-           case "false_3":
-           this.setState({ false_3s : ++this.state.false_3s})
+         
+           if(selected_answer ==="correct_answer"){
+             let currentCorrects = this.state.correct_answers
+             currentCorrects++
+             this.setState({ correct_answers: currentCorrects})
            }
+           
+           if(selected_answer ==="false_1"){
+             this.setState({ false_1s : ++this.state.false_1s})
+           }
+           
+           if(selected_answer ==="false_2"){
+             this.setState({ false_2s : ++this.state.false_2s})
+           }
+           
+           if(selected_answer ==="false_3"){
+             this.setState({ false_3s : ++this.state.false_3s})
+           }
+           
       }
   })
 
-
-       
     this.sendMessage = this.sendMessage.bind(this);
     this.renderQuiz = this.renderQuiz.bind(this);
     this.submitAnswer = this.submitAnswer.bind(this);
   }//End of CONSTSRUCTOR
-
-
 
 
 //This version goes through socket emit on client side. probably not the way to do it
@@ -124,15 +124,7 @@ class StudentView extends Component {
      
    })
 }
-    //create a submissionObject that contains all the values that will populate the submission table with the student's response. Include a timestamp when the button is clicked so that you can compair the fastest correct answers.
-
-    //Make an axios.post to the server
-
-    //After the response comes back from the server, take the response object and pass it to the socket api to broadcast it to everyone 
-
-    //Then change the student view to show the chart and the correct answer and a message saying whether or not they got it correct. Inside this new view add a function that calls the socket api with a callback. The socket api will subscribe to any updates to the results and use the callback to repopulate their chart.js with data
-
-    // Inside the 
+ 
   renderChart(){
     
     if(this.state.totalresponses > 0){
@@ -151,17 +143,18 @@ class StudentView extends Component {
           this.state.newQuizObj.false_3
         ],
         datasets: [{
-          data: [correct_answers, false_1s, false_2s],
+          data: [correct_answers, false_1s, false_2s, false_3s],
           backgroundColor: [
             '#FF6384',
             '#36A2EB',
             '#FFCE56',
-            '#36A2EB'
+            '#cc0066'
           ],
           hoverBackgroundColor: [
             '#FF6384',
             '#36A2EB',
-            '#FFCE56'
+            '#FFCE56',
+            '#cc0066'
           ]
         }]
       };
@@ -251,28 +244,15 @@ class StudentView extends Component {
 // }
 
 
-
-//WED TEST -----------------------------------
-  // expTest(){
-  //     console.log('expTest fired')
-  //    let obj = this.state.exp_obj
-  //   messenger((err, serverResponse) => {
-  //       console.log(serverResponse)
-  //       // let broadcastObj = {
-  //       //     broadcast_id: serverResponse.broadcast_id,
-  //       //     broadcast_code: serverResponse.broadcast_code
-  //       // }
-  //       // this.setState({
-  //       //     broadcast_code: broadcastObj.broadcast_code
-  //       // })
-  //   })
-  // }
-
   render() {
     return (
       <div className="StudentView">
       <h1>Welcome to the Student View </h1>
       <h1>total responses: {this.state.totalresponses} </h1>
+      <h1>Number of correct_answers: {this.state.correct_answers} </h1>
+      <h1>Number of false_1s: {this.state.false_1s} </h1>
+      <h1>Number of false_2s: {this.state.false_2s} </h1>
+      <h1>Number of false_3s: {this.state.false_3s} </h1>
      
         {this.renderChart()}
         {this.renderQuiz()}
