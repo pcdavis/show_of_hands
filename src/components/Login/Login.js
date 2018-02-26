@@ -15,16 +15,19 @@ class Login extends Component {
   }
   handleChange(event){
     this.setState({
-      classroom_code: event.target.value
+      classroom_code: event.target.value,
+      screen_name: event.target.value
     })
   }
 
   handle_student_signin(classCode) {
+    let screenName = this.state.screen_name;
     console.log("handle_student_signin fired inside login page / home '/' -------------", classCode)
-    axios.post('api/students')
+    console.log("handle_student_signin fired inside screenName -------------", screenName)
+    axios.post('api/students', {screenName})
     .then( response => { console.log("the student's session id that comes from response from server to handle student signin axios submission", response)})
     this.props.history.push(`/classroom/${this.state.classroom_code}`)
-    this.setState({classroom_code: '' })
+    // this.setState({classroom_code: '' })
   }
 
   render() {
@@ -42,9 +45,14 @@ class Login extends Component {
 
       <Form inline>
         <FormControl 
-        placeholder = 'Ente Your Classroom Code'
+        placeholder = 'Enter Your Classroom Code'
         value = {this.state.classroom_code}
         onChange = { event => this.setState({ classroom_code: event.target.value})}
+        />
+        <FormControl 
+        placeholder = 'Enter a Screen Name'
+        value = {this.state.screen_name}
+        onChange = { event => this.setState({ screen_name: event.target.value})}
         />
         <Button onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
       </Form>

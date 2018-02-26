@@ -171,7 +171,7 @@ passport.use(new Autho0Strategy({
 passport.serializeUser( (user_id, done) => { 
     console.log("in the serializeUser here")
     //I am creating the session.user object below
-    let user = { id: user_id, stacks: { }, answers: { }};
+    let user = { id: user_id, stacks: { }, answers: { }, screenName: ''};
     const isuser = user ? true : false;
     console.log(isuser)
     console.log("here is session.user I created inside serializeUser. ", user)

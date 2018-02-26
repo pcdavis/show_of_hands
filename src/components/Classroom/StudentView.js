@@ -6,6 +6,7 @@ import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem
 import {fetchBroadcast } from '../../actions/index';
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
+import Modals from './Modals'
 
 class StudentView extends Component {
   constructor(props) {
@@ -247,6 +248,7 @@ class StudentView extends Component {
   render() {
     return (
       <div className="StudentView">
+      
       <h1>Welcome to the Student View </h1>
       <h1>total responses: {this.state.totalresponses} </h1>
       <h1>Number of correct_answers: {this.state.correct_answers} </h1>
