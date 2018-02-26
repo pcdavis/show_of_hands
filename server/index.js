@@ -64,6 +64,10 @@ io.on('connection', function (client){
         
     })
 
+    client.on('incoming_students', (newStudentIdentity) => {
+        io.emit('new_student', newStudentIdentity)
+     })
+
     client.on('update_quiz_view', (current_quiz_id) => {
         control.quizMessenger(io, app, current_quiz_id)
         // io.emit('new_quiz_question', quizObj);

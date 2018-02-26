@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses } from './api';
+import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {fetchBroadcast } from '../../actions/index';
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
-import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
+import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
 import Modals from './Modals'
+
 
 class StudentView extends Component {
   constructor(props) {
@@ -19,6 +20,15 @@ class StudentView extends Component {
       console.log("here is the newQuizObj that arrived from socket into the student veiw", this.state.newQuizObj) ;
     } );
     
+    api_subscribe_to_new_students( (err, newStudentIdentity) => {
+      console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
+      console.log("here is this.state.enrolled_students before adding the new one", this.state.enrolled_students);
+      let updated_enrollment = [...this.state.enrolled_students, newStudentIdentity.screenName]
+      this.setState({ enrolled_students:updated_enrollment })
+      console.log("here is this.state.enrolled_students AFTER adding the new one", this.state.enrolled_students);
+      
+    } );
+    
     this.state = {
       timestamp: 'no timestamp yet',
       message: '',
@@ -29,6 +39,7 @@ class StudentView extends Component {
         quiz_id: 1,
         question: "what the heck?"
       },
+      enrolled_students: [],
       selectedAnswer: '',
       correct_answers: 0,
       false_1s: 0,
@@ -187,7 +198,6 @@ class StudentView extends Component {
   }
 
   renderQuiz(){
-
     console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
     const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
     console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
@@ -204,21 +214,34 @@ class StudentView extends Component {
                     <Button onClick= { ()=> this.submitAnswer("false_2" ,false_2)} > {false_2} </Button>
                     <Button onClick= { ()=> this.submitAnswer("false_3" ,false_3)} > {false_3} </Button>
                 </ButtonGroup>;
-          
-          
-                  </Panel.Body>
+                </Panel.Body>
             </Panel>
         </div>
-        
-            )
+      )
     } else {
       return (
         <h2> Waiting for teacher </h2>
       )
     }
+} // end of renderQuiz
 
-   
-  }
+//   renderStudentNames(){
+//     console.log("renderStudentNames fired and this.state.enrolled_students is ", this.state.enrolled_students)
+  
+//     if (this.state.enrolled_students.length > 0) {
+//       this.state.enrolled_students.map( student => {
+//         return (
+//           <Alert bsStyle="warning">
+//     <strong>Holy guacamole!</strong> {student.screenName}
+//   </Alert>
+//         )})
+      
+//     } else {
+//       return (
+//         <h2> Waiting for students to enroll </h2>
+//       )
+//     }
+// } // end of renderStudentNames
 
   sendMessage(){
       console.log('sendmessage fired')
@@ -250,12 +273,14 @@ class StudentView extends Component {
       <div className="StudentView">
       
       <h1>Welcome to the Student View </h1>
+      <h1>Welcome to the students in the class </h1>
       <h1>total responses: {this.state.totalresponses} </h1>
       <h1>Number of correct_answers: {this.state.correct_answers} </h1>
       <h1>Number of false_1s: {this.state.false_1s} </h1>
       <h1>Number of false_2s: {this.state.false_2s} </h1>
       <h1>Number of false_3s: {this.state.false_3s} </h1>
      
+        {this.state.enrolled_students}
         {this.renderChart()}
         {this.renderQuiz()}
                       

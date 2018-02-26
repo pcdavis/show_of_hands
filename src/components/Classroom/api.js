@@ -15,6 +15,20 @@ function api_subscribe_to_quizes(cb) {
 }
 export { api_subscribe_to_quizes };
 
+function api_notify_classroom(newStudentIdentity) {
+  console.log("here's what came into the api_notify_classroom", newStudentIdentity)
+  socket.emit('incoming_students', newStudentIdentity );
+}
+export { api_notify_classroom };
+
+function api_subscribe_to_new_students(cb) {
+  socket.on('new_student', (newStudentIdentity) => {
+    console.log(newStudentIdentity)
+    cb(null, newStudentIdentity)
+  } );
+}
+export { api_subscribe_to_new_students };
+
 function api_emit_my_responses(myResponse) {
   console.log("here's what came into the api_emit_my_responses", myResponse)
   socket.emit('responses_to_server', myResponse );

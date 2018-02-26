@@ -68,18 +68,20 @@ startBroadcasting(){
   console.log("startBroadcast function fired")
   let this_user_id = this.state.theStackContent[0].user_id;
   let this_stack_id = this.state.theStackContent[0].stack_id;
-// console.log("deconstructed items userid--------------------------------" ,this_user_id)
-// console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
-
+  // console.log("deconstructed items userid--------------------------------" ,this_user_id)
+  // console.log("deconstructed items stack_id--------------------------------" ,this_stack_id)
+  
   //set redux state of teacherID
   this.props.setTeacherID(this.state.teacherID);
-
-//create the broadcast object that we'll send via axios.post to server
+  
+  //create the broadcast object that we'll send via axios.post to server
   let broadcastObj = {
     broadcast_code: this.state.broadcast_code,
     user_id: this_user_id,
     stack_id: this_stack_id
   };
+  
+  console.log("startBroadcast is about to call axios with this broadcastObj ", broadcastObj)
   //use axios call in here to insert the broadcast into the database table 'broadcast'. Then get the promise back, which is the info from the broadcast table needed to update redux minus the broadcast stack, which we'll merge into serverResponse before sending it to the action creator.
  axios.post('/api/newbroadcast', {broadcastObj}).then( (serverResponse)=> {
     let data = serverResponse.data
