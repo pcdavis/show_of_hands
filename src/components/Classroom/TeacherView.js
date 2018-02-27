@@ -25,10 +25,11 @@ class TeacherView extends Component {
   }
 
   componentDidMount(){
-    let broadcast_id = this.props.match.params.id //Note: this only works because I added a prop to the rendered version of teacherview component inside the classroom component. Otherwise Route would not have given the teacherview component access to it.
-    this.props.fetchBroadcast(broadcast_id)
     console.log("here are socket props in cdm in teacherview-----------------------",this.props.socketroom)
-    console.log(this.state.isTeacher)
+    let broadcast_id = this.props.socketroom.broadcast_id //Note: this only works because I added a prop to the rendered version of teacherview component inside the classroom component. Otherwise Route would not have given the teacherview component access to it.
+    this.props.fetchBroadcast(broadcast_id)
+   
+    
 }
 
 //Here is what the_broadcast_stack looks like: It's an array of objects.
@@ -130,7 +131,7 @@ setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
         </Panel>;
         
                     
-                    <h1>This is the timer value: {this.state.timestamp} </h1> 
+                    {/* <h1>This is the timer value: {this.state.timestamp} </h1>  */}
                     <h2>{this.props.socketroom.broadcast_code}</h2> 
                     <Form inline>
         <FormControl 

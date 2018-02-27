@@ -9,7 +9,7 @@ export { subscribeToTimer };
 
 function api_subscribe_to_quizes(cb) {
   socket.on('new_quiz_question', (newQuizObj) => {
-    console.log(newQuizObj)
+    console.log("inside api_subscribe_to_quizes. here is the newQuizObj that arrived from teacher" ,newQuizObj)
     cb(null, newQuizObj)
   }  );
 }

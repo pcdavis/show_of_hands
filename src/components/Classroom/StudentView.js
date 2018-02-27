@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import _ from 'lodash'
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
-import {fetchBroadcast } from '../../actions/index';
+// import {fetchBroadcast } from '../../actions/index';
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
 import Modals from './Modals'
@@ -17,14 +18,16 @@ class StudentView extends Component {
     
     api_subscribe_to_quizes( (err, newQuizObj) => {
       this.setState({ newQuizObj:newQuizObj })
-      console.log("here is the newQuizObj that arrived from socket into the student veiw", this.state.newQuizObj) ;
-    } );
+    });
     
     api_subscribe_to_new_students( (err, newStudentIdentity) => {
       console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
       console.log("here is this.state.enrolled_students before adding the new one", this.state.enrolled_students);
       let updated_enrollment = [...this.state.enrolled_students, newStudentIdentity.screenName]
-      this.setState({ enrolled_students:updated_enrollment })
+      this.setState({ enrolled_students:updated_enrollment }, ()=> {
+        
+      })
+      
       console.log("here is this.state.enrolled_students AFTER adding the new one", this.state.enrolled_students);
       
     } );
@@ -196,23 +199,47 @@ class StudentView extends Component {
       
     }
   }
-
+  
+//new render quiz with randomized answers
   renderQuiz(){
     console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
-    const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
+    const { current_quiz_id, quiz_id, question, false_1, false_2, false_3, broadcast_id, correct_answer } = this.state.newQuizObj
     console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
 
     if (this.state.newQuizObj.question) {
+      console.log("false_1", false_1)
+      console.log("false_2", false_2)
+      console.log("false_3", false_3)
+      console.log("correct_answer", correct_answer)
+
+      let falsey1 = {text: false_1, key_val: "false_1"};
+      let falsey2 = {text: false_2, key_val: "false_2"};
+      let falsey3 = {text: false_3, key_val: "false_3"};
+
+      let randomAnswerArray = [falsey1,falsey2,falsey3]
+      // let randomAnswerArray = [{text: false_1, key_val: "false_1"},{text: false_2, key_val: "false_2"},{text: false_3, key_val: "false_3"}]
+
+      console.log("randomAnswerArray is" ,randomAnswerArray)
+      let correctItem = {text: correct_answer, key_val: "correct_answer"};
+       console.log("correctItem is" ,correctItem)
+       let indexOfCorrect = _.random(0,2);
+       console.log("indexOfCorrect is" ,indexOfCorrect)
+       randomAnswerArray.splice(indexOfCorrect,0,correctItem)
+       console.log(randomAnswerArray)
+       let finalArray = [...randomAnswerArray]
+       let generatedButtons = finalArray.map( item => {
+           return (
+            <Button onClick= { ()=> this.submitAnswer (item.key_val)} > {item.text} </Button>
+           )
+       })
+
       return (
         <div>
                 <Panel>
                   <Panel.Heading><h2>{question}</h2></Panel.Heading>
                   <Panel.Body>
                     <ButtonGroup vertical block>
-                    <Button onClick= { ()=> this.submitAnswer ("correct_answer", correct_answer)} > {correct_answer} </Button>
-                    <Button onClick= { ()=> this.submitAnswer("false_1", false_1)} > {false_1} </Button>
-                    <Button onClick= { ()=> this.submitAnswer("false_2" ,false_2)} > {false_2} </Button>
-                    <Button onClick= { ()=> this.submitAnswer("false_3" ,false_3)} > {false_3} </Button>
+                    {generatedButtons}
                 </ButtonGroup>;
                 </Panel.Body>
             </Panel>
@@ -223,7 +250,41 @@ class StudentView extends Component {
         <h2> Waiting for teacher </h2>
       )
     }
-} // end of renderQuiz
+} 
+// end of renderQuiz
+
+
+
+  // Below is the original renderQuiz
+//   renderQuiz(){
+//     console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
+//     const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
+//     console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
+
+//     if (this.state.newQuizObj.question) {
+//       return (
+//         <div>
+//                 <Panel>
+//                   <Panel.Heading><h2>{question}</h2></Panel.Heading>
+//                   <Panel.Body>
+//                     <ButtonGroup vertical block>
+//                     <Button onClick= { ()=> this.submitAnswer ("correct_answer", correct_answer)} > {correct_answer} </Button>
+//                     <Button onClick= { ()=> this.submitAnswer("false_1", false_1)} > {false_1} </Button>
+//                     <Button onClick= { ()=> this.submitAnswer("false_2" ,false_2)} > {false_2} </Button>
+//                     <Button onClick= { ()=> this.submitAnswer("false_3" ,false_3)} > {false_3} </Button>
+//                 </ButtonGroup>;
+//                 </Panel.Body>
+//             </Panel>
+//         </div>
+//       )
+//     } else {
+//       return (
+//         <h2> Waiting for teacher </h2>
+//       )
+//     }
+// } 
+// end of renderQuiz
+
 
 //   renderStudentNames(){
 //     console.log("renderStudentNames fired and this.state.enrolled_students is ", this.state.enrolled_students)
@@ -306,5 +367,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect (mapStateToProps, {fetchBroadcast})(StudentView)
+export default connect (mapStateToProps, null)(StudentView)
 

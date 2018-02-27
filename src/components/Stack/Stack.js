@@ -89,10 +89,15 @@ startBroadcasting(){
     
     data.broadcast_stack = this.state.theStackContent
     
-    this.props.createBroadcast(data)}).catch(error => console.log(error));
+    this.props.createBroadcast(data)
+    this.props.history.push(`/classroom/${this.state.broadcast_code}`)
+  
+  }
+  
+  ).catch(error => console.log(error));
 
 //After redux state of socketroom is updated with all the needed info, jump into the classroom for starting the broadcast session
-this.props.history.push(`/classroom/${this.state.broadcast_code}`)
+// this.props.history.push(`/classroom/${this.state.broadcast_code}`)
 
     //TODO this version below was working prior to changing strategy to update redux from inside here before jumping into the classroom
     // this.props.createBroadcast(broadcastObj, () => {
