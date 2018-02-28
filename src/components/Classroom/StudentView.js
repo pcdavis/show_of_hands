@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
-// import {fetchBroadcast } from '../../actions/index';
+
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
 import Modals from './Modals'
@@ -17,8 +17,10 @@ class StudentView extends Component {
     
     
     api_subscribe_to_quizes( (err, newQuizObj) => {
-      this.setState({ newQuizObj:newQuizObj })
-    });
+      this.setState({ newQuizObj:newQuizObj,
+                      quizIsVisible: true,
+                    chartIsVisible: false })
+                    });
     
     api_subscribe_to_new_students( (err, newStudentIdentity) => {
       console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
@@ -37,6 +39,8 @@ class StudentView extends Component {
       message: '',
       broadcast_code: '',
       current_quiz_id: '',
+      quizIsVisible: false,
+      chartIsVisible: false,
       newQuizObj: {},
       exp_obj: {
         quiz_id: 1,
@@ -111,20 +115,28 @@ class StudentView extends Component {
     this.submitAnswer = this.submitAnswer.bind(this);
   }//End of CONSTSRUCTOR
 
+  componentDidMount(){
+    console.log("here are socket props in cdm in studentview-----------------------",this.props.socketroom)
+  }
+
 
 //This version goes through socket emit on client side. probably not the way to do it
   submitAnswer(buttonKey,buttonName){
+    console.log("submit answer fired and here is the current state of props from redux for socketroom", this.props.socketroom)
     
     this.setState({ selectedAnswer: buttonKey});
     
     const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
+    const myScreenName = this.props.socketroom.myStudentID.screenName;
+    const mySessionID = this.props.socketroom.myStudentID.sessionID;
+
     let responseObj = {
       selectedAnswer: buttonKey,
       selectedAnswerText: buttonName,
       response_timestamp: new Date().getTime(),
       broadcast_id: this.props.socketroom.broadcast_id,
-      screen_name: '',
-      user_session_id: '',
+      screen_name: myScreenName,
+      user_session_id: mySessionID,
       user_id: '',
       stack_id: this.props.socketroom.stack_id,
       quiz_id: quiz_id,
@@ -136,67 +148,71 @@ class StudentView extends Component {
    .then( (response) => {
      console.log("here is the server response that comes back to submitAnswer" ,response.data);
      api_emit_my_responses(response.data)
-     
+     this.setState({ quizIsVisible: false, chartIsVisible: true })
    })
 }
  
   renderChart(){
-    
-    if(this.state.totalresponses > 0){
-      //render the chart in here using the response data
-      let correct_answers =this.state.correct_answers;
-      let false_1s = this.state.false_1s;
-      let false_2s = this.state.false_2s;
-      let false_3s = this.state.false_3s;
-      let totalresponses = this.state.totalresponses;
 
-      const doughnut = {
-        labels: [
-          this.state.newQuizObj.correct_answer,
-          this.state.newQuizObj.false_1,
-          this.state.newQuizObj.false_2,
-          this.state.newQuizObj.false_3
-        ],
-        datasets: [{
-          data: [correct_answers, false_1s, false_2s, false_3s],
-          backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#cc0066'
+    if(this.state.chartIsVisible) {
+
+      if(this.state.totalresponses > 0 ){
+        //render the chart in here using the response data
+        let correct_answers =this.state.correct_answers;
+        let false_1s = this.state.false_1s;
+        let false_2s = this.state.false_2s;
+        let false_3s = this.state.false_3s;
+        let totalresponses = this.state.totalresponses;
+  
+        const doughnut = {
+          labels: [
+            this.state.newQuizObj.correct_answer,
+            this.state.newQuizObj.false_1,
+            this.state.newQuizObj.false_2,
+            this.state.newQuizObj.false_3
           ],
-          hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56',
-            '#cc0066'
-          ]
-        }]
-      };
-
-      return (
-        <div className="animated fadeIn">
-          <CardColumns className="cols-2">
-          <Card>
-            <CardHeader>
-              Student Responses
-              <div className="card-actions">
-                <a href="http://www.chartjs.org">
-                  <small className="text-muted">docs</small>
-                </a>
-              </div>
-            </CardHeader>
-          
-              <div className="chart-wrapper">
-                <Doughnut data={doughnut}/>
-              </div>
+          datasets: [{
+            data: [correct_answers, false_1s, false_2s, false_3s],
+            backgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#cc0066'
+            ],
+            hoverBackgroundColor: [
+              '#FF6384',
+              '#36A2EB',
+              '#FFCE56',
+              '#cc0066'
+            ]
+          }]
+        };
+  
+        return (
+          <div className="animated fadeIn">
+            <CardColumns className="cols-2">
+            <Card>
+              <CardHeader>
+                Student Responses
+                <div className="card-actions">
+                  <a href="http://www.chartjs.org">
+                    <small className="text-muted">docs</small>
+                  </a>
+                </div>
+              </CardHeader>
             
-          </Card>
+                <div className="chart-wrapper">
+                  <Doughnut data={doughnut}/>
+                </div>
+              
+            </Card>
+  
+           </CardColumns>
+        </div>
+      )
+        
+      }
 
-         </CardColumns>
-      </div>
-    )
-      
     }
   }
   
@@ -206,7 +222,7 @@ class StudentView extends Component {
     const { current_quiz_id, quiz_id, question, false_1, false_2, false_3, broadcast_id, correct_answer } = this.state.newQuizObj
     console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
 
-    if (this.state.newQuizObj.question) {
+    if (this.state.newQuizObj.question && this.state.quizIsVisible) {
       console.log("false_1", false_1)
       console.log("false_2", false_2)
       console.log("false_3", false_3)
@@ -229,13 +245,13 @@ class StudentView extends Component {
        let finalArray = [...randomAnswerArray]
        let generatedButtons = finalArray.map( item => {
            return (
-            <Button onClick= { ()=> this.submitAnswer (item.key_val)} > {item.text} </Button>
+            <Button onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
            )
        })
 
       return (
         <div>
-                <Panel>
+                <Panel className={this.state.quizIsVisible} >
                   <Panel.Heading><h2>{question}</h2></Panel.Heading>
                   <Panel.Body>
                     <ButtonGroup vertical block>
@@ -244,10 +260,6 @@ class StudentView extends Component {
                 </Panel.Body>
             </Panel>
         </div>
-      )
-    } else {
-      return (
-        <h2> Waiting for teacher </h2>
       )
     }
 } 

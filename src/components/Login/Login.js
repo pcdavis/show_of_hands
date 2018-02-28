@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Form, FormControl, Button, ListGroup, ListGroupItem } from 'react-bootstrap'
 import axios from 'axios';
+import { connect } from 'react-redux';
+import {ac_setStudentID } from '../../actions/index';
 import { api_notify_classroom } from '../Classroom/api';
 import logo from './logo.svg';
 import './login.css';
@@ -10,7 +12,8 @@ class Login extends Component {
     super(props);
     this.state = {
       classroom_code: '',
-      screen_name: ''
+      screen_name: '',
+      mySessionID: ''
     }
     // this.handleChange = this.handleChange.bind(this)
     this.handle_student_signin = this.handle_student_signin.bind(this)
@@ -30,11 +33,14 @@ class Login extends Component {
     .then( response => { 
       console.log("the student's session id that comes from response from server to handle student signin axios submission", response.data)
       let newStudentIdentity = response.data
+      // this.setState({ mySessionID: newStudentIdentity.sessionID})
+      this.props.ac_setStudentID(newStudentIdentity)
       console.log("the newStudentIdentity", newStudentIdentity)
       api_notify_classroom(newStudentIdentity)
+      console.log("the socketroom props inside the login should now be showing", this.props.socketroom)
     })
     this.props.history.push(`/classroom/${this.state.classroom_code}`)
-    // this.setState({classroom_code: '' })
+    this.setState({classroom_code: '' })
   }
 
   render() {
@@ -71,4 +77,12 @@ class Login extends Component {
   }
 }
 
-export default Login;
+function mapStateToProps(state) {
+  return { 
+   socketroom: state.socketroom
+  };
+}
+
+
+export default connect (mapStateToProps, {ac_setStudentID})(Login)
+

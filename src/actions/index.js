@@ -9,6 +9,7 @@ export const CREATE_BROADCAST = "CREATE_BROADCAST";
 export const SET_TEACHER_ID = "SET_TEACHER_ID";
 export const FETCH_BROADCAST_CONTENT = "FETCH_BROADCAST_CONTENT";
 export const SET_CURRENT_QUIZ = "SET_CURRENT_QUIZ";
+export const SET_STUDENT_ID = "SET_STUDENT_ID";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
@@ -108,6 +109,14 @@ export function setTeacherID(teacher_id){
   return {
     type: SET_TEACHER_ID,
     payload: teacher_id
+  }
+}
+
+export function ac_setStudentID(newStudentIdentity){
+  console.log('ac_setStudentID fired from action creator index and here is the teacherID being passed in as the argument ', newStudentIdentity)
+  return {
+    type: SET_STUDENT_ID,
+    payload: newStudentIdentity
   }
 }
 
