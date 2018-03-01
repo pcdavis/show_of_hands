@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router'
 import axios from 'axios';
-import { subscribeToTimer, messenger, api_broadcast_quiz } from './api';
+import { subscribeToTimer, messenger, api_broadcast_quiz, api_broadcast_topFive } from './api';
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {fetchBroadcast, ac_setCurrentQuiz } from '../../actions/index';
 
@@ -138,6 +138,7 @@ axios.get(`/api/topfive?broadcast_id=${requestObj.broadcast_id}&quiz_id=${reques
     return obj.screen_name
   })
   console.log(topFiveNames)
+  api_broadcast_topFive(topFiveNames);
   // let currentQuiz = response.data //this is an object with the keys I need
   // current_quiz_id = currentQuiz.current_quiz_id
   // this.props.ac_setCurrentQuiz(currentQuiz)

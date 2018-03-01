@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash'
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students } from './api';
+import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students, api_subscribe_to_topFive } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {ac_setCurrentQuiz } from '../../actions/index';
 
@@ -28,8 +28,18 @@ class StudentView extends Component {
                     correct_answers: 0,
                     false_1s: 0,
                     false_2s: 0,
-                    false_3s: 0 })
+                    false_3s: 0,
+                    resultsFinal: false })
                     });
+
+    api_subscribe_to_topFive( (err, topFiveNames) => {
+      console.log("api_subscribe_to_topFive fired, here are topFiveNames ",topFiveNames );
+      this.setState({ topFiveNames:topFiveNames,
+                      resultsFinal: true,
+                      chartIsVisible: false })
+                    });
+
+
     
     api_subscribe_to_new_students( (err, newStudentIdentity) => {
       console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
@@ -50,6 +60,8 @@ class StudentView extends Component {
       current_quiz_id: '',
       quizIsVisible: false,
       chartIsVisible: false,
+      topFiveNames:[],
+      resultsFinal: false,
       newQuizObj: {},
       exp_obj: {
         quiz_id: 1,
@@ -159,6 +171,27 @@ class StudentView extends Component {
      api_emit_my_responses(response.data)
      this.setState({ quizIsVisible: false, chartIsVisible: true })
    })
+}
+
+renderTopFive(){
+  if(this.state.resultsFinal){
+    
+      return (
+        <Panel>
+          <Panel.Heading><h2>High Fives to the Fast Five</h2></Panel.Heading>
+          <ListGroup>
+          
+          <ListGroupItem  > {this.state.topFiveNames[0]} </ListGroupItem>
+          <ListGroupItem  > {this.state.topFiveNames[1]} </ListGroupItem>
+          <ListGroupItem  > {this.state.topFiveNames[2]} </ListGroupItem>
+          <ListGroupItem  > {this.state.topFiveNames[3]} </ListGroupItem>
+          <ListGroupItem  > {this.state.topFiveNames[4]} </ListGroupItem>
+           
+          </ListGroup>
+       </Panel>
+      )
+    
+  }
 }
  
   renderChart(){
@@ -347,6 +380,7 @@ class StudentView extends Component {
 
      
         {this.state.enrolled_students}
+        {this.renderTopFive()}
         {this.renderChart()}
         {this.renderQuiz()}
                       

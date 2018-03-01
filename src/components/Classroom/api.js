@@ -56,6 +56,21 @@ function api_broadcast_quiz(current_quiz_id) {
 }
 export { api_broadcast_quiz };
 
+//Use api_broadcast_topFive to let teacher emit top five students
+function api_broadcast_topFive(topFiveNames) {
+  console.log("api_broadcast_topFive fired, here are topfie ",topFiveNames )
+  socket.emit('send_top_five', topFiveNames);
+}
+export { api_broadcast_topFive };
+
+
+function api_subscribe_to_topFive(cb) {
+  socket.on('top_five', topFiveNames => cb(null, topFiveNames));
+}
+export { api_subscribe_to_topFive };
+
+
+
 // function api_submit_response(responseObj) {
 //   socket.emit('submit_response', responseObj);
 //   // socket.on('serverMessage', (serverResponse) => cb(null, serverResponse));

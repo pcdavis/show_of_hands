@@ -64,6 +64,11 @@ io.on('connection', function (client){
         
     })
 
+    client.on('send_top_five', (topFiveNames) => {
+        io.emit('top_five', topFiveNames)
+        
+    })
+
     client.on('incoming_students', (newStudentIdentity) => {
         io.emit('new_student', newStudentIdentity)
      })
