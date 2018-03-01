@@ -50,7 +50,8 @@ class TeacherView extends Component {
 
 renderStackItems() {
   let the_broadcast_stack = this.props.socketroom.broadcast_stack;
-  // console.log(the_broadcast_stack)
+  console.log("stack_titles" ,this.props.stack_titles)
+  console.log("the_broadcast_stack" ,the_broadcast_stack)
 
   return  _.map(the_broadcast_stack, quizObj => {
     // console.log(quizObj)
@@ -58,16 +59,23 @@ renderStackItems() {
 
     return (
       
-     <div>
-        <Panel.Body key={quizObj.quiz_id} > {quizObj.question} <Button onClick={() => this.sendMySelection({
-          quiz_id: quizObj.quiz_id,
-          question: quizObj.question,
-          correct_answer: quizObj.correct_answer,
-          false_1:quizObj.false_1,
-          false_2:quizObj.false_2,
-          false_3:quizObj.false_3,
-          broadcast_id: this.props.socketroom.broadcast_id
-        })}>Start</Button></Panel.Body>
+     <div key={quizObj.quiz_id}>
+        <Panel.Body  > 
+        {quizObj.question} 
+
+          <Button onClick={() => this.sendMySelection({
+            quiz_id: quizObj.quiz_id,
+            question: quizObj.question,
+            correct_answer: quizObj.correct_answer,
+            false_1:quizObj.false_1,
+            false_2:quizObj.false_2,
+            false_3:quizObj.false_3,
+            broadcast_id: this.props.socketroom.broadcast_id
+          })}>Start</Button>
+
+          <Button onClick={() => this.getTopFive()}>End</Button>
+
+        </Panel.Body>
           <ListGroupItem  > {quizObj.correct_answer} </ListGroupItem>
           <ListGroupItem  > {quizObj.false_1} </ListGroupItem>
           <ListGroupItem  > {quizObj.false_2} </ListGroupItem>
@@ -110,9 +118,35 @@ setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
 // setTimeout(  () => {
 //   api_notify_of_quiz(currentQuiz);
 // }, 5000)
+}
 
-
-
+getTopFive(){
+let requestObj = {
+  broadcast_id: this.props.socketroom.current_quiz.broadcast_id,
+  quiz_id: this.props.socketroom.current_quiz.quiz_id
+}
+// let requestObj = {
+//   broadcast_id: this.props.socketroom.current_quiz.broadcast_id,
+//   quiz_id: this.props.socketroom.current_quiz.quiz_id
+// }
+console.log("getTopFive fired FROM INSIDE TEACHERVIEW. Here is the requestObj" ,requestObj)
+axios.get(`/api/topfive?broadcast_id=${requestObj.broadcast_id}&quiz_id=${requestObj.quiz_id}`)
+.then( (response) => {
+  let topFiveNames = []
+  console.log("here is the response.data from getTopFive-----------" ,response.data)
+  topFiveNames = response.data.map( obj => {
+    return obj.screen_name
+  })
+  console.log(topFiveNames)
+  // let currentQuiz = response.data //this is an object with the keys I need
+  // current_quiz_id = currentQuiz.current_quiz_id
+  // this.props.ac_setCurrentQuiz(currentQuiz)
+  // api_broadcast_quiz(current_quiz_id)//place this inside .then otherwise it would fire before .then because .then is async promise
+})
+// setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
+// setTimeout(  () => {
+//   api_notify_of_quiz(currentQuiz);
+// }, 5000)
 }
 
   render() {
@@ -123,12 +157,12 @@ setTimeout(  () => {console.log(this.props.socketroom)} , 5000)
       <h1>Welcome to the Teacher View </h1>
 
       <Panel>
-          <Panel.Heading><h2>{this.state.theStackTitle}</h2></Panel.Heading>
+          <Panel.Heading><h2>{this.props.socketroom.broadcast_stack[0].stack_title}</h2></Panel.Heading>
           <ListGroup>
             {this.props.socketroom && this.renderStackItems()}
           </ListGroup>
           
-        </Panel>;
+        </Panel>
         
                     
                     {/* <h1>This is the timer value: {this.state.timestamp} </h1>  */}

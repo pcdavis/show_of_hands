@@ -143,7 +143,7 @@ class StudentView extends Component {
       selectedAnswer: buttonKey,
       selectedAnswerText: buttonName,
       response_timestamp: new Date().getTime(),
-      broadcast_id: this.props.socketroom.broadcast_id,
+      broadcast_id: this.props.socketroom.current_quiz.broadcast_id,
       screen_name: myScreenName,
       user_session_id: mySessionID,
       user_id: '',
@@ -343,6 +343,8 @@ class StudentView extends Component {
       <h1>Number of false_1s: {this.state.false_1s} </h1>
       <h1>Number of false_2s: {this.state.false_2s} </h1>
       <h1>Number of false_3s: {this.state.false_3s} </h1>
+
+
      
         {this.state.enrolled_students}
         {this.renderChart()}

@@ -28,6 +28,7 @@
     "react-scripts": "1.1.1",
     "react-tap-event-plugin": "^3.0.2",
     "react-toastify": "^3.3.2",
+    "react-transition-group": "^2.2.1",
     "reactstrap": "^4.8.0",
     "redux": "^3.7.2",
     "redux-form": "^7.2.3",

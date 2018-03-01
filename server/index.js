@@ -222,6 +222,7 @@ app.delete('/api/deletestack/:stackID', control.deleteStack)
 app.get('/api/stacktitles', control.fetchStackTitles)
 app.post('/api/broadcast', control.fetchBroadcast)
 app.get('/api/stack_items', control.fetchStackItems)
+app.get('/api/topfive', control.fetchTopFive)
 
 //test of direct axios post from student teachers
 app.post('/api/studentresponses', control.responseUpdater)

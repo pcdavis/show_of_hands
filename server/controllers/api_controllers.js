@@ -199,8 +199,8 @@ module.exports = {
         // db.sq_fetch_current_quiz([1])
         
         console.log("responseObj coming in to postAnswer server controller from front end" , req.body.responseObj)
-        let { selectedAnswer, selectedAnswerText, response_timestamp, broadcast_id, screen_name, user_id, stack_id, quiz_id, question, correct_answer } = req.body.responseObj;
-        console.log("here is the variable selectedAnswer", selectedAnswer)
+        let { selectedAnswer, selectedAnswerText, response_timestamp, broadcast_id, screen_name, user_id, stack_id, quiz_id, question, correct_answer, user_session_id } = req.body.responseObj;
+        console.log("here is the variable user_session_id", user_session_id)
         // let database_submission = {
         //     userSessionID,
         //     selectedAnswer,
@@ -217,13 +217,32 @@ module.exports = {
 // console.log("here's the database_submission that is being sent to db_responses-----------", database_submission)  
            
             // db.sq_post_responses(['slppdfjdfj','inserver','selected text from server',234567800944567, 'daffy 2duck3', 1 ])
-             db.sq_post_responses([userSessionID, selectedAnswer, selectedAnswerText, response_timestamp, screen_name, quiz_id ])
+             db.sq_post_responses([user_session_id, selectedAnswer, selectedAnswerText, response_timestamp, screen_name, broadcast_id, quiz_id])
              .then( response => {
                  console.log("postAnswer receied this back from db after posting the student's response",response[0])
                 res.status(200).send( response[0] )
                 console.log("postAnswer worked",response)
             }) 
             .catch( err => {res.status(500).send('error with postAnswer') })
+
+   },
+
+   fetchTopFive: function(req, res, next) {
+      console.log(" fetchTopFive fired in the controller ----------------------------------------------------------------------------------  ")
+        const db = req.app.get('db');
+
+        console.log("requestObj coming in to fetchTopFive server controller from front end" , req.query.broadcast_id)
+        let broadcast_id =req.query.broadcast_id;
+        let quiz_id = req.query.quiz_id;
+        console.log ("quiz id is ", quiz_id);
+                
+        db.sq_fetch_top_five([broadcast_id, quiz_id])
+             .then( response => {
+                 console.log("fetchTopFive receied this back from db  ",response[0])
+                res.status(200).send( response )
+                console.log("fetchTopFive worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with fetchTopFive') })
 
    },
 
