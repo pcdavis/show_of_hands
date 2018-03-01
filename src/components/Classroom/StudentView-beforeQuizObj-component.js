@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
-import {ac_setCurrentQuiz } from '../../actions/index';
 
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
@@ -18,9 +17,6 @@ class StudentView extends Component {
     
     
     api_subscribe_to_quizes( (err, newQuizObj) => {
-
-      this.props.ac_setCurrentQuiz(newQuizObj)
-
       this.setState({ newQuizObj:newQuizObj,
                       quizIsVisible: true,
                     chartIsVisible: false,
@@ -135,7 +131,7 @@ class StudentView extends Component {
     
     this.setState({ selectedAnswer: buttonKey});
     
-    const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.props.socketroom.current_quiz
+    const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
     const myScreenName = this.props.socketroom.myStudentID.screenName;
     const mySessionID = this.props.socketroom.myStudentID.sessionID;
 
@@ -175,10 +171,10 @@ class StudentView extends Component {
   
         const doughnut = {
           labels: [
-            this.props.socketroom.current_quiz.correct_answer,
-            this.props.socketroom.current_quiz.false_1,
-            this.props.socketroom.current_quiz.false_2,
-            this.props.socketroom.current_quiz.false_3
+            this.state.newQuizObj.correct_answer,
+            this.state.newQuizObj.false_1,
+            this.state.newQuizObj.false_2,
+            this.state.newQuizObj.false_3
           ],
           datasets: [{
             data: [correct_answers, false_1s, false_2s, false_3s],
@@ -227,14 +223,32 @@ class StudentView extends Component {
   
 //new render quiz with randomized answers
   renderQuiz(){
-    let currentQuiz = this.props.socketroom.current_quiz;
-    console.log("renderQuiz fired and this.state.quizOb is ", currentQuiz)
-    const { current_quiz_id, quiz_id, question, false_1, false_2, false_3, broadcast_id, correct_answer, answerButtons } = currentQuiz
-    console.log("Here are the destructured value of currentQuiz.correct_answer", correct_answer)
+    console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
+    const { current_quiz_id, quiz_id, question, false_1, false_2, false_3, broadcast_id, correct_answer } = this.state.newQuizObj
+    console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
 
-    if (currentQuiz.question && this.state.quizIsVisible) {
-      
-       let generatedButtons = answerButtons.map( item => {
+    if (this.state.newQuizObj.question && this.state.quizIsVisible) {
+      console.log("false_1", false_1)
+      console.log("false_2", false_2)
+      console.log("false_3", false_3)
+      console.log("correct_answer", correct_answer)
+
+      let falsey1 = {text: false_1, key_val: "false_1"};
+      let falsey2 = {text: false_2, key_val: "false_2"};
+      let falsey3 = {text: false_3, key_val: "false_3"};
+
+      let randomAnswerArray = [falsey1,falsey2,falsey3]
+      // let randomAnswerArray = [{text: false_1, key_val: "false_1"},{text: false_2, key_val: "false_2"},{text: false_3, key_val: "false_3"}]
+
+      console.log("randomAnswerArray is" ,randomAnswerArray)
+      let correctItem = {text: correct_answer, key_val: "correct_answer"};
+       console.log("correctItem is" ,correctItem)
+       let indexOfCorrect = _.random(0,2);
+       console.log("indexOfCorrect is" ,indexOfCorrect)
+       randomAnswerArray.splice(indexOfCorrect,0,correctItem)
+       console.log(randomAnswerArray)
+       const finalArray = [...randomAnswerArray]
+       let generatedButtons = finalArray.map( item => {
            return (
             <Button onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
            )
@@ -367,5 +381,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect (mapStateToProps, {ac_setCurrentQuiz} )(StudentView)
+export default connect (mapStateToProps, null)(StudentView)
 
