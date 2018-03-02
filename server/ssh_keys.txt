@@ -1,0 +1,45 @@
+-----BEGIN RSA PUBLIC KEY-----
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2z7MacXH6l11EGQVBhlGk+2m5EPTSl+XBilUvOVNZqtl2nxOkIX4Hu/n7ZIBlm04N9MyNLn6Vrt9Du/rNo/S7/1WCdwDs7k2lqGjFzcHwfAxkNpAEeopi38LI6kXp50vjozccsGa7jr8ANHWQP2ui4qNpVKSzBx7OagMZC1UZbzfofQsUipx9jRnAbt1AMeoj0Y5zvWOdOVE7b/6WVo2RGCn85cX0OSa7/yHY9ePBxO+fjIP9+jvY6JSdm2iTr0FNOExC4HHjc3SvPJvTjSSzTqFEaAY7o9G68iZbiIcwkYUK+0a2rVrFVSXhaoc0t8F13HBLiZS8OQU8tE5fZs4Z pcdav@LAPTOP-CSK079CT
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAts+zGnFx+pddRBkFQYZRpPtpuRD00pflwYpVLzlTWarZdp8T
+pCF+B7v5+2SAZZtODfTMjS5+la7fQ7v6zaP0u/9VgncA7O5Npahoxc3B8HwMZDaQ
+BHqKYt/CyOpF6edL46M3HLBmu46/ADR1kD9rouKjaVSkswcezmoDGQtVGW836H0L
+FIqcfY0ZwG7dQDHqI9GOc71jnTlRO2/+llaNkRgp/OXF9Dkmu/8h2PXjwcTvn4yD
+/fo72OiUnZtok69BTThMQuBx43N0rzyb040ks06hRGgGO6PRuvImW4iHMJGFCvtG
+tq1axVUl4WqHNLfBddxwS4mUvDkFPLROX2bOGQIDAQABAoIBAQCk4utxc1dRpcq6
+jDLAag0j2JwADzoy5EyX51Rz9qmmG8JvCoYlqQvKoBKWW4yvmIercNw6jvAfxA2e
+Q2OwrSwlkOSoevu7uCkSvLZbiv1dEhX/IXN+hqRhD9/ZZezPTw6U8HbaCoVusA64
+eZh8FafYz8CCVZUD4O05UkcfBKip+a6WCJ8G/KtU5G19VyKD1hdn9Zpzq2oHPkxL
+PtmzBwV043ItcTrUzeEkFYwJrJtOTzDb1fmDs7idY+LIaSk75BQAHdYSddmltByU
+RukK3JbXejS07HlTdomYPJkC0qiCWUgVcJ/wuxxFddhFc5dducDqVdfmCCFAY/jq
+x+WTNaJtAoGBAOZvfOfvLdWxYbCGhbAEaYn/zrHOjA51fgzsRMmwNauMYvQecs7t
+Lfn+I941n53TR/jJTzJ70PZIZUo5cNuGJ3RZaBhHlZG+60v6LH1c9yGR1fpCCWci
+Gwauop7qITcRjO3HoeH+x8wWRpAs6uu6xYua1pb+KD1zLPxmy/BiOtXPAoGBAMsX
+p8vxI1/RBoYOviIWCW/Hcr0TnvS/em11X/GGUHNf5fmwKecPQHhjc6B1ued0bPyt
+1n+eyF4wbCVW9jSqJApPkkerFfPI8/ym/6W/G3+ezRcCKBheI8Nf9KDLOxkZDibH
+jbQ1k8umnZydpS60v+wZ3l9MgVpvmWDvOxswj3+XAoGAOZ5Y6hmZKVywI5aPaQLB
+bPsksLsHtDnWqd6OGKxRzzJML+RJKsqNe3v7df2MiscgsOmNPv9MsbhKc3PHb2yt
+At+0MpX7pTTK2vWUGEidlqxDh87pUPtrLJGQIhJC+eUOiwomxT6SsMpFHJnOp+DM
+smqmC51DbJIXBomhptq5AWsCgYEAmvHhQucmZePDZmO5C6hkarNwBnEBxRiQ/xGd
+sVcX6e4wNt8AGRi5xx+ZB8LJopxgyiaWj6dElxe6aoJ+NI/aD0PGBoewp92YyBlg
+0cOL50Hwlq0+idjI0DZVHJfw7qT+9vcoVWTK7YSgmuxrKccc5bSWw35K8gRSsHHU
+VlomIOECgYB68RseP3174tCcB0mz8d3/Bpl/Ukqrf0t96WogtndwROf3yA1i4xpD
+sbRTdtXXcQb5jTVnacFymcNY6UAYScrorn4LSSTlCVzAN2/KzdBnK+xsiULFb8z2
+EEWuK76fYLDaYZZPpqzk015IiFzUP/s+AAZV85Zy26cmEhuyoyTAlg==
+-----END RSA PRIVATE KEY-----
+
+The key fingerprint is:
+SHA256:jopntc8bxzJ7r/DufH4sqYdVWngKoroOUPGB+nvvTSg pcdav@LAPTOP-CSK079CT
+The key's randomart image is:
++---[RSA 2048]----+
+|  ...            |
+|  .o .           |
+| .. .        .   |
+|..      . . . +  |
+|..     .S. . *   |
+| ..   o+ .  +    |
+|  ..Eoo.B oo o   |
+|  .o=o.+ Xo = o  |
+|  .=++o.*=BBoo   |
++----[SHA256]-----+
