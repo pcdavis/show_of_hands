@@ -12,6 +12,133 @@ const control = require ('./controllers/api_controllers.js')
 // const swag_controller = require('./controllers/swag_controller');
 
 const app = express(); 
+
+//socket-attempt-medium-dailyjs
+// const io = require('socket.io')();
+//joe's version
+const server = require('http').Server(app);
+
+massive(process.env.CONNECTION_STRING).then( dbInstance => {
+    app.set('db',dbInstance);
+    console.log('DB is connected')
+}).catch(console.log);
+const db = app.get('db')
+const io = require('socket.io')(server);
+
+var socketCount = 0
+//TODO change over from client to socket and create connections array to manage socket connections
+// const connections = [];
+// io.on('connection', function (socket) {
+// 	console.log("Connected to Socket!!"+ socket.id)	
+// 	connections.push(socket)
+// 	socket.on('disconnect', function(){
+// 		console.log('Disconnected - '+ socket.id);
+// 	});
+
+io.on('connection', function (client){
+    // Socket has connected, increase socket count
+    socketCount++
+    console.log("Socket Connections: ", socketCount)
+    io.emit('users connected', socketCount)
+ 
+    client.on('disconnect', function() {
+        // Decrease the socket count on a disconnect, emit
+        socketCount--
+        io.emit('users connected', socketCount)
+    })
+
+    client.on('subscribeToTimer', (interval) => {
+      console.log('client is subscribing to timer with interval ', interval);
+      setInterval(() => {
+        client.emit('timer', new Date());
+      }, interval);
+    });
+
+    client.on('clientMessage', () => {
+        control.socketMessenger(io, app); //need to pass in io and app in order to be able to use sql calls to db and emit the response
+        
+    })
+
+    client.on('responses_to_server', (responseObj) => {
+        io.emit('new_response', responseObj)
+        
+    })
+
+    client.on('send_top_five', (topFiveNames) => {
+        io.emit('top_five', topFiveNames)
+        
+    })
+
+    client.on('incoming_students', (newStudentIdentity) => {
+        io.emit('new_student', newStudentIdentity)
+     })
+
+    client.on('update_quiz_view', (current_quiz_id) => {
+        control.quizMessenger(io, app, current_quiz_id)
+        // io.emit('new_quiz_question', quizObj);
+        
+    })
+
+    // client.on('submit_response', (responseObj) => {
+    //     control.postAnswer(io, app, responseObj)
+                
+    // })
+
+    // client.on('update_quiz_view', (current_quiz_id) => {
+    //     io.emit('new_quiz_question', current_quiz_id);
+        
+    // })
+
+
+  });//end of socket calls
+
+  //What follows is an example from an article http://markshust.com/2013/11/07/creating-nodejs-server-client-socket-io-mysql
+
+//   var socketCount = 0
+ 
+// io.sockets.on('connection', function(socket){
+//     // Socket has connected, increase socket count
+//     socketCount++
+//     // Let all sockets know how many are connected
+//     io.sockets.emit('users connected', socketCount)
+ 
+//     socket.on('disconnect', function() {
+//         // Decrease the socket count on a disconnect, emit
+//         socketCount--
+//         io.sockets.emit('users connected', socketCount)
+//     })
+ 
+//     socket.on('new note', function(data){
+//         // New note added, push to all sockets and insert into db
+//         notes.push(data)
+//         io.sockets.emit('new note', data)
+//         // Use node's db injection format to filter incoming data
+//         db.query('INSERT INTO notes (note) VALUES (?)', data.note)
+//     })
+// // Check to see if initial query/notes are set
+// if (! isInitNotes) {
+//     // Initial app start, run db query
+//     db.query('SELECT * FROM notes')
+//         .on('result', function(data){
+//             // Push results onto the notes array
+//             notes.push(data)
+//         })
+//         .on('end', function(){
+//             // Only emit notes after query has been completed
+//             socket.emit('initial notes', notes)
+//         })
+
+//     isInitNotes = true
+// } else {
+//     // Initial notes already exist, send out
+//     socket.emit('initial notes', notes)
+// }
+// })
+  
+  
+//------------------------------------
+
+
 app.use(bodyParser.json());
 // app.use(cors);
 
@@ -20,11 +147,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
-
-massive(process.env.CONNECTION_STRING).then( dbInstance => {
-    app.set('db',dbInstance);
-    console.log('DB is connected')
-}).catch(console.log);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -58,7 +180,7 @@ passport.use(new Autho0Strategy({
 passport.serializeUser( (user_id, done) => { 
     console.log("in the serializeUser here")
     //I am creating the session.user object below
-    let user = { id: user_id, stacks: { }, answers: { }};
+    let user = { id: user_id, stacks: { }, answers: { }, screenName: ''};
     const isuser = user ? true : false;
     console.log(isuser)
     console.log("here is session.user I created inside serializeUser. ", user)
@@ -101,38 +223,26 @@ app.get( '/logout', (req,res) => {
 app.post('/api/newstack', control.createStack)
 app.post('/api/newbroadcast', control.createBroadcast)
 app.get('/api/stacks', control.fetchStacks)
+app.delete('/api/deletestack/:stackID', control.deleteStack)
 app.get('/api/stacktitles', control.fetchStackTitles)
 app.post('/api/broadcast', control.fetchBroadcast)
 app.get('/api/stack_items', control.fetchStackItems)
+app.get('/api/topfive', control.fetchTopFive)
+
+//test of direct axios post from student teachers
+app.post('/api/studentresponses', control.responseUpdater)
+app.post('/api/postQuiz', control.postQuiz)
+app.post('/api/responses', control.postAnswer)
+app.post('/api/students', control.student_signin)
+
 
 
 //Start server listening
 const port = process.env.SERVER_PORT || 3005
-app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
+//socket attempt -----------
+// io.listen(port);
+server.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
+//here's the listen call before socket implemented
+// app.listen( port, () => { console.log(`Server listening on port ${port}.`); } );
 
-//Below are the sql scripts I used to create the users1 table, populate it with some test records and see if they show up as expected
-// CREATE TABLE users1(
-//     user_id serial primary key,
-//     user_name text,
-//     img text,
-//     auth_id text,
-//     first_name text,
-//     last_name text,
-//     gender text,
-//     hair_color text,
-//     eye_color text,
-//     hobby text,
-//     birth_day integer,
-//     birth_month text,
-//     birth_year integer
-// )
-
-
-// insert into users1 
-// (user_name, img, auth_id, first_name, last_name, gender, hair_color, eye_color, hobby, birth_day, birth_month, birth_year)
-// VALUES 
-// ('', '', 'google-oauth2|10878794363160113', '', '', '', '', '', '', null, '', null )
-// returning *;
-
-// select * from users1;

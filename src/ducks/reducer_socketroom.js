@@ -1,12 +1,14 @@
 import _ from "lodash";
-import { CREATE_BROADCAST, FETCH_BROADCAST_CONTENT } from "../actions";
+import { CREATE_BROADCAST, FETCH_BROADCAST_CONTENT, SET_CURRENT_QUIZ, SET_STUDENT_ID } from "../actions";
 // FETCH_STACK, DELETE_STACK, CREATE_STACK
 
 const initialState = {
   broadcast_id: null,
   broadcast_stack_id: null,
   broadcast_code: '',
-  broadcast_stack: []
+  broadcast_stack: [],
+  current_quiz:{},
+  myStudentID: {}
 };
 
 
@@ -28,9 +30,18 @@ export default function( state = initialState, action ) {
     })
     //TODO I think now that I'm updating socketroom state directly from inside stack.j when starting a broadcast, I won't need this reducer
     case FETCH_BROADCAST_CONTENT:
-    console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload.data)
+    console.log("inside reducer_socketroom.js using case FETCH_BROADCAST_CONTENT, here is the action payload data", action.payload)
 
-    return Object.assign({}, state, { broadcast_stack: action.payload.data })
+    return Object.assign({}, state, { broadcast_stack: action.payload })
+    
+ 
+    case SET_CURRENT_QUIZ:
+    console.log("inside reducer_socketroom.js using case SET_CURRENT_QUIZ, here is the action payload data", action.payload)
+    return Object.assign({}, state, { current_quiz: action.payload })
+ 
+    case SET_STUDENT_ID:
+    console.log("inside reducer_socketroom.js using case SET_STUDENT_ID, here is the action payload data", action.payload)
+    return Object.assign({}, state, { myStudentID: action.payload })
     
  
     default:
