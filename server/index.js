@@ -7,12 +7,13 @@ const Autho0Strategy = require('passport-auth0');
 const cors = require('cors');// potentially not necessary
 const massive = require('massive'); 
 const control = require ('./controllers/api_controllers.js')
+const path = require('path')
 
 //Import Controllers I created that are used in Endpoints
 // const swag_controller = require('./controllers/swag_controller');
 
 const app = express(); 
-
+app.use( express.static( `${__dirname}/../build` ) );
 //socket-attempt-medium-dailyjs
 // const io = require('socket.io')();
 //joe's version
@@ -202,7 +203,8 @@ passport.deserializeUser( (user, done) => {
 //Authentication endpoints for Auth0
 app.get('/auth', passport.authenticate('auth0'));
 app.get('/auth/callback', passport.authenticate('auth0', { 
-    successRedirect: 'http://localhost:3000/dashboard'
+    successRedirect: process.env.AUTH_SUCCESS_REDIRECT
+    // successRedirect: 'http://localhost:3000/dashboard'
 }));
 
 //This endpoint gets called from a componentDidMount - used to ensure that the user is valid before showing sensative data
@@ -216,7 +218,8 @@ app.get('/auth/me', (req,res) => {
 // endpoint for logging out.
 app.get( '/logout', (req,res) => {
     req.logOut();  //this kills the auth0 session
-    res.redirect('http://localhost:3000/')
+    res.redirect(process.env.LOGOUT_CALLBACK)
+    // res.redirect('http://localhost:3000/')
 } )
 
 //Endpoints for interacting with the regular pages of the app
@@ -235,6 +238,9 @@ app.post('/api/postQuiz', control.postQuiz)
 app.post('/api/responses', control.postAnswer)
 app.post('/api/students', control.student_signin)
 
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 
 //Start server listening

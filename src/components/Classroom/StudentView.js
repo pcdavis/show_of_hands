@@ -9,6 +9,7 @@ import {ac_setCurrentQuiz } from '../../actions/index';
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
 import Modals from './Modals'
+// import ReactCSSTransitionGroup from './react-addons-css-transition-group'
 
 
 class StudentView extends Component {
