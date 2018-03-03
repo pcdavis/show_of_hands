@@ -3,13 +3,17 @@ import _ from 'lodash'
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students, api_subscribe_to_topFive } from './api';
-import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem, Alert } from 'react-bootstrap'
 import {ac_setCurrentQuiz } from '../../actions/index';
 
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
-import {CardColumns, Card, CardHeader, CardBody, Alert} from 'reactstrap';
+import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
+import CustomButton from './CustomButton'
 import Modals from './Modals'
+import './studentview.css'
 // import ReactCSSTransitionGroup from './react-addons-css-transition-group'
+
+
 
 
 class StudentView extends Component {
@@ -24,14 +28,15 @@ class StudentView extends Component {
 
       this.setState({ newQuizObj:newQuizObj,
                       quizIsVisible: true,
-                    chartIsVisible: false,
-                    totalresponses: 0,
-                    correct_answers: 0,
-                    false_1s: 0,
-                    false_2s: 0,
-                    false_3s: 0,
-                    resultsFinal: false })
-                    });
+                      waitingForTeacher: false,
+                      chartIsVisible: false,
+                      totalresponses: 0,
+                      correct_answers: 0,
+                      false_1s: 0,
+                      false_2s: 0,
+                      false_3s: 0,
+                      resultsFinal: false })
+                      });
 
     api_subscribe_to_topFive( (err, topFiveNames) => {
       console.log("api_subscribe_to_topFive fired, here are topFiveNames ",topFiveNames );
@@ -40,18 +45,12 @@ class StudentView extends Component {
                       chartIsVisible: false })
                     });
 
-
-    
     api_subscribe_to_new_students( (err, newStudentIdentity) => {
       console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
       console.log("here is this.state.enrolled_students before adding the new one", this.state.enrolled_students);
       let updated_enrollment = [...this.state.enrolled_students, newStudentIdentity.screenName]
-      this.setState({ enrolled_students:updated_enrollment }, ()=> {
-        
-      })
-      
+      this.setState({enrolled_students: updated_enrollment})
       console.log("here is this.state.enrolled_students AFTER adding the new one", this.state.enrolled_students);
-      
     } );
     
     this.state = {
@@ -64,6 +63,7 @@ class StudentView extends Component {
       topFiveNames:[],
       resultsFinal: false,
       newQuizObj: {},
+      waitingForTeacher: true,
       exp_obj: {
         quiz_id: 1,
         question: "what the heck?"
@@ -135,6 +135,7 @@ class StudentView extends Component {
     this.sendMessage = this.sendMessage.bind(this);
     this.renderQuiz = this.renderQuiz.bind(this);
     this.submitAnswer = this.submitAnswer.bind(this);
+    this.renderEnteringStudents = this.renderEnteringStudents.bind(this);
   }//End of CONSTSRUCTOR
 
   componentDidMount(){
@@ -232,25 +233,38 @@ renderTopFive(){
         };
   
         return (
-          <div className="animated fadeIn">
-            <CardColumns className="cols-2">
+          <div className="room-card animated flipInX">
+
+          <div className="room-card-content">
+
+            <CardColumns className="cols-8">
+
             <Card>
               <CardHeader>
-                Student Responses
-                <div className="card-actions">
-                  <a href="http://www.chartjs.org">
-                    <small className="text-muted">docs</small>
-                  </a>
-                </div>
+                <h3>{this.props.socketroom.current_quiz.question}</h3>
+                <h4>The correct answer is: {this.props.socketroom.current_quiz.correct_answer}</h4>
+                
               </CardHeader>
             
                 <div className="chart-wrapper">
-                  <Doughnut data={doughnut}/>
+                  <Doughnut className="donut-size" data={doughnut}/>
                 </div>
               
             </Card>
-  
-           </CardColumns>
+
+                  
+                  <div className="chart-totals">
+                    
+                        <p>Total responses: {this.state.totalresponses} </p>
+                        <p>{this.props.socketroom.current_quiz.correct_answer}: {this.state.correct_answers} </p>
+                        <p>{this.props.socketroom.current_quiz.false_1}: {this.state.false_1s} </p>
+                        <p>{this.props.socketroom.current_quiz.false_2}: {this.state.false_2s} </p>
+                        <p>{this.props.socketroom.current_quiz.false_3}: {this.state.false_3s} </p>
+
+                  </div>
+
+           </CardColumns> 
+           </div>
         </div>
       )
         
@@ -260,6 +274,7 @@ renderTopFive(){
   }
   
 //new render quiz with randomized answers
+
   renderQuiz(){
     let currentQuiz = this.props.socketroom.current_quiz;
     console.log("renderQuiz fired and this.state.quizOb is ", currentQuiz)
@@ -270,57 +285,89 @@ renderTopFive(){
       
        let generatedButtons = answerButtons.map( item => {
            return (
-            <Button onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
+            <Button className="quiz-buttons" onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
            )
        })
 
       return (
-        <div>
-                <Panel className={this.state.quizIsVisible} >
-                  <Panel.Heading><h2>{question}</h2></Panel.Heading>
+        <div className="animated slideInRight quiz-card">
+                <Panel className="quiz-panel" >
+                  <Panel.Heading className="quiz-panel-header"  ><h2>{question}</h2></Panel.Heading>
                   <Panel.Body>
-                    <ButtonGroup vertical block>
+                    <ButtonGroup className="quiz-buttongroup" vertical block>
                     {generatedButtons}
-                </ButtonGroup>;
+                </ButtonGroup>
                 </Panel.Body>
             </Panel>
         </div>
       )
     }
 } 
-// end of renderQuiz
+
+renderIntro(){
+  if(this.state.waitingForTeacher){
 
 
+    return (
 
-  // Below is the original renderQuiz
-//   renderQuiz(){
-//     console.log("renderQuiz fired and this.state.quizOb is ", this.state.newQuizObj)
-//     const { current_quiz_id, quiz_id, question, correct_answer, false_1, false_2, false_3, broadcast_id } = this.state.newQuizObj
-//     console.log("Here are the destructured value of this.state.newQuizObj.correct_answer", correct_answer)
+    <div className="class-intro">
 
-//     if (this.state.newQuizObj.question) {
-//       return (
-//         <div>
-//                 <Panel>
-//                   <Panel.Heading><h2>{question}</h2></Panel.Heading>
-//                   <Panel.Body>
-//                     <ButtonGroup vertical block>
-//                     <Button onClick= { ()=> this.submitAnswer ("correct_answer", correct_answer)} > {correct_answer} </Button>
-//                     <Button onClick= { ()=> this.submitAnswer("false_1", false_1)} > {false_1} </Button>
-//                     <Button onClick= { ()=> this.submitAnswer("false_2" ,false_2)} > {false_2} </Button>
-//                     <Button onClick= { ()=> this.submitAnswer("false_3" ,false_3)} > {false_3} </Button>
-//                 </ButtonGroup>;
-//                 </Panel.Body>
-//             </Panel>
-//         </div>
-//       )
-//     } else {
-//       return (
-//         <h2> Waiting for teacher </h2>
-//       )
-//     }
-// } 
-// end of renderQuiz
+      <h1>Welcome to the classroom </h1>
+      <h3 className="classroom-spacer-25">We'll begin shortly </h3>
+
+      <div className="svg-loader1">
+     
+        <svg width="70" height="20">
+          <rect width="20" height="20" x="0" y="0" rx="3" ry="3">
+            <animate attributeName="width" values="0;20;20;20;0" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="height" values="0;20;20;20;0" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="x" values="10;0;0;0;10" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="y" values="10;0;0;0;10" dur="1000ms" repeatCount="indefinite"/>
+          </rect>
+          <rect width="20" height="20" x="25" y="0" rx="3" ry="3">
+            <animate attributeName="width" values="0;20;20;20;0" begin="200ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="height" values="0;20;20;20;0" begin="200ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="x" values="35;25;25;25;35" begin="200ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="y" values="10;0;0;0;10" begin="200ms" dur="1000ms" repeatCount="indefinite"/>
+          </rect>
+          <rect width="20" height="20" x="50" y="0" rx="3" ry="3">
+            <animate attributeName="width" values="0;20;20;20;0" begin="400ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="height" values="0;20;20;20;0" begin="400ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="x" values="60;50;50;50;60" begin="400ms" dur="1000ms" repeatCount="indefinite"/>
+            <animate attributeName="y" values="10;0;0;0;10" begin="400ms" dur="1000ms" repeatCount="indefinite"/>
+          </rect>
+        </svg>
+      </div> 
+
+      
+    </div>
+
+    )
+  }
+}
+
+renderEnteringStudents(){
+
+      if(this.state.waitingForTeacher && this.state.enrolled_students.length > 0){
+        console.log("this.state.enrolled_students")
+        console.log(this.state.enrolled_students)
+        let copyOfEnrollment = [...this.state.enrolled_students]
+        console.log("copyOfEnrollment", copyOfEnrollment)
+
+        let studentName = copyOfEnrollment.pop()
+        this.setState({enrolled_students: copyOfEnrollment})
+        // alert(studentName);
+
+        return(
+          <div className="arriving-student">
+            <Alert bsStyle="info" >
+            <strong>Hello {studentName}!</strong> Thanks for joining the class.
+              
+            </Alert>
+          </div>
+        )
+      }
+}
 
 
 //   renderStudentNames(){
@@ -366,33 +413,28 @@ renderTopFive(){
 // }
 
 
+
+
   render() {
     return (
       <div className="StudentView">
       
-      <h1>Welcome to the Student View </h1>
-      <h1>Welcome to the students in the class </h1>
-      <h1>total responses: {this.state.totalresponses} </h1>
-      <h1>Number of correct_answers: {this.state.correct_answers} </h1>
-      <h1>Number of false_1s: {this.state.false_1s} </h1>
-      <h1>Number of false_2s: {this.state.false_2s} </h1>
-      <h1>Number of false_3s: {this.state.false_3s} </h1>
-
-
-     
-        {this.state.enrolled_students}
+        {this.renderEnteringStudents()}
+        {this.renderIntro()}
         {this.renderTopFive()}
         {this.renderChart()}
         {this.renderQuiz()}
+
+  
                       
-        <Form inline>
+        {/* <Form inline>
         <FormControl 
             placeholder = 'Send a message to the teacher'
             onChange = { event => this.setState({ message: event.target.value})}
             />
         <Button onClick={() => this.sendMySelection()}>Send Message to Teach</Button>
         <h3>{this.state.message}</h3>
-        </Form> 
+        </Form>  */}
       </div>
     );
   }

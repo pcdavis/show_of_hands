@@ -92,7 +92,7 @@ class Login extends Component {
         value = {this.state.screen_name}
         onChange = { event => this.setState({ screen_name: event.target.value})}
         />
-        <Button className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
+        <Button disabled={!this.state.classroom_code || !this.state.screen_name} className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
       </Form>
                 
 

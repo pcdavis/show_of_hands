@@ -5,6 +5,7 @@ import { Form, FormControl, Button, ListGroup, ListGroupItem, Fade } from 'react
 import { connect } from "react-redux";
 import { Link, History } from "react-router-dom";
 import { fetchStacks, createStack, fetchStackTitles, deleteStack } from "../../actions";
+import Navbar from '../CustomNavbar/CustomNavbar'
 
 
 class Dashboard extends Component {
@@ -29,22 +30,6 @@ class Dashboard extends Component {
     });
   }
 
-  // renderStacks() {
-    
-  //   return _.map(this.props.stacks, quizObj => {
-  //     let index = quizObj.content_id;
-  //     // console.log('inside render stacks in dashboard. here is quizObj.content_id that I assign as the key to each link created',index)
-  //     // console.log('here is the quizObj object that is going through the lodash map inside render stacks', quizObj)
-  //     return (
-  //       <li className="list-group-item" key={quizObj.content_id}>
-  //         <Link to={`/quiz/${quizObj.quiz_id}`}>
-  //           {quizObj.question}
-  //         </Link>
-  //       </li>
-  //     );
-  //   });
-  // }
-
   renderStackTitles() {
     // console.log("renderStackTitles fired-------------");
     // console.log('this props stacktitles is ',this.props.stack_titles)
@@ -61,18 +46,9 @@ class Dashboard extends Component {
               <Button bsStyle="danger" onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
         </ListGroupItem>
 
-        // Old version below
-        // <li className="list-group-item" key={stackTitleItem.stack_title}>
-        //   <Link to={`/stacks/${stackTitleItem.stack_id}`}>
-        //     {stackTitleItem.stack_title}
-        //     <Button  onClick={this.onDeleteClick.bind(this)}>Delete</Button>
-        //   </Link>
-        // </li>
       );
     });
   }
-
-
 
 handleChange(event){
   this.setState({
@@ -85,8 +61,18 @@ handleChange(event){
     
     return (
       <div>
-        <div className="text-xs-right">
 
+        <Navbar/>
+
+        <h3>Here are your Stacks</h3>
+        
+        <ul className="list-group">
+
+        <ListGroup>
+   
+          {this.renderStackTitles()}
+  
+        </ListGroup>
         <Form inline>
         <FormControl 
         placeholder = 'Stack Title'
@@ -100,18 +86,6 @@ handleChange(event){
       {/* this.props.history.push("/dashboard") */}
                 
                   <h2>{this.state.title}</h2>
-
-
-        </div>
-        <h3>Here are your Stacks</h3>
-        
-        <ul className="list-group">
-
-        <ListGroup>
-   
-          {this.renderStackTitles()}
-  
-        </ListGroup>
 
         
           

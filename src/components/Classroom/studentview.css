@@ -1,0 +1,69 @@
+
+.class-intro{
+  margin: 0 auto;
+  text-align: center;
+}
+
+svg {
+  margin: auto;
+  fill: rgba(141, 59, 114, 1); 
+}
+
+.room-card{
+    width: 90vw;
+    height: 90vh;
+    /* border: solid 1px rgba(0, 0, 0, .2); */
+    margin: 0 auto;
+    padding-bottom: 20px;
+    box-shadow: 2px 3px 10px 2px rgba(0, 0, 0, .1);
+}
+.room-card-content{
+  padding: 10px;
+  text-align: center;
+}
+
+h1,h2,h3,h4{
+  font-family: 'Averia Serif Libre', cursive;
+}
+
+.classroom-spacer-15{
+  margin-bottom: 15px;
+}
+
+.classroom-spacer-25{
+  margin-bottom: 25px;
+}
+
+.classroom-spacer-35{
+  margin-bottom: 35px;
+}
+
+.quiz-panel{
+  border: 1px solid white !important;
+}
+
+.quiz-buttons{
+  
+}
+.donut-size{
+  width: 500px;
+}
+
+.quiz-panel-header{
+  background-color: rgba(141, 59, 114, 1);
+}
+
+.quiz-card{
+  background:white;
+  box-shadow: 2px 3px 10px 2px rgba(0, 0, 0, .1);
+  width: 90vw;
+  height: 90vh;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+.chart-totals{
+  margin-left: 15px;
+  text-align: left;
+  margin-top: 15px;
+  padding: 15px;
+}

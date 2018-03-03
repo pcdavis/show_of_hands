@@ -4,6 +4,8 @@ grape rgba(115, 25, 99, 1);
 light purple rgba(141, 59, 114, 1);
 dark purple rgba(76, 59, 77, 1);
 green rgba(126, 216, 204, 1); */
+/* font-family: 'Averia Serif Libre', cursive;
+font-family: 'Open Sans', sans-serif; */
 
 .logo-move{
   width: 100vw;
@@ -28,6 +30,7 @@ green rgba(126, 216, 204, 1); */
   padding-top: 20px;
   width: 80vw;
   margin: 0 auto;
+  z-index: 200;
 }
 .login-form-field{
   margin-bottom: 10px;
@@ -42,6 +45,7 @@ green rgba(126, 216, 204, 1); */
   text-transform: uppercase;
   border: solid 2px rgba(255, 255, 255, .1);
   box-shadow: 2px 3px 10px 2px rgba(0, 0, 0, .1);
+  z-index: 400;
 }
 .teacher-login{
   position: absolute;
