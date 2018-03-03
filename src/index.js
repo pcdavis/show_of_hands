@@ -11,6 +11,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import Stack from './components/Stack/Stack'
 import QuizQuestion from './components/QuizQuestion/QuizQuestion'
 import Classroom from './components/Classroom/Classroom'
+import Test from './components/Test/Test'
 // import Widgets from './components/coreUI/Widgets/Widgets'
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
@@ -26,6 +27,7 @@ ReactDOM.render(
                 <Route exact path="/newquestion" component={QuizQuestion} />
                 <Route exact path="/stacks/:id" component={Stack} />
                 <Route exact path="/classroom/:id" component={Classroom} />
+                <Route exact path="/test" component={Test} />
                 {/* <Route exact path="/widgets" component={Widgets} /> */}
               </Switch>
             </div>

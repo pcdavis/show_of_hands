@@ -5,8 +5,10 @@
   "proxy": "http://localhost:3005",
   "private": true,
   "dependencies": {
+    "animate.css": "^3.6.1",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "bootstrap": "^4.0.0",
     "browser-router": "^0.2.0",
     "chart.js": "^2.7.1",
     "cors": "^2.8.4",

@@ -6,7 +6,7 @@ import {ac_setStudentID } from '../../actions/index';
 import { api_notify_classroom } from '../Classroom/api';
 import logo from './logo-hands2.svg';
 import SOH from './SVG-HEADER.svg';
-import './login.css'
+import './test.css'
 
 import Transition from 'react-transition-group/Transition';
 
@@ -35,7 +35,7 @@ const Fade = ({ in: inProp }) => (
   </Transition>
 );
 
-class Login extends Component {
+class Test extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -54,7 +54,7 @@ class Login extends Component {
 
   handle_student_signin(classCode) {
     let screenName = this.state.screen_name;
-    console.log("handle_student_signin fired inside Login page / home '/' -------------", classCode)
+    console.log("handle_student_signin fired inside Test page / home '/' -------------", classCode)
     console.log("handle_student_signin fired inside screenName -------------", screenName)
     axios.post('/api/students', {screenName})
     .then( response => { 
@@ -64,7 +64,7 @@ class Login extends Component {
       this.props.ac_setStudentID(newStudentIdentity)
       console.log("the newStudentIdentity", newStudentIdentity)
       api_notify_classroom(newStudentIdentity)
-      console.log("the socketroom props inside the Login should now be showing", this.props.socketroom)
+      console.log("the socketroom props inside the Test should now be showing", this.props.socketroom)
     })
     this.props.history.push(`/classroom/${this.state.classroom_code}`)
     this.setState({classroom_code: '' })
@@ -77,7 +77,7 @@ class Login extends Component {
       <div className="Login">
         
         
-        <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
+        <img src={SOH} className="animated fadeIn soh" alt="logo" />
 
       <Form inline className="login-form">
         <FormControl 
@@ -116,5 +116,5 @@ function mapStateToProps(state) {
 }
 
 
-export default connect (mapStateToProps, {ac_setStudentID})(Login)
+export default connect (mapStateToProps, {ac_setStudentID})(Test)
 

@@ -4,22 +4,20 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import {ac_setStudentID } from '../../actions/index';
 import { api_notify_classroom } from '../Classroom/api';
-import logo from './logo-hands2.svg';
-import SOH from './SVG-HEADER.svg';
-import './login.css'
-
+import logo from './logo.svg';
+import './login.css';
 import Transition from 'react-transition-group/Transition';
 
-const duration = 500;
+const duration = 300;
 
 const defaultStyle = {
   transition: `opacity ${duration}ms ease-in-out`,
-  opacity: 0
+  opacity: 0,
 }
 
 const transitionStyles = {
   entering: { opacity: 0 },
-  entered:  { opacity: .5 },
+  entered:  { opacity: 1 },
 };
 
 const Fade = ({ in: inProp }) => (
@@ -29,7 +27,7 @@ const Fade = ({ in: inProp }) => (
         ...defaultStyle,
         ...transitionStyles[state]
       }}>
-        <img src={logo} className="animated fadeInUpBig logo-move" alt="logo" />
+        <img src={logo} className="Login-logo" alt="logo" />
       </div>
     )}
   </Transition>
@@ -54,7 +52,7 @@ class Login extends Component {
 
   handle_student_signin(classCode) {
     let screenName = this.state.screen_name;
-    console.log("handle_student_signin fired inside Login page / home '/' -------------", classCode)
+    console.log("handle_student_signin fired inside login page / home '/' -------------", classCode)
     console.log("handle_student_signin fired inside screenName -------------", screenName)
     axios.post('/api/students', {screenName})
     .then( response => { 
@@ -64,7 +62,7 @@ class Login extends Component {
       this.props.ac_setStudentID(newStudentIdentity)
       console.log("the newStudentIdentity", newStudentIdentity)
       api_notify_classroom(newStudentIdentity)
-      console.log("the socketroom props inside the Login should now be showing", this.props.socketroom)
+      console.log("the socketroom props inside the login should now be showing", this.props.socketroom)
     })
     this.props.history.push(`/classroom/${this.state.classroom_code}`)
     this.setState({classroom_code: '' })
@@ -75,34 +73,34 @@ class Login extends Component {
 
     return (
       <div className="Login">
-        
-        
-        <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
+        <header className="Login-header">
 
-      <Form inline className="login-form">
+          <img src={logo} className="Login-logo" alt="logo" />
+
+          <h1 className="Login-title">Welcome to React</h1>
+        </header>
+        <p className="Login-intro">
+          To get started, edit <code>src/Login.js</code> and save to reload.
+        </p>
+
+        <h1>Welcome to Show of Hands</h1>
+        <Fade in={ isEntered } />
+
+      <Form inline>
         <FormControl 
-        className="login-form-field"
         placeholder = 'Enter Your Classroom Code'
         value = {this.state.classroom_code}
         onChange = { event => this.setState({ classroom_code: event.target.value})}
         />
         <FormControl 
-        className="login-form-field"
         placeholder = 'Enter a Screen Name'
         value = {this.state.screen_name}
         onChange = { event => this.setState({ screen_name: event.target.value})}
         />
-        <Button className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
+        <Button onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
       </Form>
-                
 
-      <div className="teacher-login">
-      <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
-      </div>
-
-      <div className="login-footer">
-      <Fade in={ isEntered } />
-      </div>
+                <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
 
       </div>
     );
