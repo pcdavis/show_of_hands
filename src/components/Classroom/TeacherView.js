@@ -155,8 +155,7 @@ axios.get(`/api/topfive?broadcast_id=${requestObj.broadcast_id}&quiz_id=${reques
 
     return (
       <div className="TeacherView">
-      <h1>Welcome to the Teacher View </h1>
-
+     
       <Panel>
           <Panel.Heading><h2>{this.props.socketroom.broadcast_stack[0].stack_title}</h2></Panel.Heading>
           <ListGroup>

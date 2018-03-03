@@ -179,6 +179,8 @@ renderTopFive(){
   if(this.state.resultsFinal){
     
       return (
+
+<div className="room-card animated flipInX">
         <Panel>
           <Panel.Heading><h2>High Fives to the Fast Five</h2></Panel.Heading>
           <ListGroup>
@@ -191,6 +193,8 @@ renderTopFive(){
            
           </ListGroup>
        </Panel>
+
+</div>
       )
     
   }

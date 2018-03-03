@@ -5,7 +5,7 @@ import './stack.css'
 import { connect } from "react-redux";
 import { createBroadcast, fetchStacks, fetchStackTitles, setTeacherID } from "../../actions";
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
-
+import Navbar from '../CustomNavbar/CustomNavbar'
 
 class Stack extends Component {
   constructor(props){
@@ -113,7 +113,7 @@ startBroadcasting(){
 
     return (
       <div>
-      
+      <Navbar/>
         <Panel>
           <Panel.Heading><h2>{this.state.theStackTitle}</h2></Panel.Heading>
           <ListGroup>
