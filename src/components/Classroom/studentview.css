@@ -67,3 +67,10 @@ h1,h2,h3,h4{
   margin-top: 15px;
   padding: 15px;
 }
+.logo-purple{
+  max-height: 50vh;
+  position: absolute;
+  bottom: 0;
+  left:0;
+  right: 0;
+}

@@ -1,11 +1,12 @@
 nav.navbar, .navbar-default {
     background: linear-gradient(10deg,rgba(76, 59, 77, 1), #bc47d9) !important;
+    height: 50px;
     box-shadow: 0px 3px 2px rgba(0, 0, 0, .2);
   }
   .brand{
       margin: 0 auto !important;
   }
-  .nav-soh{
+  .nav-soh2{
       width: 50vw;
       margin-left: 85px;
   }
@@ -23,10 +24,12 @@ nav.navbar, .navbar-default {
   .navbar-default .navbar-brand {
     color: white;
   }
-  .logo-center{
-    max-height: 30px!important;
-    padding: 10px 5px!important;
-      margin: 0 auto;
+  .logo-center2{
+      margin-top: 5px;
+      text-align: center;
+  }
+  .logo-center2 img{
+      height: 40px;
   }
   
   /* .navbar-default .navbar-toggle {

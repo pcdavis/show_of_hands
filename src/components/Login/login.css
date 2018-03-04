@@ -7,6 +7,16 @@ green rgba(126, 216, 204, 1); */
 /* font-family: 'Averia Serif Libre', cursive;
 font-family: 'Open Sans', sans-serif; */
 
+.colors{
+  background-color:rgba(115, 25, 99, 1);
+  background-color:rgba(141, 59, 114, 1);
+  background-color:rgb(77, 32, 102);
+  background-color:rgba(76, 59, 77, 1);
+  background-color:rgba(126, 216, 204, 1);
+  background-color:rgb(33, 152, 160);
+}
+
+
 .logo-move{
   width: 100vw;
   z-index: auto;

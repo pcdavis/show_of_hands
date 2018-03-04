@@ -7,6 +7,10 @@ nav.navbar, .navbar-default {
       padding: 10px 5px!important;
       margin-left: 10px;
   }
+  .nav-soh img{
+    padding-bottom: 4px;
+    margin-top: -2px;
+  }
   
   .navbar-default {
     background-image: none;

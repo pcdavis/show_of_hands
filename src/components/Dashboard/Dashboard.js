@@ -1,11 +1,12 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import './dashboard.css'
-import { Form, FormControl, Button, ListGroup, ListGroupItem, Fade } from 'react-bootstrap'
+import { Well, Form, FormControl, Button, ListGroup, ListGroupItem, Fade } from 'react-bootstrap'
 import { connect } from "react-redux";
 import { Link, History } from "react-router-dom";
 import { fetchStacks, createStack, fetchStackTitles, deleteStack } from "../../actions";
 import Navbar from '../CustomNavbar/CustomNavbar'
+import { StyleSheet, css } from 'aphrodite';
 
 
 class Dashboard extends Component {
@@ -40,10 +41,10 @@ class Dashboard extends Component {
       return (
 
         <ListGroupItem className="padding-tb" >
-           <Link to={`/stacks/${stackTitleItem.stack_id}`}>
+           <Link className={css(styles.font16)} to={`/stacks/${stackTitleItem.stack_id}`}>
               {stackTitleItem.stack_title}
           </Link>
-              <Button className="pull-right button-centering" bsStyle="warning" onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
+              <Button className="pull-right button-centering"  onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
         </ListGroupItem>
 
       );
@@ -70,7 +71,7 @@ handleClick(){
       <div>
 
         <Navbar/>
-        <div className="block35"></div>
+        <div className="block45"></div>
         <h2>Here are your Stacks</h2>
         
         <ul className="list-group">
@@ -80,21 +81,24 @@ handleClick(){
           {this.renderStackTitles()}
   
         </ListGroup>
-        <Form inline className="percent-90">
-        <FormControl 
-        className= "input-tall"
-        placeholder = 'New Stack Title'
-        onChange = {this.handleChange}
-        />
-        <Button bsStyle="info" bsSize="large" block onClick={ () => this.handleClick()}>Create New Stack</Button>
-        {/* <Button onClick={ 
-          () => this.props.createStack(this.state.title, () => {
-            this.props.fetchStackTitles()  } ) 
-                        }>Create New Stack</Button> */}
-      </Form>
+        <Well>
+          
+          <Form inline className="percent-90">
+          <FormControl 
+          className= "input-tall"
+          placeholder = 'New Stack Title'
+          onChange = {this.handleChange}
+          />
+          <Button className={css(styles.purple)} bsSize="large" block onClick={ () => this.handleClick()}>Create New Stack</Button>
+          {/* <Button onClick={ 
+            () => this.props.createStack(this.state.title, () => {
+              this.props.fetchStackTitles()  } ) 
+                          }>Create New Stack</Button> */}
+        </Form>
+        </Well>
       {/* this.props.history.push("/dashboard") */}
                 
-                  <h2>{this.state.title}</h2>
+                 
 
         
           
@@ -112,3 +116,16 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, { fetchStacks, fetchStackTitles, createStack, deleteStack })(Dashboard);
+
+
+const styles = StyleSheet.create({
+  purple: {
+      backgroundColor: 'rgb(105, 32, 101)',
+      color: 'white'
+  },
+
+  font16: {
+      fontSize: 18,
+      color: 'purple'
+  }
+});

@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { createBroadcast, fetchStacks, fetchStackTitles, setTeacherID } from "../../actions";
 import { Well, Form, FormGroup, Col, ControlLabel, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import Navbar from '../CustomNavbar/CustomNavbar'
+import { StyleSheet, css } from 'aphrodite';
 
 
 
@@ -207,20 +208,21 @@ renderForm(){
           {this.renderForm()}
 
           <Panel.Body> <Button onClick={() => this.setState({showForm: true})}>New Quiz Question</Button></Panel.Body>
-        </Panel>;
+        </Panel>
 
-        <div>
+        <Well>
         <Form inline
         className="percent-90">
         <FormGroup>
         <FormControl 
+        className={css(styles.font20)}
             placeholder = 'Broadcast Code'
             onChange = { event => this.setState({ broadcast_code: event.target.value})}
             />
         </FormGroup>
-        <Button bsStyle="info" bsSize="large" block onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
+        <Button className={css(styles.purple)} bsSize="large" block onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
         </Form>
-        </div>
+        </Well>
 
       </div>
     );
@@ -236,3 +238,14 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles, setTeacherID} )(Stack);
+
+const styles = StyleSheet.create({
+  purple: {
+      backgroundColor: 'rgb(105, 32, 101)',
+      color: 'white'
+  },
+
+  font20: {
+      fontSize: 20
+  }
+});
