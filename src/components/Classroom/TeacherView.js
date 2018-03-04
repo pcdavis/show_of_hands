@@ -6,6 +6,8 @@ import axios from 'axios';
 import { subscribeToTimer, messenger, api_broadcast_quiz, api_broadcast_topFive } from './api';
 import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import {fetchBroadcast, ac_setCurrentQuiz } from '../../actions/index';
+import Navbar from '../CustomNavbar/CustomNavbar'
+import './teacherview.css'
 
 class TeacherView extends Component {
   constructor(props) {
@@ -59,9 +61,9 @@ renderStackItems() {
 
     return (
       
-     <div key={quizObj.quiz_id}>
+     <div className="broadcast-panel" key={quizObj.quiz_id}>
         <Panel.Body  > 
-        {quizObj.question} 
+        <h3>{quizObj.question} </h3>
 
           <Button onClick={() => this.sendMySelection({
             quiz_id: quizObj.quiz_id,
@@ -155,7 +157,9 @@ axios.get(`/api/topfive?broadcast_id=${requestObj.broadcast_id}&quiz_id=${reques
 
     return (
       <div className="TeacherView">
+     <Navbar/>
      
+      <div className="block35"></div>
       <Panel>
           <Panel.Heading><h2>{this.props.socketroom.broadcast_stack[0].stack_title}</h2></Panel.Heading>
           <ListGroup>
@@ -166,15 +170,15 @@ axios.get(`/api/topfive?broadcast_id=${requestObj.broadcast_id}&quiz_id=${reques
         
                     
                     {/* <h1>This is the timer value: {this.state.timestamp} </h1>  */}
-                    <h2>{this.props.socketroom.broadcast_code}</h2> 
-                    <Form inline>
+                    {/* <h2>{this.props.socketroom.broadcast_code}</h2> 
+       <Form inline>
         <FormControl 
             placeholder = 'Broadcast Code'
             onChange = { event => this.setState({ message: event.target.value})}
             />
         <Button onClick={() => this.sendMessage()}>Send Message to Studi</Button>
         <h3>{this.state.message}</h3>
-        </Form> 
+        </Form>  */}
       </div>
     );
   }

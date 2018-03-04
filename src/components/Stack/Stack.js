@@ -4,8 +4,10 @@ import React, { Component } from "react";
 import './stack.css'
 import { connect } from "react-redux";
 import { createBroadcast, fetchStacks, fetchStackTitles, setTeacherID } from "../../actions";
-import { Form, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
+import { Well, Form, FormGroup, Col, ControlLabel, FormControl, Button, Panel, ListGroup, ListGroupItem } from 'react-bootstrap'
 import Navbar from '../CustomNavbar/CustomNavbar'
+
+
 
 class Stack extends Component {
   constructor(props){
@@ -14,9 +16,11 @@ class Stack extends Component {
       broadcast_code: '',
       theStackTitle: '',
       theStackContent: [],
-      teacherID: ''
+      teacherID: '',
+      showForm: false
     }
     // this.handleChange = this.handleChange.bind(this)
+    this.renderForm = this.renderForm.bind(this)
   }
   
 
@@ -64,6 +68,7 @@ class Stack extends Component {
 //   })
 // }
 
+
 startBroadcasting(){
   console.log("startBroadcast function fired")
   let this_user_id = this.state.theStackContent[0].user_id;
@@ -105,7 +110,85 @@ startBroadcasting(){
     // })
 
 //use action creator to set redux state of broadcast info needed and then jump into the classroom
+}
 
+handleSubmit(){
+
+  // ac_postNewQuestion()
+
+  this.setState({showForm: false})
+}
+
+renderForm(){
+  if (this.state.showForm) {
+    return (
+      <div>
+        <div className="block10"></div>
+<Well>
+  
+          <Form horizontal >
+      <FormGroup controlId="formHorizontalEmail">
+        <Col componentClass={ControlLabel} sm={2}>
+          Quiz Question
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text" placeholder="Question" />
+        </Col>
+      </FormGroup>
+    
+      <FormGroup controlId="formHorizontalPassword">
+        <Col componentClass={ControlLabel} sm={2}>
+          Correct Answer
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text" placeholder="Correct Answer" />
+        </Col>
+      </FormGroup>
+    
+      <FormGroup controlId="formHorizontalPassword">
+        <Col componentClass={ControlLabel} sm={2}>
+        False Choice 1
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text" placeholder="Enter a false answer choice" />
+        </Col>
+      </FormGroup>
+    
+      <FormGroup controlId="formHorizontalPassword">
+        <Col componentClass={ControlLabel} sm={2}>
+        False Choice 2
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text" placeholder="Enter a false answer choice" />
+        </Col>
+      </FormGroup>
+    
+      <FormGroup controlId="formHorizontalPassword">
+        <Col componentClass={ControlLabel} sm={2}>
+        False Choice 3
+        </Col>
+        <Col sm={10}>
+          <FormControl type="text" placeholder="Enter a false answer choice" />
+        </Col>
+      </FormGroup>
+    
+      <FormGroup>
+       
+          <Button onClick={()=> this.setState({showForm: false})} type="submit">Cancel</Button>
+        
+          <Button onClick={this.handleSubmit} type="submit">Submit</Button>
+        
+      </FormGroup>
+    </Form >
+
+</Well> 
+
+
+      </div>
+    )
+
+  }
+ 
 }
 
   render() {
@@ -114,22 +197,28 @@ startBroadcasting(){
     return (
       <div>
       <Navbar/>
+      <div className="block35"></div>
         <Panel>
           <Panel.Heading><h2>{this.state.theStackTitle}</h2></Panel.Heading>
           <ListGroup>
             {this.renderStackItems()}
           </ListGroup>
-          <Panel.Body> <Button onClick={() => console.log("start broadcast")}>New Quiz Question</Button></Panel.Body>
+          
+          {this.renderForm()}
+
+          <Panel.Body> <Button onClick={() => this.setState({showForm: true})}>New Quiz Question</Button></Panel.Body>
         </Panel>;
 
         <div>
-        <Form inline>
+        <Form inline
+        className="percent-90">
+        <FormGroup>
         <FormControl 
             placeholder = 'Broadcast Code'
             onChange = { event => this.setState({ broadcast_code: event.target.value})}
             />
-        <Button onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
-        <h3>{this.state.broadcast_code}</h3>
+        </FormGroup>
+        <Button bsStyle="info" bsSize="large" block onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
         </Form>
         </div>
 

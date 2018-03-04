@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "animate.css": "^3.6.1",
+    "aphrodite": "^1.2.5",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "bootstrap": "^4.0.0",

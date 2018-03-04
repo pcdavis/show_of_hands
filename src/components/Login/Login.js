@@ -29,7 +29,7 @@ const Fade = ({ in: inProp }) => (
         ...defaultStyle,
         ...transitionStyles[state]
       }}>
-        <img src={logo} className="animated fadeInUpBig logo-move" alt="logo" />
+        <img src={logo} className="animated fadeInUpBig z-bottom logo-move" alt="logo" />
       </div>
     )}
   </Transition>

@@ -5,15 +5,14 @@ import axios from 'axios';
 import { subscribeToTimer, messenger, api_subscribe_to_quizes, api_subscribe_to_responses, api_emit_my_responses, api_subscribe_to_new_students, api_subscribe_to_topFive } from './api';
 import { Form, FormControl, Button, ButtonGroup, Panel, ListGroup, ListGroupItem, Alert } from 'react-bootstrap'
 import {ac_setCurrentQuiz } from '../../actions/index';
+import { ToastContainer, toast } from 'react-toastify'
 
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
-import CustomButton from './CustomButton'
+import Navbar2 from '../CustomNavbar/CustomNavbar2'
 import Modals from './Modals'
 import './studentview.css'
 // import ReactCSSTransitionGroup from './react-addons-css-transition-group'
-
-
 
 
 class StudentView extends Component {
@@ -48,9 +47,11 @@ class StudentView extends Component {
     api_subscribe_to_new_students( (err, newStudentIdentity) => {
       console.log("here is the newStudentIdentity that arrived from socket into the new_student", newStudentIdentity);
       console.log("here is this.state.enrolled_students before adding the new one", this.state.enrolled_students);
+      
       let updated_enrollment = [...this.state.enrolled_students, newStudentIdentity.screenName]
       this.setState({enrolled_students: updated_enrollment})
       console.log("here is this.state.enrolled_students AFTER adding the new one", this.state.enrolled_students);
+      // toast.success("Hello " ,newStudentIdentity.screenName)
     } );
     
     this.state = {
@@ -179,22 +180,18 @@ renderTopFive(){
   if(this.state.resultsFinal){
     
       return (
-
-<div className="room-card animated flipInX">
-        <Panel>
-          <Panel.Heading><h2>High Fives to the Fast Five</h2></Panel.Heading>
+        <Panel className="room-card room-card-content">
+          <Panel.Heading><h2>High Fives to the Fastest Five</h2></Panel.Heading>
           <ListGroup>
           
-          <ListGroupItem  > {this.state.topFiveNames[0]} </ListGroupItem>
-          <ListGroupItem  > {this.state.topFiveNames[1]} </ListGroupItem>
-          <ListGroupItem  > {this.state.topFiveNames[2]} </ListGroupItem>
-          <ListGroupItem  > {this.state.topFiveNames[3]} </ListGroupItem>
-          <ListGroupItem  > {this.state.topFiveNames[4]} </ListGroupItem>
+          <ListGroupItem className="animated bounceInUp" > <h3>{this.state.topFiveNames[0]}</h3> </ListGroupItem>
+          <ListGroupItem className="animated bounceInUp" > <h3>{this.state.topFiveNames[1]}</h3> </ListGroupItem>
+          <ListGroupItem className="animated bounceInUp" > <h3>{this.state.topFiveNames[2]}</h3> </ListGroupItem>
+          <ListGroupItem className="animated bounceInUp" > <h3>{this.state.topFiveNames[3]}</h3> </ListGroupItem>
+          <ListGroupItem className="animated bounceInUp" > <h3>{this.state.topFiveNames[4]}</h3> </ListGroupItem>
            
           </ListGroup>
        </Panel>
-
-</div>
       )
     
   }
@@ -241,29 +238,29 @@ renderTopFive(){
 
           <div className="room-card-content">
 
-            <CardColumns className="cols-8">
+            <CardColumns className="cols-2">
 
             <Card>
               <CardHeader>
                 <h3>{this.props.socketroom.current_quiz.question}</h3>
-                <h4>The correct answer is: {this.props.socketroom.current_quiz.correct_answer}</h4>
+                
                 
               </CardHeader>
             
                 <div className="chart-wrapper">
-                  <Doughnut className="donut-size" data={doughnut}/>
+                  <Doughnut data={doughnut}/>
                 </div>
               
             </Card>
 
                   
                   <div className="chart-totals">
-                    
-                        <p>Total responses: {this.state.totalresponses} </p>
-                        <p>{this.props.socketroom.current_quiz.correct_answer}: {this.state.correct_answers} </p>
-                        <p>{this.props.socketroom.current_quiz.false_1}: {this.state.false_1s} </p>
-                        <p>{this.props.socketroom.current_quiz.false_2}: {this.state.false_2s} </p>
-                        <p>{this.props.socketroom.current_quiz.false_3}: {this.state.false_3s} </p>
+                  <h3>The correct answer is: {this.props.socketroom.current_quiz.correct_answer}</h3>
+                        <h4>Total responses: {this.state.totalresponses} </h4>
+                        <h5>{this.props.socketroom.current_quiz.correct_answer}: {this.state.correct_answers} </h5>
+                        <h5>{this.props.socketroom.current_quiz.false_1}: {this.state.false_1s} </h5>
+                        <h5>{this.props.socketroom.current_quiz.false_2}: {this.state.false_2s} </h5>
+                        <h5>{this.props.socketroom.current_quiz.false_3}: {this.state.false_3s} </h5>
 
                   </div>
 
@@ -278,7 +275,6 @@ renderTopFive(){
   }
   
 //new render quiz with randomized answers
-
   renderQuiz(){
     let currentQuiz = this.props.socketroom.current_quiz;
     console.log("renderQuiz fired and this.state.quizOb is ", currentQuiz)
@@ -289,7 +285,7 @@ renderTopFive(){
       
        let generatedButtons = answerButtons.map( item => {
            return (
-            <Button className="quiz-buttons" onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
+            <Button  onClick= { ()=> this.submitAnswer (item.key_val, item.text)} > {item.text} </Button>
            )
        })
 
@@ -298,9 +294,9 @@ renderTopFive(){
                 <Panel className="quiz-panel" >
                   <Panel.Heading className="quiz-panel-header"  ><h2>{question}</h2></Panel.Heading>
                   <Panel.Body>
-                    <ButtonGroup className="quiz-buttongroup" vertical block>
+                    <ButtonGroup bsSize="large" block className="quiz-buttons" vertical block>
                     {generatedButtons}
-                </ButtonGroup>
+                </ButtonGroup>;
                 </Panel.Body>
             </Panel>
         </div>
@@ -417,19 +413,16 @@ renderEnteringStudents(){
 // }
 
 
-
-
   render() {
     return (
       <div className="StudentView">
-      
+      <ToastContainer />
+      <Navbar2/>
         {this.renderEnteringStudents()}
         {this.renderIntro()}
         {this.renderTopFive()}
         {this.renderChart()}
         {this.renderQuiz()}
-
-  
                       
         {/* <Form inline>
         <FormControl 

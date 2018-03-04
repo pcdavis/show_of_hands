@@ -7,7 +7,7 @@ import SOH from './SVG-HEADER.svg';
 export default class CustomNavbar extends Component {
   render() {
     return (
-      <Navbar default collapseOnSelect>
+      <Navbar default fixedTop collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
           <div className="nav-soh"><img src={SOH}  alt="logo" /></div>

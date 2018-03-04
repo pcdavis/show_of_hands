@@ -39,11 +39,11 @@ class Dashboard extends Component {
       // console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
       return (
 
-        <ListGroupItem >
+        <ListGroupItem className="padding-tb" >
            <Link to={`/stacks/${stackTitleItem.stack_id}`}>
               {stackTitleItem.stack_title}
           </Link>
-              <Button bsStyle="danger" onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
+              <Button className="pull-right button-centering" bsStyle="warning" onClick={()=> this.onDeleteClick(stackTitleItem.stack_id)}>Delete</Button>
         </ListGroupItem>
 
       );
@@ -56,6 +56,13 @@ handleChange(event){
   })
 }
 
+handleClick(){
+  this.setState({title: ''}) 
+  this.props.createStack(this.state.title, () => {
+    this.props.fetchStackTitles()  } )
+    
+}
+
   render() {
     console.log('this.props.stacks',this.props.stacks)
     
@@ -63,8 +70,8 @@ handleChange(event){
       <div>
 
         <Navbar/>
-
-        <h3>Here are your Stacks</h3>
+        <div className="block35"></div>
+        <h2>Here are your Stacks</h2>
         
         <ul className="list-group">
 
@@ -73,15 +80,17 @@ handleChange(event){
           {this.renderStackTitles()}
   
         </ListGroup>
-        <Form inline>
+        <Form inline className="percent-90">
         <FormControl 
-        placeholder = 'Stack Title'
-        onChange = { event => this.setState({ title: event.target.value})}
+        className= "input-tall"
+        placeholder = 'New Stack Title'
+        onChange = {this.handleChange}
         />
-        <Button onClick={ 
+        <Button bsStyle="info" bsSize="large" block onClick={ () => this.handleClick()}>Create New Stack</Button>
+        {/* <Button onClick={ 
           () => this.props.createStack(this.state.title, () => {
             this.props.fetchStackTitles()  } ) 
-                        }>Create New Stack</Button>
+                        }>Create New Stack</Button> */}
       </Form>
       {/* this.props.history.push("/dashboard") */}
                 

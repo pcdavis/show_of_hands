@@ -9,7 +9,7 @@ import TeacherView from './TeacherView'
 // import {test} from '../../ducks/reducer_stacks';
 
 import {checkIsTeacher } from '../../actions/index';
-import Navbar from '../CustomNavbar/CustomNavbar'
+
 
 // let socket;
 
@@ -99,7 +99,7 @@ class SocketRoom extends Component {
 
         return(
            <div> 
-               <Navbar/>
+               
  
                 {this.uiToDisplay()}
            </div>

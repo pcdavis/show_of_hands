@@ -23,6 +23,19 @@ stack_id INTEGER REFERENCES stacks(stack_id) ,
 quiz_id INTEGER REFERENCES quizes(quiz_id)
 )
 
+--Below are the three sql calls I use to create quizes and insert them into stacks that show up in my account for broadcasting
+select * from quizes
+
+insert into quizes 
+(user_id, question, correct_answer, false_1, false_2, false_3)
+VALUES 
+(2, 'Which of these is NOT a character in Five Nights At Freddys?', 'Duxy the Duck', 'Freddy Fazbear', 'Bonnie the Bunny', 'Chica the Chicken')
+returning *;
+
+insert into stack_content (stack_id,quiz_id,user_id)
+VALUES (65,51,2)
+returning *;
+
 
 
 --Create quiz questions

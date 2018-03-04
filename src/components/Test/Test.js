@@ -7,8 +7,20 @@ import { api_notify_classroom } from '../Classroom/api';
 import logo from './logo-hands2.svg';
 import SOH from './SVG-HEADER.svg';
 import './test.css'
+import { StyleSheet, css } from 'aphrodite'
 
 import Transition from 'react-transition-group/Transition';
+
+
+
+
+
+
+const styles = StyleSheet.create({
+  red: {
+    backgroundColor: 'red'
+  }
+})
 
 const duration = 500;
 
@@ -78,6 +90,8 @@ class Test extends Component {
         
         
         <img src={SOH} className="animated fadeIn soh" alt="logo" />
+
+      <h1 className={css(styles.red)}>Hello from hell</h1>
 
       <Form inline className="login-form">
         <FormControl 

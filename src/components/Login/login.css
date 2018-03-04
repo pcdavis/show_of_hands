@@ -9,6 +9,11 @@ font-family: 'Open Sans', sans-serif; */
 
 .logo-move{
   width: 100vw;
+  z-index: auto;
+  max-height: 50vh;
+}
+.z-bottom{
+  z-index: auto;
 }
 .soh{
   padding-top: 40px;
