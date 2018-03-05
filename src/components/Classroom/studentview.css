@@ -70,7 +70,8 @@ h1,h2,h3,h4{
 .logo-purple{
   max-height: 50vh;
   position: absolute;
+ width: 100vw;
   bottom: 0;
-  left:0;
   right: 0;
+  left: 0;
 }

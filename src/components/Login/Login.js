@@ -4,7 +4,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import {ac_setStudentID } from '../../actions/index';
 import { api_notify_classroom } from '../Classroom/api';
-import logo from './logo-hands2.svg';
+import logo from './logo-hands-purple-login.png';
 import SOH from './SVG-HEADER.svg';
 import './login.css'
 
@@ -19,7 +19,7 @@ const defaultStyle = {
 
 const transitionStyles = {
   entering: { opacity: 0 },
-  entered:  { opacity: .5 },
+  entered:  { opacity: 1 },
 };
 
 const Fade = ({ in: inProp }) => (
@@ -100,6 +100,7 @@ class Login extends Component {
       <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
       </div>
 
+      
       <div className="login-footer">
       <Fade in={ isEntered } />
       </div>
