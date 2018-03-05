@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import {Bar, Doughnut, Line, Pie, Polar, Radar} from 'react-chartjs-2';
 import {CardColumns, Card, CardHeader, CardBody} from 'reactstrap';
 import Navbar2 from '../CustomNavbar/CustomNavbar2'
-import logo from './logo-hands-purple-login.png';
+import logo from './logo-hands-purple-login-02-01.svg';
 import Modals from './Modals'
 import './studentview.css'
 // import ReactCSSTransitionGroup from './react-addons-css-transition-group'
@@ -340,7 +340,7 @@ renderIntro(){
         </svg>
       </div> 
 
-      <img src={logo} className="logo-purple" alt="logo" />
+   <div className="hands-wrapper animated fadeIn">   <img src={logo} className="logo-purple" alt="logo" /></div>
     </div>
 
     )

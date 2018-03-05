@@ -4,7 +4,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import {ac_setStudentID } from '../../actions/index';
 import { api_notify_classroom } from '../Classroom/api';
-import logo from './logo-hands-purple-login.png';
+import logo from './logo-hands-purple-login-02-01.svg';
 import SOH from './SVG-HEADER.svg';
 import './login.css'
 
@@ -76,30 +76,32 @@ class Login extends Component {
     return (
       <div className="Login">
         
-        
-        <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
+          
+          <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
+  
+        <div className="login-form-wrapper">
+        <Form inline className="login-form">
+          <FormControl 
+          className="login-form-field"
+          placeholder = 'Enter Your Classroom Code'
+          value = {this.state.classroom_code}
+          onChange = { event => this.setState({ classroom_code: event.target.value})}
+          />
+          <FormControl 
+          className="login-form-field"
+          placeholder = 'Enter a Screen Name'
+          value = {this.state.screen_name}
+          onChange = { event => this.setState({ screen_name: event.target.value})}
+          />
+          <Button disabled={!this.state.classroom_code || !this.state.screen_name} className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
+        </Form>
+                  
+  
+        <div className="teacher-login">
+        <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
+        </div>
 
-      <Form inline className="login-form">
-        <FormControl 
-        className="login-form-field"
-        placeholder = 'Enter Your Classroom Code'
-        value = {this.state.classroom_code}
-        onChange = { event => this.setState({ classroom_code: event.target.value})}
-        />
-        <FormControl 
-        className="login-form-field"
-        placeholder = 'Enter a Screen Name'
-        value = {this.state.screen_name}
-        onChange = { event => this.setState({ screen_name: event.target.value})}
-        />
-        <Button disabled={!this.state.classroom_code || !this.state.screen_name} className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
-      </Form>
-                
-
-      <div className="teacher-login">
-      <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
-      </div>
-
+        </div> 
       
       <div className="login-footer">
       <Fade in={ isEntered } />

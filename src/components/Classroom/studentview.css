@@ -68,10 +68,8 @@ h1,h2,h3,h4{
   padding: 15px;
 }
 .logo-purple{
-  max-height: 50vh;
-  position: absolute;
  width: 100vw;
-  bottom: 0;
-  right: 0;
-  left: 0;
+}
+.hands-wrapper{
+  margin-top: 70px;
 }

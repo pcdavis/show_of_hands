@@ -19,8 +19,6 @@ font-family: 'Open Sans', sans-serif; */
 
 .logo-move{
   width: 100vw;
-  z-index: auto;
-  max-height: 50vh;
 }
 .z-bottom{
   z-index: auto;
@@ -30,8 +28,11 @@ font-family: 'Open Sans', sans-serif; */
   width: 80vw;
   margin: 0 auto;
 }
+.login-form-wrapper{
+  margin-bottom: 10px;
+}
 .login-footer{
-  position: absolute;
+  position: relative;
   bottom: 0;
   margin-bottom: -15px;
 }
