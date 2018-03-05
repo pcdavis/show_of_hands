@@ -15,7 +15,7 @@ class Dashboard extends Component {
       this.state = {
         title: ''
       }
-      this.handleChange = this.handleChange.bind(this)
+      // this.handleChange = this.handleChange.bind(this)
       this.onDeleteClick = this.onDeleteClick.bind(this)
     }
 
@@ -40,7 +40,7 @@ class Dashboard extends Component {
       // console.log('here is the statck object that is going through the lodash map inside render stacks', stackTitleItem)
       return (
 
-        <ListGroupItem className="padding-tb" >
+        <ListGroupItem key={stackTitleItem.stack_id} className="padding-tb" >
            <Link className={css(styles.font16)} to={`/stacks/${stackTitleItem.stack_id}`}>
               {stackTitleItem.stack_title}
           </Link>
@@ -51,21 +51,21 @@ class Dashboard extends Component {
     });
   }
 
-handleChange(event){
-  this.setState({
-    title: event.target.value
-  })
-}
+  handleChange(event) {
+    let fieldName = event.target.name;
+    let fleldVal = event.target.value;
+    this.setState({ [fieldName]: fleldVal})
+  }
 
 handleClick(){
-  this.setState({title: ''}) 
   this.props.createStack(this.state.title, () => {
     this.props.fetchStackTitles()  } )
     
+    this.setState({stateItem: ''}) 
 }
 
   render() {
-    console.log('this.props.stacks',this.props.stacks)
+    // console.log('this.props.stacks',this.props.stacks)
     
     return (
       <div>
@@ -85,9 +85,11 @@ handleClick(){
           
           <Form inline className="percent-90">
           <FormControl 
+          name = "title"
+          type = "text"
           className= "input-tall"
           placeholder = 'New Stack Title'
-          onChange = {this.handleChange}
+          onChange={this.handleChange.bind(this)}
           />
           <Button className={css(styles.purple)} bsSize="large" block onClick={ () => this.handleClick()}>Create New Stack</Button>
           {/* <Button onClick={ 

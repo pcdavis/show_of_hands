@@ -224,6 +224,8 @@ app.get( '/logout', (req,res) => {
 
 //Endpoints for interacting with the regular pages of the app
 app.post('/api/newstack', control.createStack)
+app.post('/api/newquestion', control.createquiz)
+app.post('/api/newstackcontent', control.createstackcontent)
 app.post('/api/newbroadcast', control.createBroadcast)
 app.get('/api/stacks', control.fetchStacks)
 app.delete('/api/deletestack/:stackID', control.deleteStack)

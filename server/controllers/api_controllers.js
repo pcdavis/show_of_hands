@@ -44,6 +44,52 @@ module.exports = {
         db.sq_stack_items([stackItemsNeeded])
     },
 
+    
+    //Here is a version trying to do 2 db calls in the same method
+    // createquiz: function(req, res, next) {
+    //     let dbResponse;
+    //     console.log("create quiz fired ----------------------------------------here is the req.body inside controller createquiz", req.body)
+    //     const db = req.app.get('db');
+    //     if(req.user){
+    //         const { question, correct_answer, false_1, false_2, false_3, stack_id } = req.body
+    //         const user_id = req.user.user_id;
+    //         console.log("here is the user id from inside createquiz controller", user_id)
+    //         db.sq_create_quiz([user_id, question, correct_answer, false_1, false_2, false_3])
+    //         .then( response => {
+    //             (function(stack_id, quiz_id, user_id){
+    //                 db.sq_create_stack_content([stack_id,quiz_id,user_id]).then ( response => {
+    //                     dbResponse = response;
+    //                     res.send(dbResponse)
+    //                 })
+    //             })(stack_id, quiz_id, user_id)
+    //         })
+    //         .catch( err => {res.status(500).send('error with create quiz') })
+    //     } 
+    //     else {
+    //         res.status(401).send("not authorized")
+    //     }
+    // },
+
+    createquiz: function(req, res, next) {
+        console.log("create quiz fired ----------------------------------------here is the req.body inside controller createquiz", req.body)
+        const db = req.app.get('db');
+        if(req.user){
+            const { question, correct_answer, false_1, false_2, false_3, stack_id } = req.body
+            const user_id = req.user.user_id;
+            console.log("here is the user id from inside createquiz controller", user_id)
+            console.log("here is the stack_id from inside createquiz controller", stack_id)
+            db.sq_create_quiz([user_id, question, correct_answer, false_1, false_2, false_3])
+            .then( response => {
+                res.status(200).send( response[0] )
+                console.log("create quiz worked",response[0])
+            }) 
+            .catch( err => {res.status(500).send('error with create quiz') })
+        } 
+        else {
+            res.status(401).send("not authorized")
+        }
+    },
+    
     createStack: function(req, res, next) {
         console.log("here is the req.body inside controller createStack", req.body)
         const db = req.app.get('db');
@@ -55,6 +101,24 @@ module.exports = {
             .then( response => {
                 res.status(200).send( response )
                 console.log("create stack worked",response)
+            }) 
+            .catch( err => {res.status(500).send('error with create stack') })
+        } 
+        else {
+            res.status(401).send("not authorized")
+        }
+    },
+    
+    createstackcontent: function(req, res, next) {
+        console.log("-------------------------------------------------------------------------------------------------------------------------here is the req.body inside controller createstackcontent", req.body)
+        const db = req.app.get('db');
+        if(req.user){
+            const { stack_id, quiz_id, user_id } = req.body
+            console.log("here is the user id from inside createstackcontent controller", user_id)
+            db.sq_create_stack_content([stack_id,quiz_id,user_id])
+            .then( response => {
+                res.status(200).send( response )
+                console.log("create stackcontent worked",response)
             }) 
             .catch( err => {res.status(500).send('error with create stack') })
         } 
@@ -107,16 +171,16 @@ module.exports = {
 
     deleteStack: function(req, res, next) {
 
-        console.log(" deleteStack ----------------------------------------------------------------------------------  ", req.params)
+        console.log(" deleteStack ----------------------------------------------------------------------------------\n\n\n  ", req.params)
         const db = req.app.get('db');
         if(req.user){
             const user_id = req.user.user_id;
-            const stackID = req.params.stackID;
-            console.log("stack id ", stackID)
-            db.sq_delete_stack([stackID])
+            const stack_id = parseInt(req.params.stackID);
+            console.log("stack id ", stack_id)
+            db.sq_delete_stack([stack_id])
             .then( response => {
-                res.status(200).send( response )
                 console.log("deleteStack worked",response)
+                res.status(200).send( response )
             }) 
             .catch( err => {res.status(500).send('error with deleteStack') })
         } else {

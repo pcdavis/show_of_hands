@@ -11,6 +11,7 @@ export const SET_TEACHER_ID = "SET_TEACHER_ID";
 export const FETCH_BROADCAST_CONTENT = "FETCH_BROADCAST_CONTENT";
 export const SET_CURRENT_QUIZ = "SET_CURRENT_QUIZ";
 export const SET_STUDENT_ID = "SET_STUDENT_ID";
+export const CREATE_QUIZ = "CREATE_QUIZ";
 
 export function fetchStacks() {
     let serverResponse = axios.get('/api/stacks')
@@ -50,11 +51,29 @@ export function fetchStackTitles() {
     payload: {}
   }
 }
+//Below is my monday feb 5 attempt to fix create quiz and stackcontent--------------------------------------------------------------------------------------------------------------------------------------------
+ export function ac_createNewQuiz(newQuizObj, callback){
+  console.log('ac-NEWQUIZ acation crreator fired and here is the title being passed to axios as its body object ', newQuizObj)
+  axios.post('/api/newquestion', newQuizObj)
+  .then((response) => {
+    console.log('hello from ac')
+    callback(response)
+  } )
+  .catch(error => console.log(error));
 
+  // return {
+  //   type: CREATE_QUIZ,
+  //   payload: {}
+  // }
+}
+//--------------------------------------------------------------
  export function deleteStack(stackID, callback){
   console.log('deleteStack action crreator fired and here is the stackID being passed to axios as its body object ', stackID)
   axios.delete('/api/deletestack/'+stackID)
-  .then(() => callback())
+  .then((response) => {
+    console.log(response)
+    callback();
+  } )
   .catch(error => console.log(error));
 
   return {

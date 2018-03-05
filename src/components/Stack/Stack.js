@@ -15,26 +15,37 @@ class Stack extends Component {
     super(props);
     this.state = {
       broadcast_code: '',
+      test: '',
       theStackTitle: '',
       theStackContent: [],
       teacherID: '',
-      showForm: false
+      showForm: false,
+      question: '',
+      correct_answer: '', 
+      false_1: '', 
+      false_2: '', 
+      false_3: '',
+      stateItem: ''
     }
     // this.handleChange = this.handleChange.bind(this)
     this.renderForm = this.renderForm.bind(this)
   }
   
 
+  componentDidMount(){
+    console.log("hello from cdm, here is this.props.stacks", this.props.stacks)
+  }
+
   componentDidMount() {
     //When stack.js is opened, we first call the action creators fetch stacks and fetchtitles to be sure we have the latest stack content. Then we grab the specific stack id from the url param and use it to filter the redux 'stacks' prop, which contains all of the teacher's stacks and get theStackNeeeded and place it in local state 'theStackContent'
-    console.log("here is the user id to use for setting teacher id -----------------------",this.props.user_id)
-    this.props.fetchStacks();
-    this.props.fetchStackTitles();
-     console.log('inside Stack component in component did mount this.props.stacks',this.props.stacks)
+    console.log("here is the user id to use for setting teacher id -----------------------",this.props.stacks[0].user_id)
+    console.log('inside Stack component in component did mount this.props.stacks',this.props.stacks)
+    // this.props.fetchStacks();
+    // this.props.fetchStackTitles();
      let stackID = this.props.match.params.id;
-     console.log("stack titles prop from redux state-------------------",this.props.stack_titles)
-     console.log(stackID)
-     let theStackNeeded = _.filter(this.props.stacks, function(obj){
+    //  console.log("stack titles prop from redux state-------------------",this.props.stack_titles)
+    //  console.log(stackID)
+    let theStackNeeded = _.filter(this.props.stacks, function(obj){
        return obj.stack_id == stackID
      })
      let titleNeeded = _.filter(this.props.stack_titles, function(obj){
@@ -63,11 +74,7 @@ class Stack extends Component {
     });
   }
 
-// handleChange(event){
-//   this.setState({
-//     broadcast_code: event.target.value
-//   })
-// }
+
 
 
 startBroadcasting(){
@@ -113,11 +120,97 @@ startBroadcasting(){
 //use action creator to set redux state of broadcast info needed and then jump into the classroom
 }
 
-handleSubmit(){
+handleSubmit(e){
 
-  // ac_postNewQuestion()
+  e.preventDefault()
+  console.log('handlesubmit fired for new quiz question-------------------------------')
+  
+  let my_user_id = this.props.stacks[0].user_id
+  let mystack_id = this.props.match.params.id;
+  console.log("my mystack_id" ,mystack_id)
+    
+  let newQuizObj = {
+      user_id: my_user_id,
+      question:this.state.question,
+      correct_answer:this.state.correct_answer,
+      false_1:this.state.false_1,
+      false_2:this.state.false_2,
+      false_3:this.state.false_3,
+      stack_id:mystack_id
+    }
+    console.log(newQuizObj);
 
-  this.setState({showForm: false})
+    axios.post('/api/newquestion', newQuizObj)
+        .then( (response) => {
+
+        console.log("here's what came back from the new quiz post" ,response)
+
+    let myquiz_id = response.data.quiz_id;
+    let myuser_id = response.data.user_id;
+    let mystack_id = parseInt(this.props.match.params.id);
+
+        let stackContentObj = {
+          stack_id: mystack_id,
+          quiz_id: myquiz_id,
+          user_id: myuser_id
+                             } 
+
+    axios.post('/api/newstackcontent', stackContentObj)
+    .then( (response) => { 
+
+      console.log(response)
+       this.props.fetchStacks();
+
+    } )//end of .then used to fetchStacks
+
+    this.setState({showForm: false});
+
+  } )//end of .then that uses response to creating new quiz to send into axios post for creating stack content
+} // end of submit new question function
+
+
+//Backup of handlesubmit prior to using redux
+// handleSubmit(){
+//   console.log('handlesubmit fired for new quiz question-------------------------------')
+// let my_user_id = this.props.stacks[0].user_id
+// let mystack_id = this.props.match.params.id;
+// console.log("my user id" ,my_user_id)
+// let newQuizObj = {
+//   user_id: my_user_id,
+//   question:this.state.question,
+//    correct_answer:this.state.correct_answer,
+//    false_1:this.state.false_1,
+//    false_2:this.state.false_2,
+//    false_3:this.state.false_3,
+//    stack_id:mystack_id
+// }
+// console.log(newQuizObj);
+// axios.post('/api/newquestion', newQuizObj)
+// .then((response) => {
+//   console.log("here's what came back from the new quiz post" ,response)
+//   let quiz_id = response.data[0].quiz_id;
+//   let user_id = response.data[0].user_id;
+//   let stack_id = this.props.match.params.id;
+//   let stackContentObj = {
+//     stack_id,
+//     quiz_id,
+//     user_id
+//   }
+//   console.log("here's stackContentObj" ,stackContentObj)
+//   axios.post('/api/newstackcontent', stackContentObj)
+// } )
+// .then((response) => {
+
+//   console.log("here's what came back from the newstackcontent------------------------" ,response)
+//   this.setState({showForm: false});
+//   this.props.fetchStacks();
+// } )
+// }
+
+handleChange(event) {
+  let fieldName = event.target.name;
+  let fleldVal = event.target.value;
+  this.setState({ [fieldName]: fleldVal})
 }
 
 renderForm(){
@@ -133,16 +226,23 @@ renderForm(){
           Quiz Question
         </Col>
         <Col sm={10}>
-          <FormControl type="text" placeholder="Question" />
+          <FormControl
+           name = "question" 
+           type="text" 
+           placeholder="Question" 
+           defaultValue={this.state.question}
+           onChange={this.handleChange.bind(this)} />
         </Col>
       </FormGroup>
-    
       <FormGroup controlId="formHorizontalPassword">
         <Col componentClass={ControlLabel} sm={2}>
           Correct Answer
         </Col>
         <Col sm={10}>
-          <FormControl type="text" placeholder="Correct Answer" />
+          <FormControl
+          name = "correct_answer" type="text" placeholder="Correct Answer"
+          defaultValue={this.state.correct_answer}
+          onChange={this.handleChange.bind(this)} />
         </Col>
       </FormGroup>
     
@@ -151,7 +251,12 @@ renderForm(){
         False Choice 1
         </Col>
         <Col sm={10}>
-          <FormControl type="text" placeholder="Enter a false answer choice" />
+          <FormControl 
+          name = "false_1" 
+          type="text" 
+          placeholder="Enter a false answer choice" 
+          defaultValue={this.state.false_1}
+          onChange={this.handleChange.bind(this)} />
         </Col>
       </FormGroup>
     
@@ -160,7 +265,12 @@ renderForm(){
         False Choice 2
         </Col>
         <Col sm={10}>
-          <FormControl type="text" placeholder="Enter a false answer choice" />
+          <FormControl 
+          name = "false_2" 
+          type="text" 
+          placeholder="Enter a false answer choice" 
+          defaultValue={this.state.false_2}
+          onChange={this.handleChange.bind(this)} />
         </Col>
       </FormGroup>
     
@@ -169,7 +279,12 @@ renderForm(){
         False Choice 3
         </Col>
         <Col sm={10}>
-          <FormControl type="text" placeholder="Enter a false answer choice" />
+          <FormControl 
+          name = "false_3" 
+          type="text" 
+          placeholder="Enter a false answer choice" 
+          defaultValue={this.state.false_3}
+          onChange={this.handleChange.bind(this)} />
         </Col>
       </FormGroup>
     
@@ -177,7 +292,7 @@ renderForm(){
        
           <Button onClick={()=> this.setState({showForm: false})} type="submit">Cancel</Button>
         
-          <Button onClick={this.handleSubmit} type="submit">Submit</Button>
+          <Button onClick={(e) => this.handleSubmit(e)} type="submit">Submit</Button>
         
       </FormGroup>
     </Form >
@@ -223,6 +338,7 @@ renderForm(){
         <Button className={css(styles.purple)} bsSize="large" block onClick={() => this.startBroadcasting()}>Start Broadcast</Button>
         </Form>
         </Well>
+       
 
       </div>
     );
@@ -237,7 +353,7 @@ function mapStateToProps(state) {
    };
 }
 
-export default connect(mapStateToProps, {createBroadcast, fetchStacks, fetchStackTitles, setTeacherID} )(Stack);
+export default connect(mapStateToProps, {createBroadcast,fetchStacks, fetchStackTitles, setTeacherID} )(Stack);
 
 const styles = StyleSheet.create({
   purple: {
