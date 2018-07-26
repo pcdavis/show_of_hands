@@ -22,6 +22,7 @@ class Dashboard extends Component {
   componentDidMount() {
     this.props.fetchStacks();
     this.props.fetchStackTitles();
+    console.log("Inside the dashbard component did mount -getting back into the code")
   }
   
   onDeleteClick(stackID) {

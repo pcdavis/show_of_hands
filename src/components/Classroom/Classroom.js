@@ -42,6 +42,7 @@ class SocketRoom extends Component {
     componentDidMount(){
         // console.log("here are socket props in cdm in classroom-----------------------",this.props.socketroom)
         console.log(this.state.isTeacher)
+        console.log(this.state.broadcast_id)
     }
 //----------------Socket items from Joe's test page -------------------
     // componentDidMount() {
