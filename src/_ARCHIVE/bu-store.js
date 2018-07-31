@@ -6,7 +6,7 @@
 
 //below is my attempt to apply middleware the way udemy did
 import { createStore, applyMiddleware } from "redux";
-import promise from "redux-promise";
+import promise from "../../../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/redux-promise";
 import reducer from './ducks/reducer_stacks';
 
 export default applyMiddleware(promise)(createStore)(reducer);
