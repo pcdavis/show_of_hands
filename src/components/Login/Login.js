@@ -70,7 +70,6 @@ class Login extends Component {
     this.setState({classroom_code: '' })
   }
 
-  // <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
   render() {
     const { isEntered } = this.state;
 
@@ -78,7 +77,7 @@ class Login extends Component {
       <div className="Login">
 
 
-
+          <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
 
         <div className="login-form-wrapper">
         <Form inline className="login-form">
