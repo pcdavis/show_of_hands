@@ -57,7 +57,7 @@ class Login extends Component {
     console.log("handle_student_signin fired inside Login page / home '/' -------------", classCode)
     console.log("handle_student_signin fired inside screenName -------------", screenName)
     axios.post('/api/students', {screenName})
-    .then( response => { 
+    .then( response => {
       console.log("the student's session id that comes from response from server to handle student signin axios submission", response.data)
       let newStudentIdentity = response.data
       // this.setState({ mySessionID: newStudentIdentity.sessionID})
@@ -70,24 +70,25 @@ class Login extends Component {
     this.setState({classroom_code: '' })
   }
 
+  // <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
   render() {
     const { isEntered } = this.state;
 
     return (
       <div className="Login">
-        
-          
-          <div className="soh"><img src={SOH} className="animated fadeIn" alt="logo" /></div>
-  
+
+
+
+
         <div className="login-form-wrapper">
         <Form inline className="login-form">
-          <FormControl 
+          <FormControl
           className="login-form-field"
           placeholder = 'Enter Your Classroom Code'
           value = {this.state.classroom_code}
           onChange = { event => this.setState({ classroom_code: event.target.value})}
           />
-          <FormControl 
+          <FormControl
           className="login-form-field"
           placeholder = 'Enter a Screen Name'
           value = {this.state.screen_name}
@@ -95,14 +96,14 @@ class Login extends Component {
           />
           <Button disabled={!this.state.classroom_code || !this.state.screen_name} className="login-form-button" onClick={ () => this.handle_student_signin(this.state.classroom_code) } >Enter Classroom</Button>
         </Form>
-                  
-  
+
+
         <div className="teacher-login">
         <a href={ process.env.REACT_APP_LOGIN }>Teacher login</a>
         </div>
 
-        </div> 
-      
+        </div>
+
       <div className="login-footer">
       <Fade in={ isEntered } />
       </div>
@@ -113,7 +114,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { 
+  return {
    socketroom: state.socketroom
   };
 }
