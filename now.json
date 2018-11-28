@@ -1,0 +1,37 @@
+{
+    "version": 2,
+    "name":"show-of-hands",
+    "env": {
+        "CONNECTION_STRING":"@connection_string",
+        "SERVER_PORT" : "@server_port",
+        "SESSION_SECRET" : "@session_secret",
+        "DOMAIN" : "@domain",
+        "CLIENTID" : "@clientid",
+        "CLIENT_SECRET" : "@client_secret",
+        "CALLBACK_URL" : "@callback_url",
+        "REACT_APP_LOGIN": "/auth",
+
+        "AUTH_SUCCESS_REDIRECT": "/dashboard",
+        "LOGOUT_CALLBACK": "/",
+        "REACT_APP_SERVER": "/auth"
+    },
+    "builds": [
+        {
+            "src": "/server/index.js",
+            "use": "@now/node-server"
+        },
+        {
+            "src": "/build/*.html",
+            "use": "@now/static-build"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/server/(.*)",
+            "dest": "server/$1"
+        },
+        {   "src": ".*",
+            "dest": "/index.html"}
+    ]
+
+}
